@@ -173,7 +173,7 @@ img,svg{display:block;max-width:100%}
   text-transform:uppercase;
   margin-bottom:14px;
 }
-.hero-sub .lead .hl{color:#fff;font-weight:600}
+.hero-sub .lead .hl{color:var(--amber);font-weight:600}
 
 .hero-list{
   display:flex;
@@ -189,16 +189,19 @@ img,svg{display:block;max-width:100%}
   font-family:var(--mono);
   font-size:11px;
   padding:4px 10px;
-  border:1px solid var(--border-2);
-  background:#050505;
-  color:var(--text-2);
+  border:1px solid #3a2f0f;
+  background:#0a0800;
+  color:var(--amber);
   white-space:nowrap;
   line-height:1.4;
 }
 .hero-list .tag .ic{color:var(--amber);font-size:10px}
+.hero-list .tag.alt{border-color:#1f3a1f;background:#020a02}
 .hero-list .tag.alt .ic{color:var(--green)}
+.hero-list .tag.alt{color:var(--amber)}
 .hero-list .tag.end{
   border-color:var(--border-red-2);
+  background:#0a0202;
   color:#e0e0e0;
 }
 
@@ -212,7 +215,7 @@ img,svg{display:block;max-width:100%}
   padding:0 20px;
   display:flex;
   align-items:center;
-  height:38px;
+  height:44px;
   gap:20px;
   font-family:var(--mono);
   font-size:11px;
@@ -228,10 +231,8 @@ img,svg{display:block;max-width:100%}
   padding:4px 12px;
   color:var(--text-2);
   white-space:nowrap;
-  border-right:1px solid var(--border);
 }
 .toolbar .cats a:first-child{padding-left:0}
-.toolbar .cats a:last-child{border-right:none}
 .toolbar .cats a:hover{color:#fff}
 .toolbar .cats a.on{color:var(--red)}
 .toolbar .search{
@@ -239,30 +240,39 @@ img,svg{display:block;max-width:100%}
   display:flex;
 }
 .toolbar .search input{
-  width:220px;
-  height:26px;
-  padding:0 9px;
+  width:260px;
+  height:28px;
+  padding:0 10px;
   background:#000;
-  border:1px solid var(--border);
+  border:1px solid var(--border-red-2);
   border-right:none;
   color:var(--text);
   font-family:var(--mono);
   font-size:11.5px;
   outline:none;
+  transition:border-color .15s,box-shadow .15s;
 }
 .toolbar .search input::placeholder{color:var(--text-4)}
-.toolbar .search input:focus{border-color:var(--border-2)}
+.toolbar .search input:focus{
+  border-color:var(--red);
+  box-shadow:0 0 0 1px rgba(217,38,38,.15);
+}
 .toolbar .search button{
-  height:26px;
-  padding:0 10px;
-  background:#0d0d0d;
-  border:1px solid var(--border);
-  color:var(--text-2);
+  height:28px;
+  padding:0 12px;
+  background:#150505;
+  border:1px solid var(--border-red-2);
+  color:var(--amber);
   font-family:var(--mono);
   font-size:10.5px;
   letter-spacing:.04em;
+  transition:background .1s,color .1s,border-color .1s;
 }
-.toolbar .search button:hover{background:#161616;color:var(--text)}
+.toolbar .search button:hover{
+  background:var(--red);
+  border-color:var(--red);
+  color:#fff;
+}
 
 .main{
   max-width:1180px;
@@ -571,7 +581,7 @@ img,svg{display:block;max-width:100%}
 }
 @media (max-width:820px){
   .hdr-nav{display:none}
-  .toolbar .search input{width:160px}
+  .toolbar .search input{width:200px}
   .grid{grid-template-columns:repeat(3,1fr);gap:10px}
   .item-body{padding:8px 10px 10px}
   .item-name{font-size:12px;margin-bottom:8px}
@@ -585,7 +595,7 @@ img,svg{display:block;max-width:100%}
 }
 @media (max-width:560px){
   .hdr-inner{padding:0 14px;gap:14px}
-  .toolbar-inner{padding:0 14px;gap:12px}
+  .toolbar-inner{padding:0 12px;gap:12px;height:40px}
   .toolbar .search{display:none}
   .main{padding:12px}
   .grid{grid-template-columns:repeat(2,1fr);gap:8px}
@@ -638,7 +648,7 @@ img,svg{display:block;max-width:100%}
       </h1>
 
       <div class="hero-sub">
-        <span class="lead">Gain Access To 1000s of Darknet &amp; Deepweb Resources with <span class="hl">SILVERFANG</span></span>
+        <span class="lead">Gain Access To 1000s of Darknet &amp; Deepweb Resources with <span class="hl">US</span></span>
 
         <div class="hero-list">
           <span class="tag"><span class="ic">⭐</span>Hacked Database Leaks</span>
@@ -689,12 +699,6 @@ img,svg{display:block;max-width:100%}
     <div class="toolbar-inner">
       <div class="cats">
         <a href="#" class="on">All</a>
-        <a href="#">Automation</a>
-        <a href="#">Security</a>
-        <a href="#">Research</a>
-        <a href="#">Privacy</a>
-        <a href="#">Infra</a>
-        <a href="#">Other</a>
       </div>
 
       <form class="search" onsubmit="event.preventDefault();toast('Search is members only.')">
