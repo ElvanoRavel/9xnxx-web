@@ -252,6 +252,13 @@ img{display:block;max-width:100%}
 .preview-display .uname{
   display: inline;
 }
+.preview-display .uemoji{
+  font-size: 1em;
+}
+.preview-display .uemoji svg{
+  width: 1em;
+  height: 1em;
+}
 .preview-meta{
   margin-top:16px;
   font-family:var(--mono);
@@ -352,9 +359,7 @@ img{display:block;max-width:100%}
   align-items:center;
   justify-content:center;
   position:relative;
-  font-family:'Segoe UI Symbol', 'Noto Sans Symbols 2', 'Apple Symbols', 'DejaVu Sans', sans-serif;
-  font-size:32px;
-  line-height:1;
+  padding:14%;
 }
 .emoji-btn:hover{
   border-color:var(--border-red-2);
@@ -363,6 +368,19 @@ img{display:block;max-width:100%}
 .emoji-btn.on{
   border-color:var(--vip-2);
   background:#0a0800;
+}
+.emoji-btn .svg-wrap{
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.emoji-btn .svg-wrap svg{
+  width:100%;
+  height:100%;
+  display:block;
+  overflow:visible;
 }
 .emoji-btn .check{
   position:absolute;
@@ -380,6 +398,7 @@ img{display:block;max-width:100%}
   font-size:10px;
   color:var(--text-3);
   letter-spacing:.04em;
+  padding:0;
 }
 
 .actions{
@@ -500,7 +519,6 @@ img{display:block;max-width:100%}
 @media (max-width:1024px){
   .effects-grid{grid-template-columns:repeat(2,1fr)}
   .emojis-grid{grid-template-columns:repeat(6,1fr)}
-  .emoji-btn{font-size:28px}
 }
 @media (max-width:820px){
   .hamburger{display:flex}
@@ -518,7 +536,6 @@ img{display:block;max-width:100%}
   .preview-display{font-size:24px}
   .effects-grid{grid-template-columns:1fr;gap:8px}
   .emojis-grid{grid-template-columns:repeat(4,1fr)}
-  .emoji-btn{font-size:26px}
   .mobile-nav a{padding:12px 14px;font-size:12px}
   .brand .name{font-size:13px}
 }
@@ -587,8 +604,8 @@ img{display:block;max-width:100%}
 
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // Pull glyph data dari vip-helper.js
-  const EMOJI_CHARS = (window.SF_VIP && window.SF_VIP.EMOJI_CHARS) || {};
+  // Pull SVG data dari vip-helper.js
+  const EMOJI_SVGS = (window.SF_VIP && window.SF_VIP.EMOJI_CHARS) || {};
 
   const EFFECTS = [
     { id:'none',     name:'None' },
@@ -612,25 +629,25 @@ img{display:block;max-width:100%}
   const EMOJIS = [
     { id:'none',       name:'None' },
     { id:'skull',      name:'Skull' },
-    { id:'biohazard',  name:'Biohazard' },
-    { id:'radioactive',name:'Radioactive' },
+    { id:'pentagram',  name:'Pentagram' },
+    { id:'baphomet',   name:'Baphomet' },
+    { id:'ouroboros',  name:'Ouroboros' },
+    { id:'providence', name:'Providence' },
     { id:'fire',       name:'Fire' },
-    { id:'swords',     name:'Swords' },
-    { id:'flag',       name:'Flag' },
-    { id:'psi',        name:'Psi' },
-    { id:'omega',      name:'Omega' },
-    { id:'delta',      name:'Delta' },
-    { id:'sigma',      name:'Sigma' },
-    { id:'dagger',     name:'Dagger' },
     { id:'mercury',    name:'Mercury' },
-    { id:'benzene',    name:'Benzene' },
-    { id:'escape',     name:'Escape' },
-    { id:'crosshair',  name:'Crosshair' },
-    { id:'maltese',    name:'Maltese' },
-    { id:'asclepius',  name:'Asclepius' },
-    { id:'neptune',    name:'Neptune' },
+    { id:'sulphur',    name:'Sulphur' },
+    { id:'trident',    name:'Trident' },
     { id:'ankh',       name:'Ankh' },
-    { id:'lightning',  name:'Lightning' }
+    { id:'asclepius',  name:'Asclepius' },
+    { id:'anarchy',    name:'Anarchy' },
+    { id:'chaos',      name:'Chaos' },
+    { id:'hexagram',   name:'Hexagram' },
+    { id:'leviathan',  name:'Leviathan' },
+    { id:'deathshead', name:'Deathshead' },
+    { id:'sun',        name:'Sun' },
+    { id:'lucifer',    name:'Lucifer' },
+    { id:'yggdrasil',  name:'Yggdrasil' },
+    { id:'maleficium', name:'Maleficium' }
   ];
 
   const state = {
@@ -740,7 +757,7 @@ img{display:block;max-width:100%}
           '<br /><br />' +
           'VIP members unlock:<br />' +
           '• 15 animated username effects<br />' +
-          '• 20 occult glyphs' +
+          '• 20 occult sigils' +
         '</div>' +
         '<a href="' + msgLink + '" class="btn-primary" style="display:inline-block;text-decoration:none">Message Admin</a>' +
       '</div>';
@@ -765,10 +782,10 @@ img{display:block;max-width:100%}
     const emojisHTML = EMOJIS.map(function(e){
       const onClass = state.currentEmoji === e.id ? ' on' : '';
       const isNone = e.id === 'none';
-      const glyph = EMOJI_CHARS[e.id] || '';
+      const svg = EMOJI_SVGS[e.id] || '';
       const content = isNone
-        ? '<span style="font-family:var(--mono);font-size:10px;color:var(--text-3)">None</span>'
-        : '<span class="uei-' + e.id + '">' + glyph + '</span>';
+        ? '<span style="font-size:10px;color:var(--text-3)">None</span>'
+        : '<span class="svg-wrap uei-' + e.id + '">' + svg + '</span>';
       return (
         '<button type="button" class="emoji-btn' + onClass + (isNone ? ' none-btn' : '') + '" data-emoji="' + e.id + '" title="' + escapeHtml(e.name) + '">' +
           content +
@@ -790,7 +807,7 @@ img{display:block;max-width:100%}
         '<div class="preview-display" id="previewDisplay">' + previewHTML + '</div>' +
         '<div class="preview-meta">' +
           'effect: <span class="k" id="metaEffect">none</span> &nbsp;·&nbsp; ' +
-          'emoji: <span class="k" id="metaEmoji">none</span>' +
+          'sigil: <span class="k" id="metaEmoji">none</span>' +
         '</div>' +
       '</div>' +
 
@@ -800,7 +817,7 @@ img{display:block;max-width:100%}
       '</div>' +
 
       '<div class="sec">' +
-        '<div class="sec-title">Username Glyph <span class="pill">20 OPTIONS</span></div>' +
+        '<div class="sec-title">Username Sigil <span class="pill">20 OPTIONS</span></div>' +
         '<div class="emojis-grid" id="emojisGrid">' + emojisHTML + '</div>' +
       '</div>' +
 
@@ -858,13 +875,13 @@ img{display:block;max-width:100%}
 
     // Reset emoji element
     emojiEl.className = 'uemoji';
-    emojiEl.textContent = '';
+    emojiEl.innerHTML = '';
 
     if (state.currentEmoji && state.currentEmoji !== 'none'){
-      const glyph = EMOJI_CHARS[state.currentEmoji] || '';
-      if (glyph){
+      const svg = EMOJI_SVGS[state.currentEmoji] || '';
+      if (svg){
         emojiEl.className = 'uemoji uei-' + state.currentEmoji;
-        emojiEl.textContent = glyph;
+        emojiEl.innerHTML = svg;
       }
     }
 
