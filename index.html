@@ -173,7 +173,7 @@ img,svg{display:block;max-width:100%}
   text-transform:uppercase;
   margin-bottom:14px;
 }
-.hero-sub .lead .hl{color:var(--amber);font-weight:600}
+.hero-sub .lead .hl{color:#fff;font-weight:600}
 
 .hero-list{
   display:flex;
@@ -196,9 +196,8 @@ img,svg{display:block;max-width:100%}
   line-height:1.4;
 }
 .hero-list .tag .ic{color:var(--amber);font-size:10px}
-.hero-list .tag.alt{border-color:#1f3a1f;background:#020a02}
+.hero-list .tag.alt{border-color:#1f3a1f;background:#020a02;color:var(--amber)}
 .hero-list .tag.alt .ic{color:var(--green)}
-.hero-list .tag.alt{color:var(--amber)}
 .hero-list .tag.end{
   border-color:var(--border-red-2);
   background:#0a0202;
@@ -228,11 +227,10 @@ img,svg{display:block;max-width:100%}
 }
 .toolbar .cats::-webkit-scrollbar{display:none}
 .toolbar .cats a{
-  padding:4px 12px;
+  padding:4px 0;
   color:var(--text-2);
   white-space:nowrap;
 }
-.toolbar .cats a:first-child{padding-left:0}
 .toolbar .cats a:hover{color:#fff}
 .toolbar .cats a.on{color:var(--red)}
 .toolbar .search{
@@ -262,7 +260,7 @@ img,svg{display:block;max-width:100%}
   padding:0 12px;
   background:#150505;
   border:1px solid var(--border-red-2);
-  color:var(--amber);
+  color:#fff;
   font-family:var(--mono);
   font-size:10.5px;
   letter-spacing:.04em;
@@ -581,7 +579,7 @@ img,svg{display:block;max-width:100%}
 }
 @media (max-width:820px){
   .hdr-nav{display:none}
-  .toolbar .search input{width:200px}
+  .toolbar .search input{width:180px}
   .grid{grid-template-columns:repeat(3,1fr);gap:10px}
   .item-body{padding:8px 10px 10px}
   .item-name{font-size:12px;margin-bottom:8px}
@@ -595,8 +593,9 @@ img,svg{display:block;max-width:100%}
 }
 @media (max-width:560px){
   .hdr-inner{padding:0 14px;gap:14px}
-  .toolbar-inner{padding:0 12px;gap:12px;height:40px}
-  .toolbar .search{display:none}
+  .toolbar-inner{padding:0 14px;gap:10px;height:44px}
+  .toolbar .search input{width:120px;height:26px;font-size:11px;padding:0 8px}
+  .toolbar .search button{height:26px;padding:0 9px;font-size:10px}
   .main{padding:12px}
   .grid{grid-template-columns:repeat(2,1fr);gap:8px}
   .item-body{padding:7px 9px 9px}
@@ -614,6 +613,7 @@ img,svg{display:block;max-width:100%}
 }
 @media (max-width:380px){
   .hero-title{font-size:13px}
+  .toolbar .search input{width:100px}
 }
 </style>
 </head>
