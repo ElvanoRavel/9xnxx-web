@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#000000" />
+<title>SilverFang // 9xnxx</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+/* ============================================================
+   RESET
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:#000;
+  color:#c9c9c9;
+  font-size:13px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+a{color:inherit;text-decoration:none}
+a:hover{color:#fff}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;font-size:inherit}
+input{font-family:inherit;color:inherit;font-size:inherit}
+ul{list-style:none}
+img,svg{display:block;max-width:100%}
+::selection{background:#d92626;color:#fff}
+
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  --border:#1a1a1a;
+  --border-2:#262626;
+  --text:#d4d4d4;
+  --text-2:#8a8a8a;
+  --text-3:#555;
+  --text-4:#333;
+  --red:#d92626;
+  --red-2:#a81c1c;
+  --green:#4a9e4a;
+  --amber:#c9a227;
+  --mono:'IBM Plex Mono',ui-monospace,'Courier New',monospace;
+}
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:#000}
+::-webkit-scrollbar-thumb{background:#1a1a1a;border:2px solid #000}
+::-webkit-scrollbar-thumb:hover{background:#282828}
+*{scrollbar-width:thin;scrollbar-color:#1a1a1a #000}
+
+/* ============================================================
+   UTIL
+   ============================================================ */
+.mono{font-family:var(--mono)}
+.dim{color:var(--text-2)}
+.dim2{color:var(--text-3)}
+.red{color:var(--red)}
+.green{color:var(--green)}
+.amber{color:var(--amber)}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.hdr{
+  border-bottom:1px solid var(--border);
+  background:#000;
+  position:sticky;
+  top:0;
+  z-index:50;
+}
+.hdr-inner{
+  max-width:1180px;
+  margin:0 auto;
+  padding:0 20px;
+  display:flex;
+  align-items:center;
+  height:52px;
+  gap:24px;
+}
+.brand{
+  display:flex;
+  align-items:baseline;
+  gap:6px;
+  font-family:var(--mono);
+  font-size:15px;
+  letter-spacing:.02em;
+  color:#fff;
+  flex-shrink:0;
+}
+.brand .name{font-weight:500;letter-spacing:.06em}
+.brand .sub{
+  color:var(--text-3);
+  font-size:10.5px;
+  letter-spacing:.08em;
+}
+
+.hdr-nav{
+  display:flex;
+  gap:2px;
+  font-size:12.5px;
+}
+.hdr-nav a{
+  padding:6px 11px;
+  color:var(--text-2);
+  border-radius:2px;
+  transition:color .1s,background .1s;
+}
+.hdr-nav a:hover{color:var(--text);background:#0d0d0d}
+.hdr-nav a.on{color:#fff}
+
+.hdr-right{
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--text-3);
+}
+.hdr-right .btn-log{
+  padding:6px 12px;
+  border:1px solid var(--border-2);
+  color:var(--text);
+  font-size:11.5px;
+  transition:background .1s,border-color .1s,color .1s;
+}
+.hdr-right .btn-log:hover{
+  background:var(--red);
+  border-color:var(--red);
+  color:#fff;
+}
+
+/* ============================================================
+   TOOLBAR
+   ============================================================ */
+.toolbar{
+  border-bottom:1px solid var(--border);
+  background:#000;
+}
+.toolbar-inner{
+  max-width:1180px;
+  margin:0 auto;
+  padding:0 20px;
+  display:flex;
+  align-items:center;
+  height:38px;
+  gap:20px;
+  font-family:var(--mono);
+  font-size:11px;
+}
+.toolbar .cats{
+  display:flex;
+  gap:0;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.toolbar .cats::-webkit-scrollbar{display:none}
+.toolbar .cats a{
+  padding:4px 12px;
+  color:var(--text-2);
+  white-space:nowrap;
+  border-right:1px solid var(--border);
+}
+.toolbar .cats a:first-child{padding-left:0}
+.toolbar .cats a:last-child{border-right:none}
+.toolbar .cats a:hover{color:#fff}
+.toolbar .cats a.on{color:var(--red)}
+.toolbar .search{
+  margin-left:auto;
+  display:flex;
+}
+.toolbar .search input{
+  width:220px;
+  height:26px;
+  padding:0 9px;
+  background:#000;
+  border:1px solid var(--border);
+  border-right:none;
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:11.5px;
+  outline:none;
+}
+.toolbar .search input::placeholder{color:var(--text-4)}
+.toolbar .search input:focus{border-color:var(--border-2)}
+.toolbar .search button{
+  height:26px;
+  padding:0 10px;
+  background:#0d0d0d;
+  border:1px solid var(--border);
+  color:var(--text-2);
+  font-family:var(--mono);
+  font-size:10.5px;
+  letter-spacing:.04em;
+}
+.toolbar .search button:hover{background:#161616;color:var(--text)}
+
+/* ============================================================
+   MAIN
+   ============================================================ */
+.main{
+  max-width:1180px;
+  margin:0 auto;
+  padding:20px;
+}
+
+.info-line{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--text-3);
+  margin-bottom:16px;
+  padding-bottom:12px;
+  border-bottom:1px solid var(--border);
+}
+.info-line .left span:not(:last-child)::after{
+  content:'·';
+  margin:0 8px;
+  color:var(--text-4);
+}
+
+/* ============================================================
+   GRID
+   ============================================================ */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+}
+
+.item{
+  border:1px solid var(--border);
+  background:#000;
+  display:flex;
+  flex-direction:column;
+  transition:border-color .1s;
+  position:relative;
+}
+.item:hover{border-color:var(--border-2)}
+
+.item-img{
+  aspect-ratio:1 / 1;
+  background:#050505;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  overflow:hidden;
+}
+.item-img .ph{
+  font-family:var(--mono);
+  font-size:9.5px;
+  color:#1f1f1f;
+  letter-spacing:.3em;
+  text-transform:uppercase;
+  user-select:none;
+}
+.item-img::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,#060606 25%,#0b0b0b 25%,#0b0b0b 50%,#060606 50%,#060606 75%,#0b0b0b 75%);
+  background-size:12px 12px;
+  opacity:.4;
+}
+
+.item-body{
+  padding:10px 12px 12px;
+  display:flex;
+  flex-direction:column;
+  flex:1;
+}
+
+.item-name{
+  font-size:13px;
+  font-weight:500;
+  color:#e0e0e0;
+  margin-bottom:3px;
+  line-height:1.35;
+}
+.item-name:hover{color:#fff}
+
+.item-vendor{
+  font-family:var(--mono);
+  font-size:10.5px;
+  color:var(--text-3);
+  margin-bottom:10px;
+}
+.item-vendor:hover{color:var(--text-2)}
+
+.item-foot{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-top:auto;
+  padding-top:10px;
+  border-top:1px solid var(--border);
+}
+.item-price{
+  font-family:var(--mono);
+  font-size:12.5px;
+  color:#e0e0e0;
+  font-weight:500;
+}
+.item-price small{
+  font-size:10px;
+  color:var(--text-3);
+  font-weight:400;
+}
+.item-rep{
+  font-family:var(--mono);
+  font-size:10.5px;
+  color:var(--green);
+}
+
+/* ============================================================
+   PAGINATION
+   ============================================================ */
+.pager{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  margin-top:28px;
+  padding-top:20px;
+  border-top:1px solid var(--border);
+  font-family:var(--mono);
+  font-size:11.5px;
+}
+.pager a,
+.pager span{
+  min-width:28px;
+  height:28px;
+  padding:0 8px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--border);
+  color:var(--text-2);
+}
+.pager a:hover{
+  border-color:var(--border-2);
+  color:#fff;
+}
+.pager .cur{
+  border-color:var(--red);
+  color:#fff;
+  background:#150505;
+}
+.pager .gap{
+  border:none;
+  color:var(--text-4);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.foot{
+  border-top:1px solid var(--border);
+  margin-top:40px;
+}
+.foot-inner{
+  max-width:1180px;
+  margin:0 auto;
+  padding:16px 20px;
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+  font-family:var(--mono);
+  font-size:10.5px;
+  color:var(--text-3);
+}
+.foot-inner a{color:var(--text-3)}
+.foot-inner a:hover{color:var(--text)}
+.foot-inner .sep{margin:0 8px;color:var(--text-4)}
+
+/* ============================================================
+   LOGIN PAGE
+   ============================================================ */
+#loginView{
+  display:none;
+  min-height:100vh;
+  padding:40px 16px;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+#loginView.on{display:flex}
+
+.login-box{
+  width:100%;
+  max-width:360px;
+  border:1px solid var(--border);
+  background:#000;
+}
+.login-head{
+  padding:12px 18px;
+  border-bottom:1px solid var(--border);
+  background:#050505;
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--text-3);
+  text-transform:uppercase;
+  letter-spacing:.1em;
+}
+.login-body{padding:22px 18px}
+.login-brand{
+  text-align:center;
+  margin-bottom:20px;
+  font-family:var(--mono);
+  font-size:16px;
+  letter-spacing:.05em;
+}
+.login-brand .name{color:#fff;font-weight:500}
+.login-brand .sub{
+  display:block;
+  font-size:10px;
+  color:var(--text-3);
+  margin-top:4px;
+  letter-spacing:.24em;
+}
+
+.lfield{margin-bottom:14px}
+.lfield label{
+  display:block;
+  font-family:var(--mono);
+  font-size:10.5px;
+  color:var(--text-3);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  margin-bottom:6px;
+}
+.lfield input{
+  width:100%;
+  height:34px;
+  padding:0 10px;
+  background:#000;
+  border:1px solid var(--border);
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:12.5px;
+  outline:none;
+  transition:border-color .1s;
+}
+.lfield input:focus{border-color:var(--border-2)}
+.lfield input::placeholder{color:var(--text-4)}
+
+.lcheck{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:12px;
+  color:var(--text-2);
+  margin-bottom:18px;
+  cursor:pointer;
+}
+.lcheck input{
+  appearance:none;
+  -webkit-appearance:none;
+  width:13px;height:13px;
+  border:1px solid var(--border-2);
+  background:#000;
+  position:relative;
+  cursor:pointer;
+}
+.lcheck input:checked{background:var(--red);border-color:var(--red)}
+.lcheck input:checked::after{
+  content:'';
+  position:absolute;
+  left:4px;top:1px;
+  width:3px;height:7px;
+  border:solid #fff;
+  border-width:0 1.5px 1.5px 0;
+  transform:rotate(45deg);
+}
+
+.btn-sub{
+  width:100%;
+  height:36px;
+  background:var(--red);
+  color:#fff;
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  border:none;
+  transition:background .1s;
+}
+.btn-sub:hover{background:var(--red-2)}
+.btn-sub:disabled{opacity:.6;cursor:not-allowed}
+
+.login-alt{
+  display:flex;
+  justify-content:space-between;
+  margin-top:14px;
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--text-3);
+}
+.login-alt a:hover{color:var(--text)}
+
+.login-foot{
+  padding:10px 18px;
+  border-top:1px solid var(--border);
+  background:#050505;
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--text-4);
+  text-align:center;
+  letter-spacing:.05em;
+  line-height:1.8;
+}
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:20px;
+  transform:translate(-50%,80px);
+  background:#0d0d0d;
+  border:1px solid var(--border-2);
+  padding:10px 16px;
+  font-family:var(--mono);
+  font-size:11.5px;
+  color:var(--text);
+  z-index:200;
+  transition:transform .25s ease;
+  max-width:90vw;
+}
+.toast.on{transform:translate(-50%,0)}
+.toast .dot{
+  display:inline-block;
+  width:5px;height:5px;
+  background:var(--red);
+  border-radius:50%;
+  margin-right:8px;
+  vertical-align:middle;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:1024px){
+  .grid{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:820px){
+  .hdr-nav{display:none}
+  .toolbar .search input{width:160px}
+  .grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:520px){
+  .hdr-inner{padding:0 14px;gap:14px}
+  .brand .sub{display:none}
+  .toolbar-inner{padding:0 14px;gap:12px}
+  .toolbar .search{display:none}
+  .main{padding:14px}
+  .grid{grid-template-columns:1fr;gap:10px}
+  .info-line{flex-direction:column;align-items:flex-start;gap:6px}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     LANDING VIEW
+     ============================================================ -->
+<div id="landingView">
+
+  <!-- HEADER -->
+  <header class="hdr">
+    <div class="hdr-inner">
+      <a href="#" class="brand" onclick="goHome(event)">
+        <span class="name">SILVERFANG</span>
+        <span class="sub">9xnxx</span>
+      </a>
+
+      <nav class="hdr-nav">
+        <a href="#" class="on">Market</a>
+        <a href="#">Forum</a>
+        <a href="#">Vendors</a>
+        <a href="#">Rules</a>
+      </nav>
+
+      <div class="hdr-right">
+        <a href="#login" class="btn-log" onclick="goLogin(event)">Login</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="toolbar-inner">
+      <div class="cats">
+        <a href="#" class="on">All</a>
+        <a href="#">Automation</a>
+        <a href="#">Security</a>
+        <a href="#">Research</a>
+        <a href="#">Privacy</a>
+        <a href="#">Infra</a>
+        <a href="#">Other</a>
+      </div>
+
+      <form class="search" onsubmit="event.preventDefault();toast('Search is members only.')">
+        <input type="text" placeholder="search products…" />
+        <button type="submit">SEARCH</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <div class="info-line">
+      <div class="left mono">
+        <span><span class="dim2">Showing</span> 1–12 <span class="dim2">of</span> 24</span>
+        <span><span class="dim2">Escrow active</span></span>
+        <span><span class="green">●</span> <span class="dim2">all vendors verified</span></span>
+      </div>
+      <div class="right mono dim2">
+        sort: <a href="#" style="color:#8a8a8a">latest</a> ·
+        <a href="#" style="color:#555">price</a> ·
+        <a href="#" style="color:#555">reputation</a>
+      </div>
+    </div>
+
+    <div class="grid">
+
+      <!-- 01 -->
+      <a href="#" class="item">
+        <div class="item-img">
+          <span class="ph">SF-001</span>
+        </div>
+        <div class="item-body">
+          <div class="item-name">SentryGuard</div>
+          <div class="item-vendor">vndr_kaido</div>
+          <div class="item-foot">
+            <span class="item-price">$149<small>/mo</small></span>
+            <span class="item-rep">98.4%</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- 02 -->
+      <a href="#" class="item">
+        <div class="item-img">
+          <span class="ph">SF-002</span>
+        </div>
+        <div class="item-body">
+          <div class="item-name">ReconScope</div>
+          <div class="item-vendor">vndr_ryujin</div>
+          <div class="item-foot">
+            <span class="item-price">$229<small>/mo</small></span>
+            <span class="item-rep">96.1%</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- 03 -->
+      <a href="#" class="item">
+        <div class="item-img">
+          <span class="ph">SF-003</span>
+        </div>
+        <div class="item-body">
+          <div class="item-name">VaultKey</div>
+          <div class="item-vendor">vndr_kaguya</div>
+          <div class="item-foot">
+            <span class="item-price">$99<small>/mo</small></span>
+            <span class="item-rep">99.2%</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- 04 -->
+      <a href="#" class="item">
+        <div class="item-img">
+          <span class="ph">SF-004</span>
+        </div>
+        <div class="item-body">
+          <div class="item-name">PhantomCore</div>
+          <div class="item-vendor">vndr_gaara</div>
+          <div class="item-foot">
+            <span class="item-price">$349<small>/mo</small></span>
+            <span class="item-rep">97.8%</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- 05 -->
+      <a href="#" class="item">
+        <div class="item-img">
+          <span class="ph">SF-005</span>
+        </div>
+        <div class="item-body">
+          <div class="item-name">CipherNode</div>
+          <div class="item-vendor">vndr_kaido</div>
+          <div class="item-foot">
+            <span class="item-price">$179<small>/mo</small></span>
+            <span class="item-rep">98.0%</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- 06 -->
+      <a href="#" class="item">
+        <div class="item-img">
+          <span class="ph">SF-006</span>
+        </div>
+        <div class="item-body">
+          <div class="item-name">TraceBurn</div>
+          <div class="item-vendor">vndr_silent</div>
+          <div class="item-foot">
+            <span class="item-price">$189<small>/mo</small></span>
+            <span class="item-rep">94.7%</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- 07 -->
+      <a href="#" class="item">
+        <div class="item-img">
+          <span class="ph">SF-007</span>
+        </div>
+        <div class="item-body">
+          <div class="item-name">GhostRelay</div>
+          <div class="item-vendor">vndr_kaguya</div>
+          <div class="item-foot">
+            <span class="item-price">$129<small>/mo</small></span>
+            <span class="item-rep">99.0%</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- 08 -->
+      <a href="#" class="item">
+        <div class="item-img">
+          <span class="ph">SF-008</span>
+        </div>
+        <div class="item-body">
+          <div class="item-name">DarkVault</div>
+          <div class="item-vendor">vndr_gaara</div>
+          <div class="item-foot">
+            <span class="item-price">$259<small>/mo</small></span>
+            <span class="item-rep">97.5%</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- 09 -->
+      <a href="#" class="item">
+        <div class="item-img">
+          <span class="ph">SF-009</span>
+        </div>
+        <div class="item-body">
+          <div class="item-name">ZeroTrace</div>
+          <div class="item-vendor">vndr_ryujin</div>
+          <div class="item-foot">
+            <span class="item-price">$159<small>/mo</small></span>
+            <span class="item-rep">95.3%</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- 10 -->
+      <a href="#" class="item">
+        <div class="item-img">
+          <span class="ph">SF-010</span>
+        </div>
+        <div class="item-body">
+          <div class="item-name">IronVeil</div>
+          <div class="item-vendor">vndr_kaido</div>
+          <div class="item-foot">
+            <span class="item-price">$199<small>/mo</small></span>
+            <span class="item-rep">98.1%</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- 11 -->
+      <a href="#" class="item">
+        <div class="item-img">
+          <span class="ph">SF-011</span>
+        </div>
+        <div class="item-body">
+          <div class="item-name">ObsidianKey</div>
+          <div class="item-vendor">vndr_silent</div>
+          <div class="item-foot">
+            <span class="item-price">$279<small>/mo</small></span>
+            <span class="item-rep">96.8%</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- 12 -->
+      <a href="#" class="item">
+        <div class="item-img">
+          <span class="ph">SF-012</span>
+        </div>
+        <div class="item-body">
+          <div class="item-name">NightShard</div>
+          <div class="item-vendor">vndr_kaguya</div>
+          <div class="item-foot">
+            <span class="item-price">$139<small>/mo</small></span>
+            <span class="item-rep">99.4%</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- PAGER -->
+    <div class="pager">
+      <span class="cur">1</span>
+      <a href="#">2</a>
+      <a href="#">3</a>
+      <a href="#">4</a>
+      <span class="gap">…</span>
+      <a href="#">12</a>
+      <a href="#">next →</a>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="foot">
+    <div class="foot-inner">
+      <div>
+        © 2025 SILVERFANG <span class="dim2">9xnxx</span>
+        <span class="sep">·</span>
+        <a href="#">Privacy</a>
+        <span class="sep">·</span>
+        <a href="#">Terms</a>
+        <span class="sep">·</span>
+        <a href="#">Escrow Policy</a>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- ============================================================
+     LOGIN VIEW
+     ============================================================ -->
+<div id="loginView">
+
+  <div class="login-box">
+    <div class="login-head">Secure Access</div>
+
+    <div class="login-body">
+
+      <div class="login-brand">
+        <span class="name">SILVERFANG</span>
+        <span class="sub">9xnxx</span>
+      </div>
+
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="lfield">
+          <label for="opid">Operator ID</label>
+          <input type="text" id="opid" placeholder="9xnxx-0000" autocomplete="off" spellcheck="false" required />
+        </div>
+
+        <div class="lfield">
+          <label for="pass">Passphrase</label>
+          <input type="password" id="pass" placeholder="••••••••••••" autocomplete="off" required />
+        </div>
+
+        <label class="lcheck">
+          <input type="checkbox" id="remember" />
+          <span>Remember this session for 7 days</span>
+        </label>
+
+        <button type="submit" class="btn-sub" id="submitBtn">Login</button>
+
+        <div class="login-alt">
+          <a href="#" onclick="goHome(event)">← Back</a>
+          <a href="#">Forgot passphrase?</a>
+        </div>
+      </form>
+
+    </div>
+
+    <div class="login-foot">
+      Encrypted connection · AES-256 · Zero-Log<br />
+      Your IP address will not be stored on the server.
+    </div>
+  </div>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="dot"></span>
+  <span id="toastMsg">—</span>
+</div>
+
+<!-- ============================================================
+     SCRIPTS
+     ============================================================ -->
+<script>
+(function(){
+  'use strict';
+
+  /* ROUTING */
+  var landing = document.getElementById('landingView');
+  var loginView = document.getElementById('loginView');
+
+  function route(){
+    var h = window.location.hash || '';
+    if (h === '#login'){
+      landing.style.display = 'none';
+      loginView.classList.add('on');
+      var opid = document.getElementById('opid');
+      if (opid) setTimeout(function(){ opid.focus(); }, 100);
+    } else {
+      landing.style.display = 'block';
+      loginView.classList.remove('on');
+    }
+  }
+
+  window.addEventListener('hashchange', route);
+  route();
+
+  window.goLogin = function(e){
+    if (e) e.preventDefault();
+    window.location.hash = '#login';
+  };
+
+  window.goHome = function(e){
+    if (e) e.preventDefault();
+    if (window.location.hash === '#login'){
+      window.location.hash = '';
+    }
+    window.scrollTo({top:0});
+  };
+
+  /* TOAST */
+  var toastEl = document.getElementById('toast');
+  var toastMsg = document.getElementById('toastMsg');
+  var toastTimer;
+
+  window.toast = function(msg){
+    if (!toastEl) return;
+    toastMsg.textContent = msg;
+    toastEl.classList.add('on');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){
+      toastEl.classList.remove('on');
+    }, 3000);
+  };
+
+  /* LOGIN */
+  var submitBtn = document.getElementById('submitBtn');
+
+  window.handleLogin = function(e){
+    e.preventDefault();
+
+    var opid = document.getElementById('opid').value.trim();
+    var pass = document.getElementById('pass').value;
+
+    if (!opid || !pass) return;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'verifying…';
+
+    setTimeout(function(){
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Login';
+
+      if (!/^9xnxx-\d{4}$/i.test(opid)){
+        toast('Invalid Operator ID format. Example: 9xnxx-0427');
+        return;
+      }
+      if (pass.length < 12){
+        toast('Passphrase must be at least 12 characters.');
+        return;
+      }
+
+      toast('Invalid credentials. Contact your operator.');
+    }, 1100);
+  };
+
+})();
+</script>
+</body>
+</html>
