@@ -607,9 +607,10 @@ img{display:block;max-width:100%}
     }
     state.session = session;
 
+    // ✅ FIX: tambah is_admin di select
     const { data: me } = await supabase
       .from('profiles')
-      .select('id, username, avatar_url, is_vip, username_effect, username_emoji')
+      .select('id, username, avatar_url, is_vip, is_admin, username_effect, username_emoji')
       .eq('id', session.user.id)
       .maybeSingle();
 
@@ -622,7 +623,8 @@ img{display:block;max-width:100%}
     chipName.textContent = me.username;
     chipAvatar.innerHTML = avatarHTML(me.avatar_url, me.username.charAt(0));
 
-    if (!me.is_vip){
+    // ✅ FIX: admin juga boleh akses VIP Studio
+    if (!me.is_vip && !me.is_admin){
       await renderDenied();
       return;
     }
