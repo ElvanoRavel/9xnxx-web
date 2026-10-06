@@ -130,33 +130,73 @@ img,svg{display:block;max-width:100%}
 }
 
 .hero{
-  border-bottom:1px solid var(--border);
+  border-bottom:1px solid var(--border-red);
   background:#000;
 }
 .hero-inner{
-  max-width:1180px;
+  max-width:980px;
   margin:0 auto;
-  padding:36px 20px 32px;
+  padding:40px 24px 34px;
+  text-align:center;
 }
 .hero-title{
   font-family:var(--mono);
   font-size:22px;
-  font-weight:500;
+  font-weight:600;
   color:#fff;
-  letter-spacing:.01em;
-  line-height:1.35;
-  max-width:820px;
+  letter-spacing:.02em;
+  line-height:1.4;
+  text-transform:uppercase;
+  margin:0 auto;
 }
 .hero-title .accent{color:var(--red)}
+.hero-title .globe{color:var(--red)}
+
 .hero-sub{
-  margin-top:10px;
+  margin:20px auto 0;
   font-family:var(--mono);
   font-size:11.5px;
-  color:var(--text-3);
-  letter-spacing:.04em;
+  color:var(--amber);
+  line-height:1.9;
+  letter-spacing:.02em;
   max-width:820px;
 }
-.hero-sub .sep{margin:0 8px;color:var(--text-4)}
+.hero-sub .lead{
+  display:block;
+  color:var(--text-2);
+  font-size:11px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  margin-bottom:14px;
+}
+.hero-sub .lead .hl{color:#fff;font-weight:600}
+
+.hero-list{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:8px 10px;
+  margin-top:6px;
+}
+.hero-list .tag{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-family:var(--mono);
+  font-size:11px;
+  padding:4px 10px;
+  border:1px solid var(--border-2);
+  background:#050505;
+  color:var(--text-2);
+  white-space:nowrap;
+  line-height:1.4;
+}
+.hero-list .tag .ic{color:var(--amber);font-size:10px}
+.hero-list .tag.alt .ic{color:var(--green)}
+.hero-list .tag.end{
+  border-color:var(--border-red-2);
+  color:#e0e0e0;
+}
 
 .toolbar{
   border-bottom:1px solid var(--border);
@@ -534,9 +574,10 @@ img,svg{display:block;max-width:100%}
   .item-price{font-size:11.5px}
   .item-price small{font-size:9px}
   .item-rep{font-size:9.5px}
-  .hero-inner{padding:28px 20px 24px}
+  .hero-inner{padding:32px 20px 28px}
   .hero-title{font-size:18px}
   .hero-sub{font-size:10.5px}
+  .hero-list .tag{font-size:10px;padding:3px 8px}
 }
 @media (max-width:560px){
   .hdr-inner{padding:0 14px;gap:14px}
@@ -551,9 +592,11 @@ img,svg{display:block;max-width:100%}
   .item-rep{font-size:9px}
   .pager{font-size:11px;margin-top:20px;padding-top:14px}
   .pager a,.pager span{min-width:26px;height:26px;padding:0 6px}
-  .hero-inner{padding:22px 14px 20px}
-  .hero-title{font-size:16px}
+  .hero-inner{padding:26px 14px 22px}
+  .hero-title{font-size:15px;line-height:1.4}
   .hero-sub{font-size:10px}
+  .hero-list{gap:6px 8px}
+  .hero-list .tag{font-size:9.5px;padding:3px 7px}
 }
 </style>
 </head>
@@ -583,11 +626,54 @@ img,svg{display:block;max-width:100%}
 
   <section class="hero">
     <div class="hero-inner">
-      <div class="hero-title">
-        <span class="accent">SilverFang</span> connects you to the world's top hackers, crackers, pentesters, and developers.
-      </div>
+      <h1 class="hero-title">
+        Connects You With The Top <span class="accent">Hackers</span>, <span class="accent">Crackers</span> And <span class="accent">Carders</span> Around The W<span class="globe">🌎</span>RLD
+      </h1>
+
       <div class="hero-sub">
-        Verified operators<span class="sep">·</span>Escrow protected<span class="sep">·</span>Global reach
+        <span class="lead">Gain Access To 1000s of Darknet &amp; Deepweb Resources with <span class="hl">SILVERFANG</span></span>
+
+        <div class="hero-list">
+          <span class="tag"><span class="ic">⭐</span>Hacked Database Leaks</span>
+          <span class="tag"><span class="ic">⭐</span>Combo Lists</span>
+          <span class="tag"><span class="ic">⭐</span>OpenBullet &amp; SilverBullet Configs</span>
+          <span class="tag"><span class="ic">⭐</span>CC Checkers</span>
+          <span class="tag"><span class="ic">⭐</span>Spamming Tools</span>
+          <span class="tag"><span class="ic">⭐</span>Carding Tools</span>
+          <span class="tag"><span class="ic">⭐</span>Carding Tutorials</span>
+
+          <span class="tag"><span class="ic">⭐</span>Hacked Credit Cards with CVV (CC + CVV)</span>
+          <span class="tag"><span class="ic">⭐</span>Paypal &amp; Bank Logs</span>
+          <span class="tag"><span class="ic">⭐</span>Verified Sellers Marketplace</span>
+          <span class="tag alt"><span class="ic">✔️</span>KYC Bypass Methods</span>
+
+          <span class="tag"><span class="ic">⭐</span>Scam Pages</span>
+          <span class="tag"><span class="ic">⭐</span>ID Scans &amp; Selfies</span>
+          <span class="tag"><span class="ic">⭐</span>Info Stealer Logs</span>
+          <span class="tag"><span class="ic">⭐</span>RATs &amp; Worm Builders</span>
+          <span class="tag"><span class="ic">⭐</span>Ransomware &amp; Malware Builders + Source Codes</span>
+
+          <span class="tag"><span class="ic">⭐</span>Hacking / Cracking Tools &amp; Apps</span>
+          <span class="tag"><span class="ic">⭐</span>Hacking Tutorials &amp; Methods</span>
+          <span class="tag"><span class="ic">⭐</span>XSS &amp; SQL Injection Dorks</span>
+          <span class="tag"><span class="ic">⭐</span>SSH Logins</span>
+          <span class="tag"><span class="ic">⭐</span>RDP Logins</span>
+
+          <span class="tag"><span class="ic">⭐</span>Shells Logins</span>
+          <span class="tag"><span class="ic">⭐</span>SMTP &amp; Webmail Logins</span>
+          <span class="tag"><span class="ic">⭐</span>CPanel &amp; WHM Logins</span>
+          <span class="tag"><span class="ic">⭐</span>Leaked Udemy &amp; Programming Courses</span>
+
+          <span class="tag"><span class="ic">⭐</span>Free Premium Netflix Accounts &amp; Cookies</span>
+          <span class="tag"><span class="ic">⭐</span>Premium Gaming Accounts</span>
+          <span class="tag"><span class="ic">⭐</span>VPN Accounts</span>
+
+          <span class="tag"><span class="ic">⭐</span>Cracked Programs &amp; Activation Keys</span>
+          <span class="tag"><span class="ic">⭐</span>Graphics Design Packs &amp; Assets</span>
+
+          <span class="tag"><span class="ic">⭐</span>Nulled PHP Scripts &amp; Themes</span>
+          <span class="tag end"><span class="ic">⭐</span>And Much Much More</span>
+        </div>
       </div>
     </div>
   </section>
