@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#000000" />
+<title>Sign Up · SilverFang</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:#000;
+  color:#c9c9c9;
+  font-size:13px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+a{color:inherit;text-decoration:none}
+a:hover{color:#fff}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;font-size:inherit}
+input{font-family:inherit;color:inherit;font-size:inherit}
+::selection{background:#d92626;color:#fff}
+
+:root{
+  --border:#1a1a1a;
+  --border-2:#262626;
+  --border-red:#3a1414;
+  --border-red-2:#6b1f1f;
+  --text:#d4d4d4;
+  --text-2:#8a8a8a;
+  --text-3:#555;
+  --text-4:#333;
+  --red:#d92626;
+  --red-2:#a81c1c;
+  --green:#4a9e4a;
+  --amber:#c9a227;
+  --mono:'IBM Plex Mono',ui-monospace,'Courier New',monospace;
+}
+
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:#000}
+::-webkit-scrollbar-thumb{background:#1a1a1a;border:2px solid #000}
+::-webkit-scrollbar-thumb:hover{background:#282828}
+*{scrollbar-width:thin;scrollbar-color:#1a1a1a #000}
+
+.page{
+  min-height:100vh;
+  padding:40px 16px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+
+.box{
+  width:100%;
+  max-width:400px;
+  border:1px solid var(--border-red-2);
+  background:#000;
+}
+.box.wide{max-width:560px}
+
+.box-head{
+  padding:12px 18px;
+  border-bottom:1px solid var(--border-red-2);
+  background:#050505;
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--text-3);
+  text-transform:uppercase;
+  letter-spacing:.1em;
+}
+.box-body{padding:24px 20px}
+
+.brand{
+  text-align:center;
+  margin-bottom:22px;
+  font-family:var(--mono);
+  font-size:16px;
+  letter-spacing:.06em;
+  color:#fff;
+  font-weight:500;
+}
+
+.field{margin-bottom:14px}
+.field label{
+  display:block;
+  font-family:var(--mono);
+  font-size:10.5px;
+  color:var(--text-3);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  margin-bottom:6px;
+}
+.field input{
+  width:100%;
+  height:36px;
+  padding:0 10px;
+  background:#000;
+  border:1px solid var(--border-2);
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:12.5px;
+  outline:none;
+  transition:border-color .15s,box-shadow .15s;
+}
+.field input:focus{
+  border-color:var(--border-red-2);
+  box-shadow:0 0 0 1px rgba(217,38,38,.15);
+}
+.field input::placeholder{color:var(--text-4)}
+.field .hint{
+  margin-top:5px;
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--text-3);
+  letter-spacing:.02em;
+}
+
+.btn-sub{
+  width:100%;
+  height:38px;
+  margin-top:6px;
+  background:var(--red);
+  color:#fff;
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  border:none;
+  transition:background .1s;
+}
+.btn-sub:hover{background:var(--red-2)}
+.btn-sub:disabled{opacity:.5;cursor:not-allowed}
+
+.alt{
+  display:flex;
+  justify-content:space-between;
+  margin-top:16px;
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--text-3);
+}
+.alt a:hover{color:var(--text)}
+
+.box-foot{
+  padding:10px 18px;
+  border-top:1px solid var(--border-red-2);
+  background:#050505;
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--text-4);
+  text-align:center;
+  letter-spacing:.05em;
+  line-height:1.8;
+}
+
+.msg{
+  margin-top:14px;
+  padding:9px 12px;
+  font-family:var(--mono);
+  font-size:11px;
+  line-height:1.5;
+  border:1px solid transparent;
+  display:none;
+}
+.msg.on{display:block}
+.msg.err{
+  border-color:#4a1a1a;
+  background:#150505;
+  color:#e06060;
+}
+.msg.ok{
+  border-color:#1f3a1f;
+  background:#020a02;
+  color:var(--green);
+}
+
+.warn{
+  padding:12px 14px;
+  border:1px solid #4a3a0f;
+  background:#0a0800;
+  font-family:var(--mono);
+  font-size:11.5px;
+  color:var(--amber);
+  line-height:1.6;
+  margin-bottom:18px;
+}
+.warn strong{color:#fff}
+
+.codes-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+  margin-bottom:16px;
+}
+.code-item{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 10px;
+  background:#050505;
+  border:1px solid var(--border-red-2);
+  font-family:var(--mono);
+  font-size:11px;
+}
+.code-item .num{
+  color:var(--text-3);
+  font-size:9.5px;
+  min-width:16px;
+}
+.code-item .val{
+  color:var(--amber);
+  letter-spacing:.03em;
+  word-break:break-all;
+  line-height:1.3;
+}
+
+.btn-copy{
+  width:100%;
+  height:32px;
+  margin-bottom:16px;
+  background:#0d0d0d;
+  border:1px solid var(--border-2);
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  transition:background .1s,border-color .1s,color .1s;
+}
+.btn-copy:hover{background:#161616;border-color:var(--border-red-2);color:#fff}
+
+.check{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  padding:12px;
+  border:1px solid var(--border-2);
+  background:#050505;
+  font-size:12px;
+  color:var(--text-2);
+  margin-bottom:14px;
+  cursor:pointer;
+  line-height:1.5;
+}
+.check input{
+  appearance:none;
+  -webkit-appearance:none;
+  width:14px;height:14px;
+  margin-top:1px;
+  border:1px solid var(--border-2);
+  background:#000;
+  position:relative;
+  cursor:pointer;
+  flex-shrink:0;
+}
+.check input:checked{background:var(--red);border-color:var(--red)}
+.check input:checked::after{
+  content:'';
+  position:absolute;
+  left:4px;top:1px;
+  width:3px;height:7px;
+  border:solid #fff;
+  border-width:0 1.5px 1.5px 0;
+  transform:rotate(45deg);
+}
+
+@media (max-width:520px){
+  .page{padding:24px 12px}
+  .box-body{padding:20px 16px}
+  .codes-grid{grid-template-columns:1fr}
+  .code-item{font-size:11.5px;padding:9px 11px}
+}
+</style>
+</head>
+<body>
+
+<div class="page" id="signupView">
+
+  <div class="box">
+    <div class="box-head">New Operator · Registration</div>
+
+    <div class="box-body">
+
+      <div class="brand">SilverFang</div>
+
+      <form id="signupForm">
+        <div class="field">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            placeholder="pick a unique username"
+            autocomplete="off"
+            spellcheck="false"
+            maxlength="64"
+            required
+          />
+          <div class="hint">Letters, numbers, symbols — all allowed. Must be unique.</div>
+        </div>
+
+        <div class="field">
+          <label for="pass">Password</label>
+          <input
+            type="password"
+            id="pass"
+            placeholder="at least 8 characters"
+            autocomplete="new-password"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label for="pass2">Confirm Password</label>
+          <input
+            type="password"
+            id="pass2"
+            placeholder="repeat your password"
+            autocomplete="new-password"
+            required
+          />
+        </div>
+
+        <button type="submit" class="btn-sub" id="submitBtn">Create Account</button>
+
+        <div class="alt">
+          <a href="index.html">← Back</a>
+          <a href="login.html">Have an account? Login</a>
+        </div>
+      </form>
+
+      <div class="msg" id="msg"></div>
+
+    </div>
+
+    <div class="box-foot">
+      Anonymous signup · No email required<br />
+      You will receive 12 recovery codes
+    </div>
+  </div>
+
+</div>
+
+<div class="page" id="codesView" style="display:none">
+
+  <div class="box wide">
+    <div class="box-head">Recovery Codes · Save These</div>
+
+    <div class="box-body">
+
+      <div class="warn">
+        <strong>⚠ IMPORTANT:</strong> These 12 codes are shown <strong>ONLY ONCE</strong>.
+        You will need <strong>ONE</strong> of them every time you log in.
+        Save them somewhere safe — password manager, paper, encrypted note.
+        <strong>If you lose them, you lose access to your account permanently.</strong>
+      </div>
+
+      <div class="codes-grid" id="codesGrid"></div>
+
+      <button type="button" class="btn-copy" id="copyBtn">Copy All Codes</button>
+
+      <label class="check">
+        <input type="checkbox" id="confirmSaved" />
+        <span>I have saved all 12 codes somewhere safe and understand they cannot be recovered.</span>
+      </label>
+
+      <button type="button" class="btn-sub" id="continueBtn" disabled>Continue to Market</button>
+
+    </div>
+
+    <div class="box-foot">
+      Keep these codes offline · Never share them
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  'use strict';
+
+  const SUPABASE_URL = 'https://iygiioemtpfozxikhgmx.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_xHr9z0NCsm8gBivTQ2nH8Q_Y1uzdlis';
+
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const CODES_COUNT = 12;
+  const CODE_LENGTH = 12;
+  const CHARSET = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#$%^&*-_=+';
+
+  const signupView = document.getElementById('signupView');
+  const codesView = document.getElementById('codesView');
+  const signupForm = document.getElementById('signupForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const msgEl = document.getElementById('msg');
+  const codesGrid = document.getElementById('codesGrid');
+  const copyBtn = document.getElementById('copyBtn');
+  const confirmSaved = document.getElementById('confirmSaved');
+  const continueBtn = document.getElementById('continueBtn');
+
+  let generatedCodes = [];
+
+  function showMsg(text, type) {
+    msgEl.textContent = text;
+    msgEl.className = 'msg on ' + (type || 'err');
+  }
+
+  function hideMsg() {
+    msgEl.className = 'msg';
+    msgEl.textContent = '';
+  }
+
+  async function usernameToEmail(username) {
+    const enc = new TextEncoder();
+    const data = enc.encode('sf:' + username.toLowerCase());
+    const hashBuf = await crypto.subtle.digest('SHA-256', data);
+    const hashArr = Array.from(new Uint8Array(hashBuf));
+    const hex = hashArr.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hex.slice(0, 32) + '@sf.local';
+  }
+
+  function randomCode() {
+    let s = '';
+    const arr = new Uint32Array(CODE_LENGTH);
+    crypto.getRandomValues(arr);
+    for (let i = 0; i < CODE_LENGTH; i++) {
+      s += CHARSET[arr[i] % CHARSET.length];
+    }
+    return s;
+  }
+
+  function renderCodes(codes) {
+    codesGrid.innerHTML = '';
+    codes.forEach(function(code, i) {
+      const div = document.createElement('div');
+      div.className = 'code-item';
+      const num = document.createElement('span');
+      num.className = 'num';
+      num.textContent = String(i + 1).padStart(2, '0');
+      const val = document.createElement('span');
+      val.className = 'val';
+      val.textContent = code;
+      div.appendChild(num);
+      div.appendChild(val);
+      codesGrid.appendChild(div);
+    });
+  }
+
+  function showCodesScreen(codes) {
+    generatedCodes = codes;
+    renderCodes(codes);
+    signupView.style.display = 'none';
+    codesView.style.display = 'flex';
+    sessionStorage.setItem('sf_signup_codes', JSON.stringify(codes));
+  }
+
+  function showSignupForm() {
+    signupView.style.display = 'flex';
+    codesView.style.display = 'none';
+  }
+
+  signupForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    hideMsg();
+
+    const username = document.getElementById('username').value.trim();
+    const pass = document.getElementById('pass').value;
+    const pass2 = document.getElementById('pass2').value;
+
+    if (!username) { showMsg('Username is required.', 'err'); return; }
+    if (username.length < 3) { showMsg('Username must be at least 3 characters.', 'err'); return; }
+    if (!pass) { showMsg('Password is required.', 'err'); return; }
+    if (pass.length < 8) { showMsg('Password must be at least 8 characters.', 'err'); return; }
+    if (pass !== pass2) { showMsg('Passwords do not match.', 'err'); return; }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'creating account…';
+
+    try {
+      const { data: existing, error: checkErr } = await supabase
+        .from('profiles')
+        .select('username')
+        .eq('username', username)
+        .limit(1);
+
+      if (checkErr) throw new Error(checkErr.message);
+      if (existing && existing.length > 0) {
+        throw new Error('That username is already taken. Try another one.');
+      }
+
+      const pseudoEmail = await usernameToEmail(username);
+
+      const { data: authData, error: signupErr } = await supabase.auth.signUp({
+        email: pseudoEmail,
+        password: pass
+      });
+
+      if (signupErr) throw new Error(signupErr.message);
+      if (!authData || !authData.user) throw new Error('Signup failed: no user returned.');
+
+      const userId = authData.user.id;
+
+      const { error: profileErr } = await supabase
+        .from('profiles')
+        .insert({ id: userId, username: username });
+
+      if (profileErr) {
+        if (profileErr.code === '23505') {
+          throw new Error('That username was just taken. Please try another.');
+        }
+        throw new Error('Failed to create profile: ' + profileErr.message);
+      }
+
+      submitBtn.textContent = 'generating codes…';
+
+      const codes = [];
+      let attempts = 0;
+      const maxAttempts = CODES_COUNT * 20;
+
+      while (codes.length < CODES_COUNT && attempts < maxAttempts) {
+        attempts++;
+        const code = randomCode();
+
+        const { error: insertErr } = await supabase
+          .from('recovery_codes')
+          .insert({ user_id: userId, code: code });
+
+        if (!insertErr) {
+          codes.push(code);
+        } else if (insertErr.code === '23505') {
+          continue;
+        } else {
+          throw new Error('Failed to save recovery code: ' + insertErr.message);
+        }
+      }
+
+      if (codes.length < CODES_COUNT) {
+        throw new Error('Could not generate enough unique codes. Please try again.');
+      }
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Create Account';
+
+      showCodesScreen(codes);
+
+    } catch (err) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Create Account';
+      showMsg(err.message || 'Something went wrong. Try again.', 'err');
+    }
+  });
+
+  copyBtn.addEventListener('click', async function(){
+    try {
+      const text = generatedCodes.map(function(c, i){
+        return String(i + 1).padStart(2, '0') + '. ' + c;
+      }).join('\n');
+
+      await navigator.clipboard.writeText(text);
+
+      const original = copyBtn.textContent;
+      copyBtn.textContent = 'Copied ✓';
+      copyBtn.style.color = '#4a9e4a';
+      setTimeout(function(){
+        copyBtn.textContent = original;
+        copyBtn.style.color = '';
+      }, 1800);
+    } catch (err) {
+      copyBtn.textContent = 'Copy failed — select manually';
+      setTimeout(function(){
+        copyBtn.textContent = 'Copy All Codes';
+      }, 1800);
+    }
+  });
+
+  confirmSaved.addEventListener('change', function(){
+    continueBtn.disabled = !confirmSaved.checked;
+  });
+
+  continueBtn.addEventListener('click', function(){
+    sessionStorage.removeItem('sf_signup_codes');
+    window.location.href = 'index.html';
+  });
+
+  (async function init(){
+    try {
+      const cached = sessionStorage.getItem('sf_signup_codes');
+      if (cached) {
+        try {
+          const codes = JSON.parse(cached);
+          if (Array.isArray(codes) && codes.length > 0) {
+            showCodesScreen(codes);
+            return;
+          }
+        } catch (e) {
+          sessionStorage.removeItem('sf_signup_codes');
+        }
+      }
+
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        window.location.href = 'index.html';
+        return;
+      }
+
+      showSignupForm();
+
+    } catch (err) {
+      showSignupForm();
+    }
+  })();
+
+})();
+</script>
+</body>
+</html>
