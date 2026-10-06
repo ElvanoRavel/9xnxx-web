@@ -86,12 +86,7 @@ img,svg{display:block;max-width:100%}
   color:#fff;
   flex-shrink:0;
 }
-.brand-logo{
-  width:22px;
-  height:22px;
-  object-fit:contain;
-  flex-shrink:0;
-}
+.brand-logo{width:22px;height:22px;object-fit:contain;flex-shrink:0}
 .brand .name{font-weight:500}
 
 .hdr-nav{
@@ -118,11 +113,7 @@ img,svg{display:block;max-width:100%}
   color:var(--text-3);
 }
 
-.hdr-guest{
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
+.hdr-guest{display:flex;align-items:center;gap:8px}
 .hdr-guest .btn-log{
   padding:6px 12px;
   border:1px solid var(--border-2);
@@ -130,11 +121,7 @@ img,svg{display:block;max-width:100%}
   font-size:11.5px;
   transition:background .1s,border-color .1s,color .1s;
 }
-.hdr-guest .btn-log:hover{
-  background:var(--red);
-  border-color:var(--red);
-  color:#fff;
-}
+.hdr-guest .btn-log:hover{background:var(--red);border-color:var(--red);color:#fff}
 .hdr-guest .btn-signup{
   padding:6px 12px;
   background:var(--red);
@@ -143,54 +130,39 @@ img,svg{display:block;max-width:100%}
   font-size:11.5px;
   transition:background .1s,border-color .1s;
 }
-.hdr-guest .btn-signup:hover{
-  background:var(--red-2);
-  border-color:var(--red-2);
-}
+.hdr-guest .btn-signup:hover{background:var(--red-2);border-color:var(--red-2)}
 
-.hdr-user{
-  display:none;
-  align-items:center;
-  gap:8px;
-}
+.hdr-user{display:none;align-items:center;gap:8px}
 .user-chip{
   display:flex;
   align-items:center;
-  gap:7px;
-  padding:6px 11px;
+  gap:8px;
+  padding:4px 10px 4px 4px;
   border:1px solid var(--border-red-2);
   background:#050505;
-  font-family:var(--mono);
-  font-size:11.5px;
   color:#e0e0e0;
-  max-width:200px;
+  font-size:11.5px;
+  transition:border-color .15s;
 }
-.user-chip .user-dot{
-  width:6px;
-  height:6px;
-  background:var(--green);
-  border-radius:50%;
-  box-shadow:0 0 6px rgba(74,158,74,.6);
+.user-chip:hover{border-color:var(--red)}
+.user-chip .avatar{
+  width:24px;height:24px;
+  background:#1a1a1a;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
   flex-shrink:0;
 }
-.user-chip .user-name{
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
+.user-chip .avatar img{width:100%;height:100%;object-fit:cover}
+.user-chip .avatar .ph{font-size:10px;color:var(--text-3)}
+.user-chip .name{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .btn-logout{
   padding:6px 12px;
   border:1px solid var(--border-2);
   color:var(--text);
   font-size:11.5px;
-  font-family:var(--mono);
   transition:background .1s,border-color .1s,color .1s;
 }
-.btn-logout:hover{
-  background:var(--red);
-  border-color:var(--red);
-  color:#fff;
-}
+.btn-logout:hover{background:var(--red);border-color:var(--red);color:#fff}
 
 .hero{
   border-bottom:1px solid var(--border-red);
@@ -370,6 +342,7 @@ img,svg{display:block;max-width:100%}
   position:relative;
   overflow:hidden;
 }
+.item-img img{width:100%;height:100%;object-fit:cover}
 .item-img .ph{
   font-family:var(--mono);
   font-size:9.5px;
@@ -385,7 +358,11 @@ img,svg{display:block;max-width:100%}
   background:linear-gradient(135deg,#060606 25%,#0b0b0b 25%,#0b0b0b 50%,#060606 50%,#060606 75%,#0b0b0b 75%);
   background-size:12px 12px;
   opacity:.4;
+  pointer-events:none;
+  z-index:0;
 }
+.item-img img{position:relative;z-index:1}
+.item-img .ph{position:relative;z-index:1}
 
 .item-body{
   padding:10px 12px 12px;
@@ -398,10 +375,17 @@ img,svg{display:block;max-width:100%}
   font-size:13px;
   font-weight:500;
   color:#e0e0e0;
-  margin-bottom:10px;
+  margin-bottom:3px;
   line-height:1.35;
 }
 .item-name:hover{color:#fff}
+
+.item-vendor{
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--text-3);
+  margin-bottom:10px;
+}
 
 .item-foot{
   display:flex;
@@ -414,19 +398,22 @@ img,svg{display:block;max-width:100%}
 }
 .item-price{
   font-family:var(--mono);
-  font-size:12.5px;
+  font-size:12px;
   color:#e0e0e0;
   font-weight:500;
+  line-height:1.4;
 }
 .item-price small{
   font-size:10px;
   color:var(--text-3);
   font-weight:400;
 }
+.item-price .row{display:block}
 .item-rep{
   font-family:var(--mono);
   font-size:10.5px;
-  color:var(--green);
+  color:var(--amber);
+  white-space:nowrap;
 }
 
 .pager{
@@ -510,6 +497,40 @@ img,svg{display:block;max-width:100%}
   vertical-align:middle;
 }
 
+.loading-state{
+  grid-column:1 / -1;
+  text-align:center;
+  padding:60px 20px;
+  font-family:var(--mono);
+  font-size:11.5px;
+  color:var(--text-3);
+  border:1px dashed var(--border-2);
+  background:#030303;
+}
+.loading-state .dot{
+  display:inline-block;
+  width:5px;height:5px;
+  background:var(--red);
+  border-radius:50%;
+  margin-right:6px;
+  vertical-align:middle;
+  animation:blink 1s infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.empty-state{
+  grid-column:1 / -1;
+  text-align:center;
+  padding:60px 20px;
+  font-family:var(--mono);
+  font-size:11.5px;
+  color:var(--text-3);
+  border:1px dashed var(--border-2);
+  background:#030303;
+  line-height:1.7;
+}
+.empty-state strong{color:var(--text-2);display:block;margin-bottom:6px}
+
 @media (max-width:1024px){
   .grid{grid-template-columns:repeat(3,1fr)}
 }
@@ -518,7 +539,8 @@ img,svg{display:block;max-width:100%}
   .toolbar .search input{width:180px}
   .grid{grid-template-columns:repeat(3,1fr);gap:10px}
   .item-body{padding:8px 10px 10px}
-  .item-name{font-size:12px;margin-bottom:8px}
+  .item-name{font-size:12px;margin-bottom:2px}
+  .item-vendor{font-size:9.5px;margin-bottom:8px}
   .item-price{font-size:11.5px}
   .item-price small{font-size:9px}
   .item-rep{font-size:9.5px}
@@ -541,7 +563,8 @@ img,svg{display:block;max-width:100%}
   .main{padding:12px}
   .grid{grid-template-columns:repeat(2,1fr);gap:8px}
   .item-body{padding:7px 9px 9px}
-  .item-name{font-size:11.5px;margin-bottom:6px}
+  .item-name{font-size:11.5px;margin-bottom:2px}
+  .item-vendor{font-size:9px;margin-bottom:6px}
   .item-price{font-size:11px}
   .item-price small{font-size:8.5px}
   .item-rep{font-size:9px}
@@ -565,297 +588,124 @@ img,svg{display:block;max-width:100%}
 </head>
 <body>
 
-<div id="landingView">
+<header class="hdr">
+  <div class="hdr-inner">
+    <a href="index.html" class="brand">
+      <img src="silverfang.jpg" alt="SilverFang" class="brand-logo" />
+      <span class="name">SilverFang</span>
+    </a>
 
-  <header class="hdr">
-    <div class="hdr-inner">
-      <a href="#" class="brand" onclick="goHome(event)">
-        <img src="silverfang.jpg" alt="SilverFang" class="brand-logo" />
-        <span class="name">SilverFang</span>
-      </a>
+    <nav class="hdr-nav">
+      <a href="index.html" class="on">Market</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="messages.html">Messages</a>
+    </nav>
 
-      <nav class="hdr-nav">
-        <a href="#" class="on">Market</a>
-        <a href="#">Forum</a>
-        <a href="#">Vendors</a>
-        <a href="#">Rules</a>
-      </nav>
-
-      <div class="hdr-right">
-
-        <div class="hdr-guest" id="hdrGuest">
-          <a href="login.html" class="btn-log">Login</a>
-          <a href="signup.html" class="btn-signup">Sign Up</a>
-        </div>
-
-        <div class="hdr-user" id="hdrUser">
-          <span class="user-chip">
-            <span class="user-dot"></span>
-            <span class="user-name" id="userName">—</span>
-          </span>
-          <button type="button" class="btn-logout" id="logoutBtn">Logout</button>
-        </div>
-
-      </div>
-    </div>
-  </header>
-
-  <section class="hero">
-    <div class="hero-inner">
-      <h1 class="hero-title">
-        Connects You With The Top <span class="accent">Hackers</span>, <span class="accent">Crackers</span> And <span class="accent">Carders</span> Around The <span class="nowrap">W<span class="globe">🌎</span>RLD</span>
-      </h1>
-
-      <div class="hero-sub">
-        <span class="lead">Gain Access To 1000s of Darknet &amp; Deepweb Resources with <span class="hl">US</span></span>
-
-        <div class="hero-list">
-          <span class="tag"><span class="ic">⭐</span>Hacked Database Leaks</span>
-          <span class="tag"><span class="ic">⭐</span>Combo Lists</span>
-          <span class="tag"><span class="ic">⭐</span>OpenBullet &amp; SilverBullet Configs</span>
-          <span class="tag"><span class="ic">⭐</span>CC Checkers</span>
-          <span class="tag"><span class="ic">⭐</span>Spamming Tools</span>
-          <span class="tag"><span class="ic">⭐</span>Carding Tools</span>
-          <span class="tag"><span class="ic">⭐</span>Carding Tutorials</span>
-
-          <span class="tag"><span class="ic">⭐</span>Hacked Credit Cards with CVV (CC + CVV)</span>
-          <span class="tag"><span class="ic">⭐</span>Paypal &amp; Bank Logs</span>
-          <span class="tag"><span class="ic">⭐</span>Verified Sellers Marketplace</span>
-          <span class="tag alt"><span class="ic">✔️</span>KYC Bypass Methods</span>
-
-          <span class="tag"><span class="ic">⭐</span>Scam Pages</span>
-          <span class="tag"><span class="ic">⭐</span>ID Scans &amp; Selfies</span>
-          <span class="tag"><span class="ic">⭐</span>Info Stealer Logs</span>
-          <span class="tag"><span class="ic">⭐</span>RATs &amp; Worm Builders</span>
-          <span class="tag"><span class="ic">⭐</span>Ransomware &amp; Malware Builders + Source Codes</span>
-
-          <span class="tag"><span class="ic">⭐</span>Hacking / Cracking Tools &amp; Apps</span>
-          <span class="tag"><span class="ic">⭐</span>Hacking Tutorials &amp; Methods</span>
-          <span class="tag"><span class="ic">⭐</span>XSS &amp; SQL Injection Dorks</span>
-          <span class="tag"><span class="ic">⭐</span>SSH Logins</span>
-          <span class="tag"><span class="ic">⭐</span>RDP Logins</span>
-
-          <span class="tag"><span class="ic">⭐</span>Shells Logins</span>
-          <span class="tag"><span class="ic">⭐</span>SMTP &amp; Webmail Logins</span>
-          <span class="tag"><span class="ic">⭐</span>CPanel &amp; WHM Logins</span>
-          <span class="tag"><span class="ic">⭐</span>Leaked Udemy &amp; Programming Courses</span>
-
-          <span class="tag"><span class="ic">⭐</span>Free Premium Netflix Accounts &amp; Cookies</span>
-          <span class="tag"><span class="ic">⭐</span>Premium Gaming Accounts</span>
-          <span class="tag"><span class="ic">⭐</span>VPN Accounts</span>
-
-          <span class="tag"><span class="ic">⭐</span>Cracked Programs &amp; Activation Keys</span>
-          <span class="tag"><span class="ic">⭐</span>Graphics Design Packs &amp; Assets</span>
-
-          <span class="tag"><span class="ic">⭐</span>Nulled PHP Scripts &amp; Themes</span>
-          <span class="tag end"><span class="ic">⭐</span>And Much Much More</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="toolbar">
-    <div class="toolbar-inner">
-      <div class="cats">
-        <a href="#" class="on">All</a>
+    <div class="hdr-right">
+      <div class="hdr-guest" id="hdrGuest">
+        <a href="login.html" class="btn-log">Login</a>
+        <a href="signup.html" class="btn-signup">Sign Up</a>
       </div>
 
-      <form class="search" onsubmit="event.preventDefault();toast('Search is members only.')">
-        <input type="text" placeholder="search products…" />
-        <button type="submit">SEARCH</button>
-      </form>
+      <div class="hdr-user" id="hdrUser">
+        <a href="dashboard.html" class="user-chip">
+          <span class="avatar" id="chipAvatar"><span class="ph">?</span></span>
+          <span class="name" id="chipName">…</span>
+        </a>
+        <button type="button" class="btn-logout" id="logoutBtn">Logout</button>
+      </div>
     </div>
   </div>
+</header>
 
-  <main class="main">
+<section class="hero">
+  <div class="hero-inner">
+    <h1 class="hero-title">
+      Connects You With The Top <span class="accent">Hackers</span>, <span class="accent">Crackers</span> And <span class="accent">Carders</span> Around The <span class="nowrap">W<span class="globe">🌎</span>RLD</span>
+    </h1>
 
-    <div class="grid">
+    <div class="hero-sub">
+      <span class="lead">Gain Access To 1000s of Darknet &amp; Deepweb Resources with <span class="hl">US</span></span>
 
-      <a href="#" class="item">
-        <div class="item-img">
-          <span class="ph">SF-001</span>
-        </div>
-        <div class="item-body">
-          <div class="item-name">SentryGuard</div>
-          <div class="item-foot">
-            <span class="item-price">$149<small>/mo</small></span>
-            <span class="item-rep">98.4%</span>
-          </div>
-        </div>
-      </a>
+      <div class="hero-list">
+        <span class="tag"><span class="ic">⭐</span>Hacked Database Leaks</span>
+        <span class="tag"><span class="ic">⭐</span>Combo Lists</span>
+        <span class="tag"><span class="ic">⭐</span>OpenBullet &amp; SilverBullet Configs</span>
+        <span class="tag"><span class="ic">⭐</span>CC Checkers</span>
+        <span class="tag"><span class="ic">⭐</span>Spamming Tools</span>
+        <span class="tag"><span class="ic">⭐</span>Carding Tools</span>
+        <span class="tag"><span class="ic">⭐</span>Carding Tutorials</span>
 
-      <a href="#" class="item">
-        <div class="item-img">
-          <span class="ph">SF-002</span>
-        </div>
-        <div class="item-body">
-          <div class="item-name">ReconScope</div>
-          <div class="item-foot">
-            <span class="item-price">$229<small>/mo</small></span>
-            <span class="item-rep">96.1%</span>
-          </div>
-        </div>
-      </a>
+        <span class="tag"><span class="ic">⭐</span>Hacked Credit Cards with CVV (CC + CVV)</span>
+        <span class="tag"><span class="ic">⭐</span>Paypal &amp; Bank Logs</span>
+        <span class="tag"><span class="ic">⭐</span>Verified Sellers Marketplace</span>
+        <span class="tag alt"><span class="ic">✔️</span>KYC Bypass Methods</span>
 
-      <a href="#" class="item">
-        <div class="item-img">
-          <span class="ph">SF-003</span>
-        </div>
-        <div class="item-body">
-          <div class="item-name">VaultKey</div>
-          <div class="item-foot">
-            <span class="item-price">$99<small>/mo</small></span>
-            <span class="item-rep">99.2%</span>
-          </div>
-        </div>
-      </a>
+        <span class="tag"><span class="ic">⭐</span>Scam Pages</span>
+        <span class="tag"><span class="ic">⭐</span>ID Scans &amp; Selfies</span>
+        <span class="tag"><span class="ic">⭐</span>Info Stealer Logs</span>
+        <span class="tag"><span class="ic">⭐</span>RATs &amp; Worm Builders</span>
+        <span class="tag"><span class="ic">⭐</span>Ransomware &amp; Malware Builders + Source Codes</span>
 
-      <a href="#" class="item">
-        <div class="item-img">
-          <span class="ph">SF-004</span>
-        </div>
-        <div class="item-body">
-          <div class="item-name">PhantomCore</div>
-          <div class="item-foot">
-            <span class="item-price">$349<small>/mo</small></span>
-            <span class="item-rep">97.8%</span>
-          </div>
-        </div>
-      </a>
+        <span class="tag"><span class="ic">⭐</span>Hacking / Cracking Tools &amp; Apps</span>
+        <span class="tag"><span class="ic">⭐</span>Hacking Tutorials &amp; Methods</span>
+        <span class="tag"><span class="ic">⭐</span>XSS &amp; SQL Injection Dorks</span>
+        <span class="tag"><span class="ic">⭐</span>SSH Logins</span>
+        <span class="tag"><span class="ic">⭐</span>RDP Logins</span>
 
-      <a href="#" class="item">
-        <div class="item-img">
-          <span class="ph">SF-005</span>
-        </div>
-        <div class="item-body">
-          <div class="item-name">CipherNode</div>
-          <div class="item-foot">
-            <span class="item-price">$179<small>/mo</small></span>
-            <span class="item-rep">98.0%</span>
-          </div>
-        </div>
-      </a>
+        <span class="tag"><span class="ic">⭐</span>Shells Logins</span>
+        <span class="tag"><span class="ic">⭐</span>SMTP &amp; Webmail Logins</span>
+        <span class="tag"><span class="ic">⭐</span>CPanel &amp; WHM Logins</span>
+        <span class="tag"><span class="ic">⭐</span>Leaked Udemy &amp; Programming Courses</span>
 
-      <a href="#" class="item">
-        <div class="item-img">
-          <span class="ph">SF-006</span>
-        </div>
-        <div class="item-body">
-          <div class="item-name">TraceBurn</div>
-          <div class="item-foot">
-            <span class="item-price">$189<small>/mo</small></span>
-            <span class="item-rep">94.7%</span>
-          </div>
-        </div>
-      </a>
+        <span class="tag"><span class="ic">⭐</span>Free Premium Netflix Accounts &amp; Cookies</span>
+        <span class="tag"><span class="ic">⭐</span>Premium Gaming Accounts</span>
+        <span class="tag"><span class="ic">⭐</span>VPN Accounts</span>
 
-      <a href="#" class="item">
-        <div class="item-img">
-          <span class="ph">SF-007</span>
-        </div>
-        <div class="item-body">
-          <div class="item-name">GhostRelay</div>
-          <div class="item-foot">
-            <span class="item-price">$129<small>/mo</small></span>
-            <span class="item-rep">99.0%</span>
-          </div>
-        </div>
-      </a>
+        <span class="tag"><span class="ic">⭐</span>Cracked Programs &amp; Activation Keys</span>
+        <span class="tag"><span class="ic">⭐</span>Graphics Design Packs &amp; Assets</span>
 
-      <a href="#" class="item">
-        <div class="item-img">
-          <span class="ph">SF-008</span>
-        </div>
-        <div class="item-body">
-          <div class="item-name">DarkVault</div>
-          <div class="item-foot">
-            <span class="item-price">$259<small>/mo</small></span>
-            <span class="item-rep">97.5%</span>
-          </div>
-        </div>
-      </a>
-
-      <a href="#" class="item">
-        <div class="item-img">
-          <span class="ph">SF-009</span>
-        </div>
-        <div class="item-body">
-          <div class="item-name">ZeroTrace</div>
-          <div class="item-foot">
-            <span class="item-price">$159<small>/mo</small></span>
-            <span class="item-rep">95.3%</span>
-          </div>
-        </div>
-      </a>
-
-      <a href="#" class="item">
-        <div class="item-img">
-          <span class="ph">SF-010</span>
-        </div>
-        <div class="item-body">
-          <div class="item-name">IronVeil</div>
-          <div class="item-foot">
-            <span class="item-price">$199<small>/mo</small></span>
-            <span class="item-rep">98.1%</span>
-          </div>
-        </div>
-      </a>
-
-      <a href="#" class="item">
-        <div class="item-img">
-          <span class="ph">SF-011</span>
-        </div>
-        <div class="item-body">
-          <div class="item-name">ObsidianKey</div>
-          <div class="item-foot">
-            <span class="item-price">$279<small>/mo</small></span>
-            <span class="item-rep">96.8%</span>
-          </div>
-        </div>
-      </a>
-
-      <a href="#" class="item">
-        <div class="item-img">
-          <span class="ph">SF-012</span>
-        </div>
-        <div class="item-body">
-          <div class="item-name">NightShard</div>
-          <div class="item-foot">
-            <span class="item-price">$139<small>/mo</small></span>
-            <span class="item-rep">99.4%</span>
-          </div>
-        </div>
-      </a>
-
-    </div>
-
-    <div class="pager">
-      <span class="cur">1</span>
-      <a href="#">2</a>
-      <a href="#">3</a>
-      <a href="#">4</a>
-      <span class="gap">…</span>
-      <a href="#">12</a>
-      <a href="#">next →</a>
-    </div>
-
-  </main>
-
-  <footer class="foot">
-    <div class="foot-inner">
-      <div>
-        © 2025 SilverFang
-        <span class="sep">·</span>
-        <a href="#">Privacy</a>
-        <span class="sep">·</span>
-        <a href="#">Terms</a>
-        <span class="sep">·</span>
-        <a href="#">Escrow Policy</a>
+        <span class="tag"><span class="ic">⭐</span>Nulled PHP Scripts &amp; Themes</span>
+        <span class="tag end"><span class="ic">⭐</span>And Much Much More</span>
       </div>
     </div>
-  </footer>
+  </div>
+</section>
 
+<div class="toolbar">
+  <div class="toolbar-inner">
+    <div class="cats">
+      <a href="#" class="on">All</a>
+    </div>
+
+    <form class="search" id="searchForm">
+      <input type="text" id="searchInput" placeholder="search products…" />
+      <button type="submit">SEARCH</button>
+    </form>
+  </div>
 </div>
+
+<main class="main">
+
+  <div class="grid" id="productGrid">
+    <div class="loading-state"><span class="dot"></span>loading market…</div>
+  </div>
+
+</main>
+
+<footer class="foot">
+  <div class="foot-inner">
+    <div>
+      © 2025 SilverFang
+      <span class="sep">·</span>
+      <a href="#">Privacy</a>
+      <span class="sep">·</span>
+      <a href="#">Terms</a>
+      <span class="sep">·</span>
+      <a href="#">Escrow Policy</a>
+    </div>
+  </div>
+</footer>
 
 <div class="toast" id="toast">
   <span class="dot"></span>
@@ -872,77 +722,220 @@ img,svg{display:block;max-width:100%}
 
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const hdrGuest = document.getElementById('hdrGuest');
-  const hdrUser = document.getElementById('hdrUser');
-  const userNameEl = document.getElementById('userName');
-  const logoutBtn = document.getElementById('logoutBtn');
-
-  window.goHome = function(e){
-    if (e) e.preventDefault();
-    window.scrollTo({top:0});
+  const state = {
+    session: null,
+    me: null,
+    allProducts: [],
+    sellerMap: {},
+    ratingMap: {},
+    searchQuery: ''
   };
 
-  var toastEl = document.getElementById('toast');
-  var toastMsg = document.getElementById('toastMsg');
-  var toastTimer;
+  const $ = function(id){ return document.getElementById(id); };
+  const productGrid = $('productGrid');
+  const hdrGuest = $('hdrGuest');
+  const hdrUser = $('hdrUser');
+  const chipAvatar = $('chipAvatar');
+  const chipName = $('chipName');
+  const logoutBtn = $('logoutBtn');
+  const searchForm = $('searchForm');
+  const searchInput = $('searchInput');
+  const toastEl = $('toast');
+  const toastMsg = $('toastMsg');
+  let toastTimer;
 
-  window.toast = function(msg){
-    if (!toastEl) return;
+  function toast(msg){
     toastMsg.textContent = msg;
     toastEl.classList.add('on');
     clearTimeout(toastTimer);
     toastTimer = setTimeout(function(){
       toastEl.classList.remove('on');
     }, 3000);
-  };
+  }
 
-  async function updateHeader(){
+  function escapeHtml(str){
+    if (str == null) return '';
+    return String(str)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;')
+      .replace(/'/g,'&#39;');
+  }
+
+  function priceHTML(p){
+    const parts = [];
+    if (p.price_monthly != null){
+      parts.push('<span class="row">$' + Number(p.price_monthly).toFixed(0) + '<small>/mo</small></span>');
+    }
+    if (p.price_lifetime != null){
+      parts.push('<span class="row">$' + Number(p.price_lifetime).toFixed(0) + '<small> lifetime</small></span>');
+    }
+    return parts.join('');
+  }
+
+  function avatarHTML(url, ch){
+    if (url) return '<img src="' + escapeHtml(url) + '" alt="" />';
+    return '<span class="ph">' + escapeHtml((ch || '?').toUpperCase()) + '</span>';
+  }
+
+  async function initAuth(){
     try {
       const { data: { session } } = await supabase.auth.getSession();
-
-      if (!session) {
-        hdrGuest.style.display = 'flex';
-        hdrUser.style.display = 'none';
-        return;
+      state.session = session;
+      if (session){
+        const { data: me } = await supabase
+          .from('profiles')
+          .select('id, username, avatar_url')
+          .eq('id', session.user.id)
+          .maybeSingle();
+        state.me = me || null;
       }
+    } catch (e){}
+    renderHeader();
+  }
 
+  function renderHeader(){
+    if (state.session && state.me){
       hdrGuest.style.display = 'none';
       hdrUser.style.display = 'flex';
-
-      const { data: profile, error } = await supabase
-        .from('profiles')
-        .select('username')
-        .eq('id', session.user.id)
-        .maybeSingle();
-
-      if (error || !profile) {
-        userNameEl.textContent = 'operator';
-      } else {
-        userNameEl.textContent = profile.username;
-      }
-    } catch (e) {
+      chipName.textContent = state.me.username;
+      chipAvatar.innerHTML = state.me.avatar_url
+        ? '<img src="' + escapeHtml(state.me.avatar_url) + '" alt="" />'
+        : '<span class="ph">' + escapeHtml((state.me.username || '?').charAt(0).toUpperCase()) + '</span>';
+    } else {
       hdrGuest.style.display = 'flex';
       hdrUser.style.display = 'none';
     }
   }
 
+  async function loadMarket(){
+    productGrid.innerHTML = '<div class="loading-state"><span class="dot"></span>loading market…</div>';
+
+    const { data, error } = await supabase
+      .from('products')
+      .select('id, seller_id, name, image_url, price_monthly, price_lifetime, created_at')
+      .order('created_at', { ascending: false })
+      .limit(60);
+
+    if (error){
+      productGrid.innerHTML = '<div class="empty-state"><strong>Failed to load</strong>' + escapeHtml(error.message) + '</div>';
+      return;
+    }
+
+    state.allProducts = data || [];
+
+    if (state.allProducts.length === 0){
+      productGrid.innerHTML =
+        '<div class="empty-state">' +
+          '<strong>No products listed yet</strong>' +
+          'Be the first to list a product on the market.' +
+        '</div>';
+      return;
+    }
+
+    const sellerIds = Array.from(new Set(state.allProducts.map(function(p){ return p.seller_id; })));
+    const productIds = state.allProducts.map(function(p){ return p.id; });
+
+    const [{ data: sellers }, { data: ratings }] = await Promise.all([
+      supabase.from('profiles').select('id, username, avatar_url').in('id', sellerIds),
+      supabase.from('ratings').select('product_id, stars').in('product_id', productIds)
+    ]);
+
+    state.sellerMap = {};
+    (sellers || []).forEach(function(s){ state.sellerMap[s.id] = s; });
+
+    const agg = {};
+    (ratings || []).forEach(function(r){
+      if (!agg[r.product_id]) agg[r.product_id] = { sum: 0, count: 0 };
+      agg[r.product_id].sum += r.stars;
+      agg[r.product_id].count++;
+    });
+    state.ratingMap = agg;
+
+    renderMarket();
+  }
+
+  function renderMarket(){
+    const q = state.searchQuery.toLowerCase();
+    const filtered = q
+      ? state.allProducts.filter(function(p){
+          return (p.name || '').toLowerCase().indexOf(q) !== -1;
+        })
+      : state.allProducts;
+
+    if (filtered.length === 0){
+      productGrid.innerHTML =
+        '<div class="empty-state">' +
+          '<strong>No results</strong>' +
+          'No products match "' + escapeHtml(state.searchQuery) + '".' +
+        '</div>';
+      return;
+    }
+
+    productGrid.innerHTML = filtered.map(function(p){
+      const seller = state.sellerMap[p.seller_id] || { username: 'unknown' };
+      const agg = state.ratingMap[p.id];
+      const avg = agg ? (agg.sum / agg.count).toFixed(1) : null;
+      const cnt = agg ? agg.count : 0;
+      const ratingHTML = avg
+        ? '<span class="item-rep">★ ' + avg + ' (' + cnt + ')</span>'
+        : '<span class="item-rep" style="color:var(--text-3)">—</span>';
+
+      const img = p.image_url
+        ? '<img src="' + escapeHtml(p.image_url) + '" alt="" />'
+        : '<span class="ph">NO IMG</span>';
+
+      return (
+        '<a href="product.html?id=' + p.id + '" class="item">' +
+          '<div class="item-img">' + img + '</div>' +
+          '<div class="item-body">' +
+            '<div class="item-name">' + escapeHtml(p.name) + '</div>' +
+            '<div class="item-vendor">by ' + escapeHtml(seller.username) + '</div>' +
+            '<div class="item-foot">' +
+              '<span class="item-price">' + priceHTML(p) + '</span>' +
+              ratingHTML +
+            '</div>' +
+          '</div>' +
+        '</a>'
+      );
+    }).join('');
+  }
+
   logoutBtn.addEventListener('click', async function(){
     logoutBtn.disabled = true;
-    logoutBtn.textContent = '…';
-    try {
-      await supabase.auth.signOut();
-    } catch (e) {
-      /* ignore */
-    }
+    try { await supabase.auth.signOut(); } catch(e){}
     sessionStorage.removeItem('sf_signup_codes');
     window.location.href = 'index.html';
   });
 
-  supabase.auth.onAuthStateChange(function(_event, _session){
-    updateHeader();
+  searchForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    const q = searchInput.value.trim();
+    if (!q){
+      state.searchQuery = '';
+      renderMarket();
+      return;
+    }
+    if (!state.session){
+      toast('Search is members only. Login first.');
+      return;
+    }
+    state.searchQuery = q;
+    renderMarket();
   });
 
-  updateHeader();
+  searchInput.addEventListener('input', function(){
+    if (searchInput.value.trim() === '' && state.searchQuery !== ''){
+      state.searchQuery = '';
+      renderMarket();
+    }
+  });
+
+  (async function boot(){
+    await initAuth();
+    await loadMarket();
+  })();
 
 })();
 </script>
