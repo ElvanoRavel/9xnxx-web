@@ -1207,9 +1207,14 @@ table.tbl{
             ? '<div class="row-sub" style="color:var(--vip)">VIP since ' + escapeHtml(fmtDate(u.vip_granted_at)) + '</div>'
             : '';
 
+          // ============ FIX: self-grant/revoke VIP untuk diri sendiri ============
           let actions = '';
           if (isSelf){
-            actions = '<span style="color:var(--text-3);font-family:var(--mono);font-size:10.5px">—</span>';
+            if (u.is_vip){
+              actions += '<button type="button" class="btn-sm unvip" data-revokevip="' + u.id + '">Revoke VIP</button>';
+            } else {
+              actions += '<button type="button" class="btn-sm vip" data-grantvip="' + u.id + '">Grant VIP</button>';
+            }
           } else {
             if (u.is_banned){
               actions += '<button type="button" class="btn-sm success" data-unban="' + u.id + '">Unban</button>';
@@ -1293,7 +1298,11 @@ table.tbl{
         const id = el.getAttribute('data-grantvip');
         const u = state.users.find(function(x){ return x.id === id; });
         if (!u) return;
-        if (!confirm('Grant VIP status to "' + u.username + '"?\n\nThey will be able to customize their username with effects and emojis.')) return;
+        const isSelf = u.id === state.me.id;
+        const promptMsg = isSelf
+          ? 'Grant VIP status to YOURSELF?\n\nYou will be able to customize your username with effects and emojis.'
+          : 'Grant VIP status to "' + u.username + '"?\n\nThey will be able to customize their username with effects and emojis.';
+        if (!confirm(promptMsg)) return;
         const { data, error } = await supabase.rpc('admin_grant_vip', { p_user_id: id });
         if (error || !data || !data.success){
           toast((data && data.error) || error.message || 'Failed.', 'err');
@@ -1311,7 +1320,11 @@ table.tbl{
         const id = el.getAttribute('data-revokevip');
         const u = state.users.find(function(x){ return x.id === id; });
         if (!u) return;
-        if (!confirm('Revoke VIP status from "' + u.username + '"?\n\nTheir custom username effect and emoji will be removed.')) return;
+        const isSelf = u.id === state.me.id;
+        const promptMsg = isSelf
+          ? 'Revoke VIP status from YOURSELF?\n\nYour custom username effect and emoji will be removed.'
+          : 'Revoke VIP status from "' + u.username + '"?\n\nTheir custom username effect and emoji will be removed.';
+        if (!confirm(promptMsg)) return;
         const { data, error } = await supabase.rpc('admin_revoke_vip', { p_user_id: id });
         if (error || !data || !data.success){
           toast((data && data.error) || error.message || 'Failed.', 'err');
