@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#000000" />
+<title>Product · SilverFang</title>
+<link rel="icon" type="image/jpeg" href="silverfang.jpg" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:#000;
+  color:#c9c9c9;
+  font-size:13px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+a{color:inherit;text-decoration:none}
+a:hover{color:#fff}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;font-size:inherit}
+input,textarea{font-family:inherit;color:inherit;font-size:inherit}
+img{display:block;max-width:100%}
+::selection{background:#d92626;color:#fff}
+
+:root{
+  --border:#1a1a1a;
+  --border-2:#262626;
+  --border-red:#3a1414;
+  --border-red-2:#6b1f1f;
+  --text:#d4d4d4;
+  --text-2:#8a8a8a;
+  --text-3:#555;
+  --text-4:#333;
+  --red:#d92626;
+  --red-2:#a81c1c;
+  --green:#4a9e4a;
+  --amber:#c9a227;
+  --mono:'IBM Plex Mono',ui-monospace,'Courier New',monospace;
+}
+
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:#000}
+::-webkit-scrollbar-thumb{background:#1a1a1a;border:2px solid #000}
+::-webkit-scrollbar-thumb:hover{background:#282828}
+*{scrollbar-width:thin;scrollbar-color:#1a1a1a #000}
+
+.hdr{
+  border-bottom:1px solid var(--border);
+  background:#000;
+  position:sticky;
+  top:0;
+  z-index:50;
+}
+.hdr-inner{
+  max-width:1180px;
+  margin:0 auto;
+  padding:0 20px;
+  display:flex;
+  align-items:center;
+  height:52px;
+  gap:20px;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-family:var(--mono);
+  font-size:15px;
+  letter-spacing:.06em;
+  color:#fff;
+  flex-shrink:0;
+}
+.brand-logo{width:22px;height:22px;object-fit:contain;flex-shrink:0}
+.brand .name{font-weight:500}
+
+.hdr-nav{
+  display:flex;
+  gap:2px;
+  font-size:12.5px;
+  margin-left:8px;
+}
+.hdr-nav a{padding:6px 11px;color:var(--text-2);border-radius:2px}
+.hdr-nav a:hover{color:var(--text);background:#0d0d0d}
+.hdr-nav a.on{color:#fff}
+
+.hdr-right{
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-family:var(--mono);
+  font-size:11px;
+}
+.hdr-guest{display:flex;align-items:center;gap:8px}
+.btn-log{
+  padding:6px 12px;
+  border:1px solid var(--border-2);
+  color:var(--text);
+  font-size:11.5px;
+  transition:background .1s,border-color .1s,color .1s;
+}
+.btn-log:hover{background:var(--red);border-color:var(--red);color:#fff}
+.btn-signup{
+  padding:6px 12px;
+  background:var(--red);
+  border:1px solid var(--red);
+  color:#fff;
+  font-size:11.5px;
+  transition:background .1s,border-color .1s;
+}
+.btn-signup:hover{background:var(--red-2);border-color:var(--red-2)}
+
+.hdr-user{display:none;align-items:center;gap:8px}
+.user-chip{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:4px 10px 4px 4px;
+  border:1px solid var(--border-red-2);
+  background:#050505;
+  color:#e0e0e0;
+  font-size:11.5px;
+}
+.user-chip .avatar{
+  width:24px;height:24px;
+  background:#1a1a1a;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  flex-shrink:0;
+}
+.user-chip .avatar img{width:100%;height:100%;object-fit:cover}
+.user-chip .avatar .ph{font-size:10px;color:var(--text-3)}
+.user-chip .name{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btn-logout{
+  padding:6px 12px;
+  border:1px solid var(--border-2);
+  color:var(--text);
+  font-size:11.5px;
+  transition:background .1s,border-color .1s,color .1s;
+}
+.btn-logout:hover{background:var(--red);border-color:var(--red);color:#fff}
+
+.crumbs{
+  border-bottom:1px solid var(--border);
+  background:#000;
+}
+.crumbs-inner{
+  max-width:1180px;
+  margin:0 auto;
+  padding:0 20px;
+  height:38px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--text-3);
+}
+.crumbs-inner a{color:var(--text-3)}
+.crumbs-inner a:hover{color:var(--text)}
+.crumbs-inner .sep{color:var(--text-4)}
+
+.main{
+  max-width:1180px;
+  margin:0 auto;
+  padding:24px 20px 60px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1.6fr 1fr;
+  gap:24px;
+  margin-bottom:28px;
+}
+
+.card{
+  border:1px solid var(--border-red);
+  background:#000;
+}
+
+.prod-hero{
+  border-bottom:1px solid var(--border);
+  background:#050505;
+  aspect-ratio:16/10;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  position:relative;
+}
+.prod-hero img{width:100%;height:100%;object-fit:contain;background:#000}
+.prod-hero .ph{
+  font-family:var(--mono);
+  font-size:11px;
+  color:#1f1f1f;
+  letter-spacing:.3em;
+  text-transform:uppercase;
+}
+
+.prod-info{padding:20px}
+.prod-name{
+  font-family:var(--mono);
+  font-size:20px;
+  font-weight:600;
+  color:#fff;
+  line-height:1.3;
+  margin-bottom:6px;
+  word-break:break-word;
+}
+.prod-meta{
+  font-family:var(--mono);
+  font-size:10.5px;
+  color:var(--text-3);
+  letter-spacing:.04em;
+  margin-bottom:16px;
+}
+
+.price-block{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+  padding-bottom:18px;
+  border-bottom:1px solid var(--border);
+}
+.price-item{
+  padding:10px 14px;
+  background:#050505;
+  border:1px solid var(--border-red-2);
+  font-family:var(--mono);
+}
+.price-item .lbl{
+  display:block;
+  font-size:9.5px;
+  color:var(--text-3);
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  margin-bottom:4px;
+}
+.price-item .amt{
+  font-size:16px;
+  font-weight:600;
+  color:#fff;
+}
+.price-item .amt small{
+  font-size:10.5px;
+  color:var(--text-3);
+  font-weight:400;
+}
+
+.prod-desc{
+  font-size:13px;
+  color:var(--text);
+  line-height:1.7;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+.prod-desc.empty{
+  color:var(--text-3);
+  font-style:italic;
+  font-family:var(--mono);
+  font-size:11.5px;
+}
+
+.seller-card{padding:20px}
+.seller-head{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding-bottom:16px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:16px;
+}
+.seller-avatar{
+  width:56px;height:56px;
+  background:#0d0d0d;
+  border:1px solid var(--border-2);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  flex-shrink:0;
+}
+.seller-avatar img{width:100%;height:100%;object-fit:cover}
+.seller-avatar .ph{
+  font-family:var(--mono);
+  font-size:20px;
+  color:var(--text-4);
+}
+.seller-meta{flex:1;min-width:0}
+.seller-uname{
+  font-family:var(--mono);
+  font-size:13.5px;
+  color:#e0e0e0;
+  font-weight:500;
+  word-break:break-all;
+  margin-bottom:3px;
+}
+.seller-joined{
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--text-3);
+  letter-spacing:.04em;
+}
+
+.seller-bio{
+  font-size:12px;
+  color:var(--text-2);
+  line-height:1.65;
+  margin-bottom:16px;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+.seller-bio.empty{
+  color:var(--text-4);
+  font-style:italic;
+  font-family:var(--mono);
+}
+
+.seller-stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-bottom:16px;
+}
+.stat{
+  padding:8px 10px;
+  background:#050505;
+  border:1px solid var(--border-2);
+  font-family:var(--mono);
+  text-align:center;
+}
+.stat .num{
+  display:block;
+  font-size:14px;
+  color:#fff;
+  font-weight:600;
+  margin-bottom:2px;
+}
+.stat .lbl{
+  font-size:9px;
+  color:var(--text-3);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.seller-actions{display:flex;flex-direction:column;gap:8px}
+
+.btn-primary{
+  padding:9px 14px;
+  background:var(--red);
+  border:1px solid var(--red);
+  color:#fff;
+  font-family:var(--mono);
+  font-size:11.5px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  transition:background .1s,border-color .1s;
+  text-align:center;
+}
+.btn-primary:hover{background:var(--red-2);border-color:var(--red-2)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+
+.btn-ghost{
+  padding:9px 14px;
+  background:#0d0d0d;
+  border:1px solid var(--border-2);
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:11.5px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  transition:background .1s,border-color .1s,color .1s;
+  text-align:center;
+}
+.btn-ghost:hover{background:#161616;border-color:var(--border-red-2);color:#fff}
+
+.btn-following{
+  background:#150505;
+  border-color:var(--border-red-2);
+  color:#e06060;
+}
+.btn-following:hover{background:var(--red);border-color:var(--red);color:#fff}
+
+.sec{
+  border:1px solid var(--border-red);
+  background:#000;
+  margin-bottom:24px;
+}
+.sec-head{
+  padding:14px 20px;
+  border-bottom:1px solid var(--border);
+  background:#050505;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+.sec-title{
+  font-family:var(--mono);
+  font-size:12px;
+  font-weight:500;
+  color:#fff;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.sec-body{padding:20px}
+
+.rating-wrap{
+  display:flex;
+  align-items:center;
+  gap:20px;
+  flex-wrap:wrap;
+}
+.rating-summary{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.rating-big{
+  font-family:var(--mono);
+  font-size:36px;
+  color:var(--amber);
+  font-weight:600;
+  line-height:1;
+}
+.rating-meta{
+  font-family:var(--mono);
+  font-size:10.5px;
+  color:var(--text-3);
+  line-height:1.6;
+}
+.rating-stars{
+  font-size:16px;
+  color:var(--amber);
+  letter-spacing:1px;
+}
+.rating-stars .dim{color:var(--text-4)}
+
+.rating-divider{
+  width:1px;
+  height:60px;
+  background:var(--border);
+}
+
+.your-rating{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.your-rating .lbl{
+  font-family:var(--mono);
+  font-size:10.5px;
+  color:var(--text-3);
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.star-picker{
+  display:flex;
+  gap:4px;
+  font-size:22px;
+  line-height:1;
+}
+.star-picker span{
+  cursor:pointer;
+  color:var(--text-4);
+  transition:color .1s,transform .1s;
+  user-select:none;
+}
+.star-picker span:hover,
+.star-picker span.hover{color:var(--amber);transform:scale(1.1)}
+.star-picker span.on{color:var(--amber)}
+.star-picker.locked span{cursor:not-allowed;opacity:.6}
+.star-picker.locked span:hover{transform:none}
+
+.comments-empty{
+  text-align:center;
+  padding:30px 20px;
+  font-family:var(--mono);
+  font-size:11.5px;
+  color:var(--text-3);
+}
+
+.comment-form{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-bottom:22px;
+  padding-bottom:22px;
+  border-bottom:1px solid var(--border);
+}
+.comment-form textarea{
+  width:100%;
+  padding:10px 12px;
+  background:#000;
+  border:1px solid var(--border-2);
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:12.5px;
+  outline:none;
+  resize:vertical;
+  min-height:80px;
+  line-height:1.6;
+  transition:border-color .15s,box-shadow .15s;
+}
+.comment-form textarea:focus{
+  border-color:var(--border-red-2);
+  box-shadow:0 0 0 1px rgba(217,38,38,.15);
+}
+.comment-form textarea::placeholder{color:var(--text-4)}
+.comment-form .row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+.comment-form .count{
+  font-family:var(--mono);
+  font-size:10.5px;
+  color:var(--text-3);
+}
+
+.comment-list{display:flex;flex-direction:column;gap:14px}
+.comment{
+  display:flex;
+  gap:12px;
+  padding-bottom:14px;
+  border-bottom:1px solid var(--border);
+}
+.comment:last-child{border-bottom:none;padding-bottom:0}
+.comment-avatar{
+  width:36px;height:36px;
+  background:#0d0d0d;
+  border:1px solid var(--border-2);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  flex-shrink:0;
+}
+.comment-avatar img{width:100%;height:100%;object-fit:cover}
+.comment-avatar .ph{font-family:var(--mono);font-size:12px;color:var(--text-3)}
+.comment-body{flex:1;min-width:0}
+.comment-head{
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+  margin-bottom:5px;
+  flex-wrap:wrap;
+}
+.comment-uname{
+  font-family:var(--mono);
+  font-size:12px;
+  color:#e0e0e0;
+  font-weight:500;
+  word-break:break-all;
+}
+.comment-date{
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--text-3);
+}
+.comment-text{
+  font-size:12.5px;
+  color:var(--text);
+  line-height:1.65;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+.comment-del{
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--text-3);
+  padding:2px 6px;
+  border:1px solid transparent;
+  transition:color .1s,border-color .1s;
+}
+.comment-del:hover{color:#e06060;border-color:var(--border-red-2)}
+
+.guest-prompt{
+  padding:16px;
+  border:1px solid var(--border-red-2);
+  background:#0a0202;
+  font-family:var(--mono);
+  font-size:11.5px;
+  color:var(--text-2);
+  line-height:1.7;
+  text-align:center;
+}
+.guest-prompt a{color:var(--amber)}
+.guest-prompt a:hover{color:#fff}
+
+.loading{
+  text-align:center;
+  padding:60px 20px;
+  font-family:var(--mono);
+  font-size:11.5px;
+  color:var(--text-3);
+}
+.loading .dot{
+  display:inline-block;
+  width:5px;height:5px;
+  background:var(--red);
+  border-radius:50%;
+  margin-right:6px;
+  vertical-align:middle;
+  animation:blink 1s infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.error-box{
+  text-align:center;
+  padding:60px 20px;
+  border:1px dashed var(--border-2);
+  font-family:var(--mono);
+  font-size:12px;
+  color:var(--text-3);
+  line-height:1.8;
+}
+.error-box strong{color:#e06060;display:block;margin-bottom:8px}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:20px;
+  transform:translate(-50%,80px);
+  background:#0d0d0d;
+  border:1px solid var(--border-2);
+  padding:10px 16px;
+  font-family:var(--mono);
+  font-size:11.5px;
+  color:var(--text);
+  z-index:200;
+  transition:transform .25s ease;
+  max-width:90vw;
+}
+.toast.on{transform:translate(-50%,0)}
+.toast.ok{border-color:#1f3a1f;color:var(--green)}
+.toast.err{border-color:#4a1a1a;color:#e06060}
+.toast .dot{
+  display:inline-block;
+  width:5px;height:5px;
+  background:currentColor;
+  border-radius:50%;
+  margin-right:8px;
+  vertical-align:middle;
+}
+
+@media (max-width:900px){
+  .grid{grid-template-columns:1fr;gap:16px}
+  .rating-wrap{flex-direction:column;align-items:flex-start;gap:16px}
+  .rating-divider{display:none}
+}
+@media (max-width:640px){
+  .hdr-inner{padding:0 14px;gap:10px}
+  .hdr-nav{display:none}
+  .crumbs-inner{padding:0 14px;font-size:10.5px}
+  .main{padding:16px 14px 60px}
+  .prod-info{padding:14px}
+  .prod-name{font-size:16px}
+  .sec-body{padding:16px}
+  .seller-card{padding:16px}
+  .rating-big{font-size:28px}
+  .user-chip .name{max-width:70px}
+  .btn-logout{padding:6px 9px;font-size:10.5px}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-inner">
+    <a href="index.html" class="brand">
+      <img src="silverfang.jpg" alt="SilverFang" class="brand-logo" />
+      <span class="name">SilverFang</span>
+    </a>
+
+    <nav class="hdr-nav">
+      <a href="index.html">Market</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="messages.html">Messages</a>
+    </nav>
+
+    <div class="hdr-right">
+      <div class="hdr-guest" id="hdrGuest">
+        <a href="login.html" class="btn-log">Login</a>
+        <a href="signup.html" class="btn-signup">Sign Up</a>
+      </div>
+
+      <div class="hdr-user" id="hdrUser">
+        <a href="dashboard.html" class="user-chip">
+          <span class="avatar" id="chipAvatar"><span class="ph">?</span></span>
+          <span class="name" id="chipName">…</span>
+        </a>
+        <button type="button" class="btn-logout" id="logoutBtn">Logout</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="crumbs">
+  <div class="crumbs-inner">
+    <a href="index.html">Market</a>
+    <span class="sep">/</span>
+    <span id="crumbName">…</span>
+  </div>
+</div>
+
+<main class="main" id="mainArea">
+  <div class="loading"><span class="dot"></span>loading product…</div>
+</main>
+
+<div class="toast" id="toast">
+  <span class="dot"></span>
+  <span id="toastMsg">—</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  'use strict';
+
+  const SUPABASE_URL = 'https://iygiioemtpfozxikhgmx.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_xHr9z0NCsm8gBivTQ2nH8Q_Y1uzdlis';
+
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const params = new URLSearchParams(window.location.search);
+  const productId = params.get('id');
+
+  const state = {
+    session: null,
+    profile: null,
+    product: null,
+    seller: null,
+    sellerStats: { productCount: 0, followerCount: 0 },
+    myRating: null,
+    ratingAvg: null,
+    ratingCount: 0,
+    comments: [],
+    isFollowing: false
+  };
+
+  const $ = function(id){ return document.getElementById(id); };
+  const mainArea = $('mainArea');
+  const crumbName = $('crumbName');
+  const hdrGuest = $('hdrGuest');
+  const hdrUser = $('hdrUser');
+  const chipAvatar = $('chipAvatar');
+  const chipName = $('chipName');
+  const logoutBtn = $('logoutBtn');
+  const toastEl = $('toast');
+  const toastMsg = $('toastMsg');
+  let toastTimer;
+
+  function toast(msg, type){
+    toastMsg.textContent = msg;
+    toastEl.className = 'toast on ' + (type || '');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){
+      toastEl.className = 'toast';
+    }, 3000);
+  }
+
+  function escapeHtml(str){
+    if (str == null) return '';
+    return String(str)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;')
+      .replace(/'/g,'&#39;');
+  }
+
+  function fmtDate(iso){
+    if (!iso) return '—';
+    try {
+      const d = new Date(iso);
+      return d.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
+    } catch(e){ return '—'; }
+  }
+
+  function fmtRelative(iso){
+    if (!iso) return '';
+    try {
+      const d = new Date(iso);
+      const diff = (Date.now() - d.getTime()) / 1000;
+      if (diff < 60) return 'just now';
+      if (diff < 3600) return Math.floor(diff/60) + 'm ago';
+      if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
+      if (diff < 604800) return Math.floor(diff/86400) + 'd ago';
+      return fmtDate(iso);
+    } catch(e){ return ''; }
+  }
+
+  function avatarHTML(url, fallbackChar){
+    if (url){
+      return '<img src="' + escapeHtml(url) + '" alt="" />';
+    }
+    return '<span class="ph">' + escapeHtml(fallbackChar || '?') + '</span>';
+  }
+
+  function starsHTML(avg){
+    const rounded = Math.round(avg * 2) / 2;
+    let html = '';
+    for (let i = 1; i <= 5; i++){
+      if (i <= Math.floor(rounded)){
+        html += '★';
+      } else if (i - 0.5 === rounded){
+        html += '★';
+      } else {
+        html += '<span class="dim">★</span>';
+      }
+    }
+    return html;
+  }
+
+  // ================= AUTH + HEADER =================
+  async function loadSession(){
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      state.session = session;
+      if (session){
+        const { data } = await supabase
+          .from('profiles')
+          .select('id, username, avatar_url, bio, created_at')
+          .eq('id', session.user.id)
+          .maybeSingle();
+        state.profile = data || null;
+      }
+    } catch(e){}
+    renderHeader();
+  }
+
+  function renderHeader(){
+    if (state.session && state.profile){
+      hdrGuest.style.display = 'none';
+      hdrUser.style.display = 'flex';
+      chipName.textContent = state.profile.username;
+      chipAvatar.innerHTML = state.profile.avatar_url
+        ? '<img src="' + escapeHtml(state.profile.avatar_url) + '" alt="" />'
+        : '<span class="ph">' + escapeHtml((state.profile.username || '?').charAt(0).toUpperCase()) + '</span>';
+    } else {
+      hdrGuest.style.display = 'flex';
+      hdrUser.style.display = 'none';
+    }
+  }
+
+  logoutBtn.addEventListener('click', async function(){
+    logoutBtn.disabled = true;
+    try { await supabase.auth.signOut(); } catch(e){}
+    sessionStorage.removeItem('sf_signup_codes');
+    window.location.href = 'index.html';
+  });
+
+  // ================= LOAD DATA =================
+  async function loadProduct(){
+    const { data, error } = await supabase
+      .from('products')
+      .select('id, seller_id, name, description, image_url, price_monthly, price_lifetime, created_at')
+      .eq('id', productId)
+      .maybeSingle();
+
+    if (error || !data) return null;
+    state.product = data;
+    return data;
+  }
+
+  async function loadSeller(){
+    const { data } = await supabase
+      .from('profiles')
+      .select('id, username, avatar_url, bio, created_at')
+      .eq('id', state.product.seller_id)
+      .maybeSingle();
+
+    state.seller = data || { id: state.product.seller_id, username: 'unknown', avatar_url: null, bio: null, created_at: null };
+  }
+
+  async function loadSellerStats(){
+    const [{ count: prodCount }, { count: followerCount }] = await Promise.all([
+      supabase.from('products').select('id', { count: 'exact', head: true }).eq('seller_id', state.product.seller_id),
+      supabase.from('follows').select('id', { count: 'exact', head: true }).eq('following_id', state.product.seller_id)
+    ]);
+    state.sellerStats.productCount = prodCount || 0;
+    state.sellerStats.followerCount = followerCount || 0;
+  }
+
+  async function loadRatings(){
+    const { data } = await supabase
+      .from('ratings')
+      .select('stars, user_id')
+      .eq('product_id', productId);
+
+    const rows = data || [];
+    state.ratingCount = rows.length;
+    if (rows.length === 0){
+      state.ratingAvg = null;
+    } else {
+      const sum = rows.reduce(function(a, r){ return a + r.stars; }, 0);
+      state.ratingAvg = sum / rows.length;
+    }
+
+    state.myRating = null;
+    if (state.session){
+      const mine = rows.find(function(r){ return r.user_id === state.session.user.id; });
+      state.myRating = mine ? mine.stars : null;
+    }
+  }
+
+  async function loadComments(){
+    const { data } = await supabase
+      .from('comments')
+      .select('id, content, created_at, user_id')
+      .eq('product_id', productId)
+      .order('created_at', { ascending: false })
+      .limit(100);
+
+    const rows = data || [];
+
+    if (rows.length > 0){
+      const userIds = Array.from(new Set(rows.map(function(r){ return r.user_id; })));
+      const { data: profiles } = await supabase
+        .from('profiles')
+        .select('id, username, avatar_url')
+        .in('id', userIds);
+
+      const map = {};
+      (profiles || []).forEach(function(p){ map[p.id] = p; });
+
+      state.comments = rows.map(function(r){
+        return {
+          id: r.id,
+          content: r.content,
+          created_at: r.created_at,
+          user_id: r.user_id,
+          username: (map[r.user_id] && map[r.user_id].username) || 'unknown',
+          avatar_url: (map[r.user_id] && map[r.user_id].avatar_url) || null
+        };
+      });
+    } else {
+      state.comments = [];
+    }
+  }
+
+  async function loadFollowStatus(){
+    state.isFollowing = false;
+    if (!state.session) return;
+    if (state.session.user.id === state.product.seller_id) return;
+
+    const { data } = await supabase
+      .from('follows')
+      .select('id')
+      .eq('follower_id', state.session.user.id)
+      .eq('following_id', state.product.seller_id)
+      .maybeSingle();
+
+    state.isFollowing = !!data;
+  }
+
+  // ================= RENDER =================
+  function renderPage(){
+    const p = state.product;
+    const s = state.seller;
+    const isOwner = state.session && state.session.user.id === p.seller_id;
+    const isLoggedIn = !!state.session;
+
+    crumbName.textContent = p.name;
+
+    const img = p.image_url
+      ? '<img src="' + escapeHtml(p.image_url) + '" alt="" />'
+      : '<span class="ph">NO IMAGE</span>';
+
+    const desc = p.description
+      ? '<div class="prod-desc">' + escapeHtml(p.description) + '</div>'
+      : '<div class="prod-desc empty">No description provided.</div>';
+
+    const priceParts = [];
+    if (p.price_monthly != null){
+      priceParts.push(
+        '<div class="price-item">' +
+          '<span class="lbl">Monthly</span>' +
+          '<span class="amt">$' + Number(p.price_monthly).toFixed(0) + '<small>/mo</small></span>' +
+        '</div>'
+      );
+    }
+    if (p.price_lifetime != null){
+      priceParts.push(
+        '<div class="price-item">' +
+          '<span class="lbl">Lifetime</span>' +
+          '<span class="amt">$' + Number(p.price_lifetime).toFixed(0) + '<small> once</small></span>' +
+        '</div>'
+      );
+    }
+
+    const sellerAv = avatarHTML(s.avatar_url, (s.username || '?').charAt(0).toUpperCase());
+
+    const sellerBio = s.bio
+      ? '<div class="seller-bio">' + escapeHtml(s.bio) + '</div>'
+      : '<div class="seller-bio empty">No bio yet.</div>';
+
+    let sellerActions = '';
+
+    if (!isLoggedIn){
+      sellerActions =
+        '<a href="login.html" class="btn-ghost">Login to interact</a>';
+    } else if (isOwner){
+      sellerActions =
+        '<a href="dashboard.html" class="btn-ghost">Manage This Product</a>';
+    } else {
+      const followClass = state.isFollowing ? 'btn-ghost btn-following' : 'btn-primary';
+      const followText = state.isFollowing ? 'Unfollow' : 'Follow';
+      sellerActions =
+        '<button type="button" class="' + followClass + '" id="followBtn">' + followText + '</button>' +
+        '<a href="messages.html?with=' + s.id + '" class="btn-ghost">Send Message</a>';
+    }
+
+    const ratingBigText = state.ratingAvg != null
+      ? state.ratingAvg.toFixed(1)
+      : '—';
+    const ratingStars = state.ratingAvg != null
+      ? '<div class="rating-stars">' + starsHTML(state.ratingAvg) + '</div>'
+      : '<div class="rating-stars dim" style="color:var(--text-4)">☆☆☆☆☆</div>';
+    const ratingCountText = state.ratingCount === 1
+      ? '1 rating'
+      : state.ratingCount + ' ratings';
+
+    // Your rating section
+    let yourRatingBlock = '';
+    if (!isLoggedIn){
+      yourRatingBlock =
+        '<div class="guest-prompt">' +
+          '<a href="login.html">Login</a> to rate this product.' +
+        '</div>';
+    } else if (isOwner){
+      yourRatingBlock =
+        '<div class="guest-prompt">' +
+          'You cannot rate your own product.' +
+        '</div>';
+    } else {
+      const locked = state.myRating != null;
+      let pickerHTML = '<div class="star-picker' + (locked ? ' locked' : '') + '" id="starPicker">';
+      for (let i = 1; i <= 5; i++){
+        const on = state.myRating != null && i <= state.myRating ? ' on' : '';
+        pickerHTML += '<span data-star="' + i + '" class="' + on + '">★</span>';
+      }
+      pickerHTML += '</div>';
+      const hintText = state.myRating
+        ? 'Your rating: ' + state.myRating + ' / 5 — click a star to change it.'
+        : 'Click a star to rate.';
+      yourRatingBlock =
+        '<div class="your-rating">' +
+          '<span class="lbl">Your Rating</span>' +
+          pickerHTML +
+          '<span class="lbl" style="margin-top:4px;text-transform:none;letter-spacing:.02em">' + hintText + '</span>' +
+        '</div>';
+    }
+
+    // Comments
+    let commentFormHTML = '';
+    if (!isLoggedIn){
+      commentFormHTML =
+        '<div class="guest-prompt">' +
+          '<a href="login.html">Login</a> to post a comment.' +
+        '</div>';
+    } else {
+      commentFormHTML =
+        '<div class="comment-form">' +
+          '<textarea id="commentText" placeholder="Write a comment…" maxlength="1000"></textarea>' +
+          '<div class="row">' +
+            '<span class="count" id="commentCount">0 / 1000</span>' +
+            '<button type="button" class="btn-primary" id="postCommentBtn" style="padding:7px 16px">Post Comment</button>' +
+          '</div>' +
+        '</div>';
+    }
+
+    let commentsHTML = '';
+    if (state.comments.length === 0){
+      commentsHTML = '<div class="comments-empty">No comments yet. Be the first to comment.</div>';
+    } else {
+      commentsHTML = '<div class="comment-list">' +
+        state.comments.map(function(c){
+          const av = avatarHTML(c.avatar_url, (c.username || '?').charAt(0).toUpperCase());
+          const canDelete = state.session && state.session.user.id === c.user_id;
+          const delBtn = canDelete
+            ? '<button type="button" class="comment-del" data-del-comment="' + c.id + '">delete</button>'
+            : '';
+          return (
+            '<div class="comment">' +
+              '<div class="comment-avatar">' + av + '</div>' +
+              '<div class="comment-body">' +
+                '<div class="comment-head">' +
+                  '<span class="comment-uname">' + escapeHtml(c.username) + '</span>' +
+                  '<span class="comment-date">' + escapeHtml(fmtRelative(c.created_at)) + '</span>' +
+                  delBtn +
+                '</div>' +
+                '<div class="comment-text">' + escapeHtml(c.content) + '</div>' +
+              '</div>' +
+            '</div>'
+          );
+        }).join('') +
+        '</div>';
+    }
+
+    const html =
+      '<div class="grid">' +
+
+        '<div class="card">' +
+          '<div class="prod-hero">' + img + '</div>' +
+          '<div class="prod-info">' +
+            '<div class="prod-name">' + escapeHtml(p.name) + '</div>' +
+            '<div class="prod-meta">listed ' + escapeHtml(fmtRelative(p.created_at)) + '</div>' +
+            (priceParts.length > 0 ? '<div class="price-block">' + priceParts.join('') + '</div>' : '') +
+            desc +
+          '</div>' +
+        '</div>' +
+
+        '<div class="card">' +
+          '<div class="seller-card">' +
+            '<div class="seller-head">' +
+              '<div class="seller-avatar">' + sellerAv + '</div>' +
+              '<div class="seller-meta">' +
+                '<div class="seller-uname">' + escapeHtml(s.username) + '</div>' +
+                '<div class="seller-joined">joined ' + escapeHtml(fmtDate(s.created_at)) + '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="seller-stats">' +
+              '<div class="stat"><span class="num">' + state.sellerStats.productCount + '</span><span class="lbl">Products</span></div>' +
+              '<div class="stat"><span class="num">' + state.sellerStats.followerCount + '</span><span class="lbl">Followers</span></div>' +
+            '</div>' +
+            sellerBio +
+            '<div class="seller-actions">' + sellerActions + '</div>' +
+          '</div>' +
+        '</div>' +
+
+      '</div>' +
+
+      '<div class="sec">' +
+        '<div class="sec-head"><span class="sec-title">Rating</span></div>' +
+        '<div class="sec-body">' +
+          '<div class="rating-wrap">' +
+            '<div class="rating-summary">' +
+              '<div class="rating-big">' + ratingBigText + '</div>' +
+              '<div class="rating-meta">' +
+                ratingStars +
+                '<div>' + escapeHtml(ratingCountText) + '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="rating-divider"></div>' +
+            yourRatingBlock +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="sec">' +
+        '<div class="sec-head">' +
+          '<span class="sec-title">Comments (' + state.comments.length + ')</span>' +
+        '</div>' +
+        '<div class="sec-body">' +
+          commentFormHTML +
+          commentsHTML +
+        '</div>' +
+      '</div>';
+
+    mainArea.innerHTML = html;
+
+    bindInteractions();
+  }
+
+  function bindInteractions(){
+    // rating picker
+    const picker = $('starPicker');
+    if (picker){
+      picker.querySelectorAll('span').forEach(function(span){
+        span.addEventListener('click', function(){
+          const n = parseInt(span.getAttribute('data-star'), 10);
+          submitRating(n);
+        });
+        span.addEventListener('mouseenter', function(){
+          const n = parseInt(span.getAttribute('data-star'), 10);
+          picker.querySelectorAll('span').forEach(function(s){
+            const sn = parseInt(s.getAttribute('data-star'), 10);
+            s.classList.toggle('hover', sn <= n);
+          });
+        });
+        span.addEventListener('mouseleave', function(){
+          picker.querySelectorAll('span').forEach(function(s){
+            s.classList.remove('hover');
+          });
+        });
+      });
+    }
+
+    // follow button
+    const followBtn = $('followBtn');
+    if (followBtn){
+      followBtn.addEventListener('click', toggleFollow);
+    }
+
+    // comment form
+    const commentText = $('commentText');
+    const commentCount = $('commentCount');
+    const postCommentBtn = $('postCommentBtn');
+
+    if (commentText){
+      commentText.addEventListener('input', function(){
+        commentCount.textContent = commentText.value.length + ' / 1000';
+      });
+    }
+
+    if (postCommentBtn){
+      postCommentBtn.addEventListener('click', postComment);
+    }
+
+    // delete comment buttons
+    mainArea.querySelectorAll('[data-del-comment]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        const id = btn.getAttribute('data-del-comment');
+        deleteComment(id);
+      });
+    });
+  }
+
+  async function submitRating(n){
+    if (!state.session){
+      toast('You must be logged in.', 'err');
+      return;
+    }
+    if (state.session.user.id === state.product.seller_id){
+      toast('You cannot rate your own product.', 'err');
+      return;
+    }
+
+    const { error } = await supabase
+      .from('ratings')
+      .upsert({
+        product_id: productId,
+        user_id: state.session.user.id,
+        stars: n,
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'product_id,user_id' });
+
+    if (error){
+      toast('Rating failed: ' + error.message, 'err');
+      return;
+    }
+
+    toast('Rating saved: ' + n + ' star' + (n > 1 ? 's' : ''), 'ok');
+    await loadRatings();
+    renderPage();
+  }
+
+  async function toggleFollow(){
+    if (!state.session){
+      window.location.href = 'login.html';
+      return;
+    }
+    if (state.session.user.id === state.product.seller_id) return;
+
+    if (state.isFollowing){
+      const { error } = await supabase
+        .from('follows')
+        .delete()
+        .eq('follower_id', state.session.user.id)
+        .eq('following_id', state.product.seller_id);
+      if (error){ toast('Failed: ' + error.message, 'err'); return; }
+      state.isFollowing = false;
+      toast('Unfollowed.', 'ok');
+    } else {
+      const { error } = await supabase
+        .from('follows')
+        .insert({
+          follower_id: state.session.user.id,
+          following_id: state.product.seller_id
+        });
+      if (error){ toast('Failed: ' + error.message, 'err'); return; }
+      state.isFollowing = true;
+      toast('Now following.', 'ok');
+    }
+
+    await loadSellerStats();
+    renderPage();
+  }
+
+  async function postComment(){
+    if (!state.session){
+      window.location.href = 'login.html';
+      return;
+    }
+    const textarea = $('commentText');
+    if (!textarea) return;
+    const content = textarea.value.trim();
+    if (!content){
+      toast('Comment cannot be empty.', 'err');
+      return;
+    }
+    if (content.length > 1000){
+      toast('Comment too long (max 1000).', 'err');
+      return;
+    }
+
+    const btn = $('postCommentBtn');
+    btn.disabled = true;
+    btn.textContent = 'posting…';
+
+    const { error } = await supabase
+      .from('comments')
+      .insert({
+        product_id: productId,
+        user_id: state.session.user.id,
+        content: content
+      });
+
+    if (error){
+      btn.disabled = false;
+      btn.textContent = 'Post Comment';
+      toast('Post failed: ' + error.message, 'err');
+      return;
+    }
+
+    toast('Comment posted.', 'ok');
+    await loadComments();
+    renderPage();
+  }
+
+  async function deleteComment(id){
+    if (!confirm('Delete this comment?')) return;
+    const { error } = await supabase.from('comments').delete().eq('id', id);
+    if (error){ toast('Delete failed: ' + error.message, 'err'); return; }
+    toast('Comment deleted.', 'ok');
+    await loadComments();
+    renderPage();
+  }
+
+  // ================= INIT =================
+  async function init(){
+    if (!productId){
+      mainArea.innerHTML =
+        '<div class="error-box"><strong>No product ID</strong>Missing product reference in URL.</div>';
+      return;
+    }
+
+    await loadSession();
+
+    const prod = await loadProduct();
+    if (!prod){
+      mainArea.innerHTML =
+        '<div class="error-box"><strong>Product not found</strong>This product may have been removed.</div>';
+      return;
+    }
+
+    await Promise.all([
+      loadSeller(),
+      loadSellerStats(),
+      loadRatings(),
+      loadComments(),
+      loadFollowStatus()
+    ]);
+
+    renderPage();
+  }
+
+  init().catch(function(err){
+    console.error(err);
+    mainArea.innerHTML = '<div class="error-box"><strong>Error</strong>' + escapeHtml(err.message) + '</div>';
+  });
+
+})();
+</script>
+</body>
+</html>
