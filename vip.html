@@ -248,12 +248,22 @@ img{display:block;max-width:100%}
   line-height:1.4;
   padding:14px 0;
   word-break:break-word;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+  flex-wrap:wrap;
 }
 .preview-display .uname{
-  display: inline;
+  display: inline-flex;
+  align-items: center;
 }
 .preview-display .uemoji{
-  font-size: 0.9em;
+  font-size: 1em;
+}
+.preview-display .uemoji svg{
+  width: 1em;
+  height: 1em;
 }
 .preview-meta{
   margin-top:16px;
@@ -354,9 +364,8 @@ img{display:block;max-width:100%}
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:24px;
-  font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;
   position:relative;
+  padding:16%;
 }
 .emoji-btn:hover{
   border-color:var(--border-red-2);
@@ -365,6 +374,19 @@ img{display:block;max-width:100%}
 .emoji-btn.on{
   border-color:var(--vip-2);
   background:#0a0800;
+}
+.emoji-btn .svg-wrap{
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.emoji-btn .svg-wrap svg{
+  width:100%;
+  height:100%;
+  display:block;
+  overflow:visible;
 }
 .emoji-btn .check{
   position:absolute;
@@ -382,6 +404,7 @@ img{display:block;max-width:100%}
   font-size:10px;
   color:var(--text-3);
   letter-spacing:.04em;
+  padding:0;
 }
 
 .actions{
@@ -519,7 +542,6 @@ img{display:block;max-width:100%}
   .preview-display{font-size:24px}
   .effects-grid{grid-template-columns:1fr;gap:8px}
   .emojis-grid{grid-template-columns:repeat(4,1fr)}
-  .emoji-btn{font-size:22px}
   .mobile-nav a{padding:12px 14px;font-size:12px}
   .brand .name{font-size:13px}
 }
@@ -577,6 +599,7 @@ img{display:block;max-width:100%}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="vip-helper.js"></script>
 <script>
 (function(){
   'use strict';
@@ -586,6 +609,9 @@ img{display:block;max-width:100%}
   const ADMIN_USERNAME = 'SilverFang';
 
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // Pull SVG data dari vip-helper.js
+  const EMOJI_SVGS = (window.SF_VIP && window.SF_VIP.EMOJI_CHARS) || {};
 
   const EFFECTS = [
     { id:'none',     name:'None' },
@@ -607,27 +633,27 @@ img{display:block;max-width:100%}
   ];
 
   const EMOJIS = [
-    { id:'none',       char:'',   name:'None' },
-    { id:'skull',      char:'💀', name:'Skull' },
-    { id:'crossbones', char:'☠️', name:'Crossbones' },
-    { id:'fire',       char:'🔥', name:'Fire' },
-    { id:'lightning',  char:'⚡', name:'Lightning' },
-    { id:'dagger',     char:'🗡️', name:'Dagger' },
-    { id:'swords',     char:'⚔️', name:'Swords' },
-    { id:'spider',     char:'🕷️', name:'Spider' },
-    { id:'scorpion',   char:'🦂', name:'Scorpion' },
-    { id:'snake',      char:'🐍', name:'Snake' },
-    { id:'eagle',      char:'🦅', name:'Eagle' },
-    { id:'wolf',       char:'🐺', name:'Wolf' },
-    { id:'bat',        char:'🦇', name:'Bat' },
-    { id:'eye',        char:'👁️', name:'Eye' },
-    { id:'diamond',    char:'💎', name:'Diamond' },
-    { id:'chains',     char:'⛓️', name:'Chains' },
-    { id:'web',        char:'🕸️', name:'Web' },
-    { id:'radioactive',char:'☢️', name:'Radioactive' },
-    { id:'biohazard',  char:'☣️', name:'Biohazard' },
-    { id:'alarm',      char:'🚨', name:'Alarm' },
-    { id:'trident',    char:'🔱', name:'Trident' }
+    { id:'none',       name:'None' },
+    { id:'skull',      name:'Skull' },
+    { id:'crossbones', name:'Crossbones' },
+    { id:'fire',       name:'Fire' },
+    { id:'lightning',  name:'Lightning' },
+    { id:'dagger',     name:'Dagger' },
+    { id:'swords',     name:'Swords' },
+    { id:'spider',     name:'Spider' },
+    { id:'scorpion',   name:'Scorpion' },
+    { id:'snake',      name:'Snake' },
+    { id:'eagle',      name:'Eagle' },
+    { id:'wolf',       name:'Wolf' },
+    { id:'bat',        name:'Bat' },
+    { id:'eye',        name:'Eye' },
+    { id:'diamond',    name:'Diamond' },
+    { id:'chains',     name:'Chains' },
+    { id:'web',        name:'Web' },
+    { id:'radioactive',name:'Radioactive' },
+    { id:'biohazard',  name:'Biohazard' },
+    { id:'alarm',      name:'Alarm' },
+    { id:'trident',    name:'Trident' }
   ];
 
   const state = {
@@ -737,7 +763,7 @@ img{display:block;max-width:100%}
           '<br /><br />' +
           'VIP members unlock:<br />' +
           '• 15 animated username effects<br />' +
-          '• 20 animated hacker emojis' +
+          '• 20 custom hacker emojis' +
         '</div>' +
         '<a href="' + msgLink + '" class="btn-primary" style="display:inline-block;text-decoration:none">Message Admin</a>' +
       '</div>';
@@ -762,9 +788,10 @@ img{display:block;max-width:100%}
     const emojisHTML = EMOJIS.map(function(e){
       const onClass = state.currentEmoji === e.id ? ' on' : '';
       const isNone = e.id === 'none';
+      const svg = EMOJI_SVGS[e.id] || '';
       const content = isNone
         ? '<span style="font-size:10px;color:var(--text-3)">None</span>'
-        : '<span class="uei-' + e.id + '">' + e.char + '</span>';
+        : '<span class="svg-wrap uei-' + e.id + '">' + svg + '</span>';
       return (
         '<button type="button" class="emoji-btn' + onClass + (isNone ? ' none-btn' : '') + '" data-emoji="' + e.id + '" title="' + escapeHtml(e.name) + '">' +
           content +
@@ -851,10 +878,18 @@ img{display:block;max-width:100%}
     if (!nameEl || !emojiEl) return;
 
     nameEl.className = 'uname' + (state.currentEffect !== 'none' ? ' ue-' + state.currentEffect : '');
-    emojiEl.className = 'uemoji' + (state.currentEmoji !== 'none' ? ' uei-' + state.currentEmoji : ' uei-none');
 
-    const eObj = EMOJIS.find(function(x){ return x.id === state.currentEmoji; });
-    emojiEl.textContent = eObj && eObj.char ? eObj.char : '';
+    // Reset emoji element
+    emojiEl.className = 'uemoji';
+    emojiEl.innerHTML = '';
+
+    if (state.currentEmoji && state.currentEmoji !== 'none'){
+      const svg = EMOJI_SVGS[state.currentEmoji] || '';
+      if (svg){
+        emojiEl.className = 'uemoji uei-' + state.currentEmoji;
+        emojiEl.innerHTML = svg;
+      }
+    }
 
     $('metaEffect').textContent = state.currentEffect;
     $('metaEmoji').textContent = state.currentEmoji;
