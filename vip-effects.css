@@ -1,5 +1,5 @@
 /* ============================================================
-   SILVERFANG VIP — USERNAME EFFECTS + OCCULT GLYPHS
+   SILVERFANG VIP — USERNAME EFFECTS + OCCULT SVG SYMBOLS
    ============================================================ */
 
 /* ---------- USERNAME EFFECTS ---------- */
@@ -208,42 +208,59 @@
 }
 
 
-/* ---------- OCCULT / HACKER GLYPHS ---------- */
+/* ---------- OCCULT SVG SYMBOLS ---------- */
 
 .uemoji {
   --glow: rgba(255, 215, 80, 0.85);
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   margin-left: 6px;
-  vertical-align: -0.08em;
-  font-family: 'Segoe UI Symbol', 'Noto Sans Symbols 2', 'Apple Symbols', 'DejaVu Sans', sans-serif;
-  font-size: 1em;
+  vertical-align: -0.15em;
+  width: 1.15em;
+  height: 1.15em;
   line-height: 1;
-  color: #e8e8e8;
-  text-shadow:
-    0 0 3px var(--glow),
-    0 0 7px var(--glow),
-    0 0 12px var(--glow);
-  animation: eGlowPulse 1.6s ease-in-out infinite;
+  flex-shrink: 0;
+  /* Container get its own transform animation per emoji */
+  animation: eGlowIdle 2s ease-in-out infinite;
+}
+
+/* Reset idle animation as default (do nothing visual) */
+@keyframes eGlowIdle {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(0, 0) scale(1); }
+}
+
+.uemoji svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+  /* glow via filter (works on SVG shapes) — 2 layers */
+  filter:
+    drop-shadow(0 0 2px var(--glow))
+    drop-shadow(0 0 5px var(--glow));
+  animation: eSvgGlowPulse 1.6s ease-in-out infinite;
+}
+
+/* Universal SVG glow pulse — every symbol "breathes" */
+@keyframes eSvgGlowPulse {
+  0%, 100% {
+    filter:
+      drop-shadow(0 0 2px var(--glow))
+      drop-shadow(0 0 5px var(--glow));
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 4px var(--glow))
+      drop-shadow(0 0 10px var(--glow))
+      drop-shadow(0 0 16px var(--glow));
+  }
 }
 
 .uei-none { display: none; }
 
-/* Universal glow pulse — setiap glyph pasti "bernafas" */
-@keyframes eGlowPulse {
-  0%, 100% {
-    text-shadow:
-      0 0 3px var(--glow),
-      0 0 6px var(--glow);
-  }
-  50% {
-    text-shadow:
-      0 0 4px var(--glow),
-      0 0 10px var(--glow),
-      0 0 18px var(--glow);
-  }
-}
-
-/* ---------- ANIMASI TAMBAHAN PER GLYPH ---------- */
+/* ---------- TRANSFORM ANIMATIONS ---------- */
 
 @keyframes eFloat {
   0%, 100% { transform: translateY(0); }
@@ -251,7 +268,7 @@
 }
 @keyframes ePulse {
   0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.15); }
+  50% { transform: scale(1.12); }
 }
 @keyframes eShake {
   0%, 100% { transform: translate(0, 0); }
@@ -264,30 +281,140 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+@keyframes eSpinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
 @keyframes eSway {
-  0%, 100% { transform: rotate(-8deg); }
-  50% { transform: rotate(8deg); }
+  0%, 100% { transform: rotate(-7deg); }
+  50% { transform: rotate(7deg); }
+}
+@keyframes eBreath {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.08) rotate(2deg); }
 }
 
-/* ---------- WARNA GLOW PER GLYPH ---------- */
 
-.uei-skull       { --glow: rgba(255, 255, 255, 0.9);   animation: eShake 1.8s ease-in-out infinite, eGlowPulse 1.6s ease-in-out infinite; }
-.uei-biohazard   { --glow: rgba(255, 210, 60, 0.9);    animation: ePulse 2s ease-in-out infinite, eGlowPulse 1.6s ease-in-out infinite; }
-.uei-radioactive { --glow: rgba(180, 255, 40, 0.95);   animation: eSpin 4s linear infinite, eGlowPulse 1.6s ease-in-out infinite; }
-.uei-fire        { --glow: rgba(255, 120, 20, 0.95);   animation: eFloat 0.9s ease-in-out infinite, eGlowPulse 1.6s ease-in-out infinite; }
-.uei-swords      { --glow: rgba(220, 230, 255, 0.9);   animation: eSpin 8s linear infinite, eGlowPulse 1.6s ease-in-out infinite; }
-.uei-flag        { --glow: rgba(255, 60, 60, 0.9);     animation: eSway 1.8s ease-in-out infinite, eGlowPulse 1.6s ease-in-out infinite; }
-.uei-psi         { --glow: rgba(200, 120, 255, 0.9);   animation: ePulse 2s ease-in-out infinite, eGlowPulse 1.6s ease-in-out infinite; }
-.uei-omega       { --glow: rgba(90, 190, 255, 0.9);    animation: ePulse 2.2s ease-in-out infinite, eGlowPulse 1.6s ease-in-out infinite; }
-.uei-delta       { --glow: rgba(120, 220, 255, 0.9);   animation: eFloat 1.8s ease-in-out infinite, eGlowPulse 1.6s ease-in-out infinite; }
-.uei-sigma       { --glow: rgba(255, 200, 60, 0.9);    animation: ePulse 2.4s ease-in-out infinite, eGlowPulse 1.6s ease-in-out infinite; }
-.uei-dagger      { --glow: rgba(255, 60, 80, 0.9);     animation: eShake 2s ease-in-out infinite, eGlowPulse 1.6s ease-in-out infinite; }
-.uei-mercury     { --glow: rgba(220, 230, 255, 0.9);   animation: eFloat 1.8s ease-in-out infinite, eGlowPulse 1.6s ease-in-out infinite; }
-.uei-benzene     { --glow: rgba(90, 190, 255, 0.9);    animation: eSpin 10s linear infinite, eGlowPulse 1.6s ease-in-out infinite; }
-.uei-escape      { --glow: rgba(255, 255, 255, 0.9);   animation: eShake 1.5s ease-in-out infinite, eGlowPulse 1.6s ease-in-out infinite; }
-.uei-crosshair   { --glow: rgba(255, 60, 60, 0.9);     animation: ePulse 1.6s ease-in-out infinite, eGlowPulse 1.6s ease-in-out infinite; }
-.uei-maltese     { --glow: rgba(255, 210, 60, 0.9);    animation: eFloat 2s ease-in-out infinite, eGlowPulse 1.6s ease-in-out infinite; }
-.uei-asclepius   { --glow: rgba(80, 255, 130, 0.9);    animation: ePulse 2.2s ease-in-out infinite, eGlowPulse 1.6s ease-in-out infinite; }
-.uei-neptune     { --glow: rgba(80, 160, 255, 0.9);    animation: eFloat 2.2s ease-in-out infinite, eGlowPulse 1.6s ease-in-out infinite; }
-.uei-ankh        { --glow: rgba(255, 200, 60, 0.95);   animation: eSway 2.2s ease-in-out infinite, eGlowPulse 1.6s ease-in-out infinite; }
-.uei-lightning   { --glow: rgba(255, 220, 60, 0.95);   animation: eFloat 1.1s ease-in-out infinite, eGlowPulse 1.6s ease-in-out infinite; }
+/* ============================================================
+   PER-SYMBOL: glow color + transform animation
+   ============================================================ */
+
+/* 1. SKULL — silver glow, shake */
+.uei-skull {
+  --glow: rgba(232, 232, 240, 0.9);
+  animation: eShake 1.8s ease-in-out infinite;
+}
+
+/* 2. PENTAGRAM — blood red glow, pulse */
+.uei-pentagram {
+  --glow: rgba(217, 38, 38, 0.9);
+  animation: ePulse 1.6s ease-in-out infinite;
+}
+
+/* 3. BAPHOMET — gold glow, slow breath */
+.uei-baphomet {
+  --glow: rgba(230, 195, 77, 0.9);
+  animation: eBreath 2.4s ease-in-out infinite;
+}
+
+/* 4. OUROBOROS — emerald glow, slow spin */
+.uei-ouroboros {
+  --glow: rgba(90, 200, 90, 0.9);
+  animation: eSpinSlow 8s linear infinite;
+}
+
+/* 5. EYE OF PROVIDENCE — electric blue glow, pulse */
+.uei-providence {
+  --glow: rgba(74, 168, 255, 0.95);
+  animation: ePulse 2s ease-in-out infinite;
+}
+
+/* 6. ALCHEMICAL FIRE — orange glow, float */
+.uei-fire {
+  --glow: rgba(255, 140, 20, 0.95);
+  animation: eFloat 1s ease-in-out infinite;
+}
+
+/* 7. MERCURY — pale silver-blue glow, float */
+.uei-mercury {
+  --glow: rgba(200, 212, 232, 0.9);
+  animation: eFloat 1.8s ease-in-out infinite;
+}
+
+/* 8. SULPHUR — dark red glow, shake */
+.uei-sulphur {
+  --glow: rgba(217, 38, 38, 0.9);
+  animation: eShake 2s ease-in-out infinite;
+}
+
+/* 9. TRIDENT — cyan glow, float */
+.uei-trident {
+  --glow: rgba(74, 168, 255, 0.9);
+  animation: eFloat 2.2s ease-in-out infinite;
+}
+
+/* 10. ANKH — gold glow, sway */
+.uei-ankh {
+  --glow: rgba(230, 195, 77, 0.95);
+  animation: eSway 2.2s ease-in-out infinite;
+}
+
+/* 11. ASCLEPIUS — healing green glow, pulse */
+.uei-asclepius {
+  --glow: rgba(80, 255, 130, 0.9);
+  animation: ePulse 2.2s ease-in-out infinite;
+}
+
+/* 12. ANARCHY — white glow, slow spin */
+.uei-anarchy {
+  --glow: rgba(224, 224, 224, 0.9);
+  animation: eSpinSlow 10s linear infinite;
+}
+
+/* 13. CHAOS STAR — purple glow, medium spin */
+.uei-chaos {
+  --glow: rgba(192, 132, 252, 0.95);
+  animation: eSpin 6s linear infinite;
+}
+
+/* 14. HEXAGRAM — blue glow, slow spin */
+.uei-hexagram {
+  --glow: rgba(74, 168, 255, 0.9);
+  animation: eSpinSlow 9s linear infinite;
+}
+
+/* 15. LEVIATHAN CROSS — violet glow, pulse */
+.uei-leviathan {
+  --glow: rgba(168, 85, 247, 0.9);
+  animation: ePulse 1.8s ease-in-out infinite;
+}
+
+/* 16. DEATH'S HEAD — bone white glow, shake */
+.uei-deathshead {
+  --glow: rgba(224, 224, 232, 0.9);
+  animation: eShake 2s ease-in-out infinite;
+}
+
+/* 17. ALL-SEEING SUN — amber glow, very slow spin */
+.uei-sun {
+  --glow: rgba(255, 179, 71, 0.95);
+  animation: eSpinSlow 14s linear infinite;
+}
+
+/* 18. SIGIL OF LUCIFER — crimson glow, pulse */
+.uei-lucifer {
+  --glow: rgba(217, 38, 38, 0.95);
+  animation: ePulse 2s ease-in-out infinite;
+}
+
+/* 19. YGGDRASIL — forest green glow, sway */
+.uei-yggdrasil {
+  --glow: rgba(90, 200, 90, 0.9);
+  animation: eSway 3s ease-in-out infinite;
+}
+
+/* 20. MALEFICIUM — blood red glow, shake */
+.uei-maleficium {
+  --glow: rgba(217, 38, 38, 0.95);
+  animation: eShake 1.6s ease-in-out infinite;
+}
