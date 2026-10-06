@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#000000" />
 <title>Product · SilverFang</title>
 <link rel="icon" type="image/jpeg" href="silverfang.jpg" />
+<link rel="stylesheet" href="vip-effects.css" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -87,9 +88,17 @@ img{display:block;max-width:100%}
   font-size:12.5px;
   margin-left:8px;
 }
-.hdr-nav a{padding:6px 11px;color:var(--text-2);border-radius:2px}
+.hdr-nav a{
+  padding:6px 11px;
+  color:var(--text-2);
+  border-radius:2px;
+}
 .hdr-nav a:hover{color:var(--text);background:#0d0d0d}
 .hdr-nav a.on{color:#fff}
+.hdr-nav a.admin-link{color:var(--red);border:1px solid var(--border-red-2)}
+.hdr-nav a.admin-link:hover{color:#fff;background:#150505}
+.hdr-nav a.vip-link{color:var(--amber);border:1px solid #3a2f0f}
+.hdr-nav a.vip-link:hover{color:#fff;background:#0a0800}
 
 .hdr-right{
   margin-left:auto;
@@ -138,7 +147,15 @@ img{display:block;max-width:100%}
 }
 .user-chip .avatar img{width:100%;height:100%;object-fit:cover}
 .user-chip .avatar .ph{font-size:10px;color:var(--text-3)}
-.user-chip .name{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.user-chip .name{
+  max-width:140px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+}
 .btn-logout{
   padding:6px 12px;
   border:1px solid var(--border-2);
@@ -301,6 +318,10 @@ img{display:block;max-width:100%}
   font-weight:500;
   word-break:break-all;
   margin-bottom:3px;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  flex-wrap:wrap;
 }
 .seller-joined{
   font-family:var(--mono);
@@ -558,6 +579,10 @@ img{display:block;max-width:100%}
   color:#e0e0e0;
   font-weight:500;
   word-break:break-all;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  flex-wrap:wrap;
 }
 .comment-date{
   font-family:var(--mono);
@@ -665,7 +690,7 @@ img{display:block;max-width:100%}
   .sec-body{padding:16px}
   .seller-card{padding:16px}
   .rating-big{font-size:28px}
-  .user-chip .name{max-width:70px}
+  .user-chip .name{max-width:80px}
   .btn-logout{padding:6px 9px;font-size:10.5px}
 }
 </style>
@@ -683,6 +708,8 @@ img{display:block;max-width:100%}
       <a href="index.html">Market</a>
       <a href="dashboard.html">Dashboard</a>
       <a href="messages.html">Messages</a>
+      <a href="vip.html" class="vip-link" id="vipLink" style="display:none">VIP</a>
+      <a href="admin.html" class="admin-link" id="adminLink" style="display:none">Admin</a>
     </nav>
 
     <div class="hdr-right">
@@ -720,6 +747,7 @@ img{display:block;max-width:100%}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="vip-helper.js"></script>
 <script>
 (function(){
   'use strict';
@@ -728,6 +756,8 @@ img{display:block;max-width:100%}
   const SUPABASE_ANON_KEY = 'sb_publishable_xHr9z0NCsm8gBivTQ2nH8Q_Y1uzdlis';
 
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const escapeHtml = SF_VIP.escapeHtml;
+  const renderUsername = SF_VIP.renderUsername;
 
   const params = new URLSearchParams(window.location.search);
   const productId = params.get('id');
@@ -752,6 +782,8 @@ img{display:block;max-width:100%}
   const hdrUser = $('hdrUser');
   const chipAvatar = $('chipAvatar');
   const chipName = $('chipName');
+  const adminLink = $('adminLink');
+  const vipLink = $('vipLink');
   const logoutBtn = $('logoutBtn');
   const toastEl = $('toast');
   const toastMsg = $('toastMsg');
@@ -764,16 +796,6 @@ img{display:block;max-width:100%}
     toastTimer = setTimeout(function(){
       toastEl.className = 'toast';
     }, 3000);
-  }
-
-  function escapeHtml(str){
-    if (str == null) return '';
-    return String(str)
-      .replace(/&/g,'&amp;')
-      .replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;')
-      .replace(/"/g,'&quot;')
-      .replace(/'/g,'&#39;');
   }
 
   function fmtDate(iso){
@@ -827,7 +849,7 @@ img{display:block;max-width:100%}
       if (session){
         const { data } = await supabase
           .from('profiles')
-          .select('id, username, avatar_url, bio, created_at')
+          .select('id, username, avatar_url, bio, created_at, is_admin, is_vip, username_effect, username_emoji')
           .eq('id', session.user.id)
           .maybeSingle();
         state.profile = data || null;
@@ -840,13 +862,19 @@ img{display:block;max-width:100%}
     if (state.session && state.profile){
       hdrGuest.style.display = 'none';
       hdrUser.style.display = 'flex';
-      chipName.textContent = state.profile.username;
+
+      chipName.innerHTML = renderUsername(state.profile.username, state.profile.username_effect, state.profile.username_emoji);
       chipAvatar.innerHTML = state.profile.avatar_url
         ? '<img src="' + escapeHtml(state.profile.avatar_url) + '" alt="" />'
         : '<span class="ph">' + escapeHtml((state.profile.username || '?').charAt(0).toUpperCase()) + '</span>';
+
+      adminLink.style.display = state.profile.is_admin ? 'inline-block' : 'none';
+      vipLink.style.display = (state.profile.is_vip || state.profile.is_admin) ? 'inline-block' : 'none';
     } else {
       hdrGuest.style.display = 'flex';
       hdrUser.style.display = 'none';
+      adminLink.style.display = 'none';
+      vipLink.style.display = 'none';
     }
   }
 
@@ -873,11 +901,19 @@ img{display:block;max-width:100%}
   async function loadSeller(){
     const { data } = await supabase
       .from('profiles')
-      .select('id, username, avatar_url, bio, created_at')
+      .select('id, username, avatar_url, bio, created_at, username_effect, username_emoji')
       .eq('id', state.product.seller_id)
       .maybeSingle();
 
-    state.seller = data || { id: state.product.seller_id, username: 'unknown', avatar_url: null, bio: null, created_at: null };
+    state.seller = data || {
+      id: state.product.seller_id,
+      username: 'unknown',
+      avatar_url: null,
+      bio: null,
+      created_at: null,
+      username_effect: 'none',
+      username_emoji: 'none'
+    };
   }
 
   async function loadSellerStats(){
@@ -925,20 +961,23 @@ img{display:block;max-width:100%}
       const userIds = Array.from(new Set(rows.map(function(r){ return r.user_id; })));
       const { data: profiles } = await supabase
         .from('profiles')
-        .select('id, username, avatar_url')
+        .select('id, username, avatar_url, username_effect, username_emoji')
         .in('id', userIds);
 
       const map = {};
       (profiles || []).forEach(function(p){ map[p.id] = p; });
 
       state.comments = rows.map(function(r){
+        const prof = map[r.user_id] || {};
         return {
           id: r.id,
           content: r.content,
           created_at: r.created_at,
           user_id: r.user_id,
-          username: (map[r.user_id] && map[r.user_id].username) || 'unknown',
-          avatar_url: (map[r.user_id] && map[r.user_id].avatar_url) || null
+          username: prof.username || 'unknown',
+          avatar_url: prof.avatar_url || null,
+          username_effect: prof.username_effect || 'none',
+          username_emoji: prof.username_emoji || 'none'
         };
       });
     } else {
@@ -997,6 +1036,7 @@ img{display:block;max-width:100%}
     }
 
     const sellerAv = avatarHTML(s.avatar_url, (s.username || '?').charAt(0).toUpperCase());
+    const sellerNameHTML = renderUsername(s.username, s.username_effect, s.username_emoji);
 
     const sellerBio = s.bio
       ? '<div class="seller-bio">' + escapeHtml(s.bio) + '</div>'
@@ -1028,7 +1068,6 @@ img{display:block;max-width:100%}
       ? '1 rating'
       : state.ratingCount + ' ratings';
 
-    // Your rating section
     let yourRatingBlock = '';
     if (!isLoggedIn){
       yourRatingBlock =
@@ -1059,7 +1098,6 @@ img{display:block;max-width:100%}
         '</div>';
     }
 
-    // Comments
     let commentFormHTML = '';
     if (!isLoggedIn){
       commentFormHTML =
@@ -1088,12 +1126,13 @@ img{display:block;max-width:100%}
           const delBtn = canDelete
             ? '<button type="button" class="comment-del" data-del-comment="' + c.id + '">delete</button>'
             : '';
+          const unameHTML = renderUsername(c.username, c.username_effect, c.username_emoji);
           return (
             '<div class="comment">' +
               '<div class="comment-avatar">' + av + '</div>' +
               '<div class="comment-body">' +
                 '<div class="comment-head">' +
-                  '<span class="comment-uname">' + escapeHtml(c.username) + '</span>' +
+                  '<span class="comment-uname">' + unameHTML + '</span>' +
                   '<span class="comment-date">' + escapeHtml(fmtRelative(c.created_at)) + '</span>' +
                   delBtn +
                 '</div>' +
@@ -1123,7 +1162,7 @@ img{display:block;max-width:100%}
             '<div class="seller-head">' +
               '<div class="seller-avatar">' + sellerAv + '</div>' +
               '<div class="seller-meta">' +
-                '<div class="seller-uname">' + escapeHtml(s.username) + '</div>' +
+                '<div class="seller-uname">' + sellerNameHTML + '</div>' +
                 '<div class="seller-joined">joined ' + escapeHtml(fmtDate(s.created_at)) + '</div>' +
               '</div>' +
             '</div>' +
@@ -1171,7 +1210,6 @@ img{display:block;max-width:100%}
   }
 
   function bindInteractions(){
-    // rating picker
     const picker = $('starPicker');
     if (picker){
       picker.querySelectorAll('span').forEach(function(span){
@@ -1194,13 +1232,11 @@ img{display:block;max-width:100%}
       });
     }
 
-    // follow button
     const followBtn = $('followBtn');
     if (followBtn){
       followBtn.addEventListener('click', toggleFollow);
     }
 
-    // comment form
     const commentText = $('commentText');
     const commentCount = $('commentCount');
     const postCommentBtn = $('postCommentBtn');
@@ -1215,7 +1251,6 @@ img{display:block;max-width:100%}
       postCommentBtn.addEventListener('click', postComment);
     }
 
-    // delete comment buttons
     mainArea.querySelectorAll('[data-del-comment]').forEach(function(btn){
       btn.addEventListener('click', function(){
         const id = btn.getAttribute('data-del-comment');
