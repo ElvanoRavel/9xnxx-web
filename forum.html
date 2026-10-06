@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#000000" />
+<title>Forum · SilverFang</title>
+<link rel="icon" type="image/jpeg" href="silverfang.jpg" />
+<link rel="stylesheet" href="vip-effects.css" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:#000;
+  color:#c9c9c9;
+  font-size:13px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+a{color:inherit;text-decoration:none}
+a:hover{color:#fff}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;font-size:inherit}
+img{display:block;max-width:100%}
+::selection{background:#d92626;color:#fff}
+
+:root{
+  --border:#1a1a1a;
+  --border-2:#262626;
+  --border-red:#3a1414;
+  --border-red-2:#6b1f1f;
+  --text:#d4d4d4;
+  --text-2:#8a8a8a;
+  --text-3:#555;
+  --text-4:#333;
+  --red:#d92626;
+  --red-2:#a81c1c;
+  --green:#4a9e4a;
+  --amber:#c9a227;
+  --tg:#2aabee;
+  --tg-2:#1e8cc4;
+  --mono:'IBM Plex Mono',ui-monospace,'Courier New',monospace;
+}
+
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:#000}
+::-webkit-scrollbar-thumb{background:#1a1a1a;border:2px solid #000}
+::-webkit-scrollbar-thumb:hover{background:#282828}
+*{scrollbar-width:thin;scrollbar-color:#1a1a1a #000}
+
+.hdr{
+  border-bottom:1px solid var(--border);
+  background:#000;
+  position:sticky;
+  top:0;
+  z-index:50;
+}
+.hdr-inner{
+  max-width:1180px;
+  margin:0 auto;
+  padding:0 20px;
+  display:flex;
+  align-items:center;
+  height:52px;
+  gap:20px;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-family:var(--mono);
+  font-size:15px;
+  letter-spacing:.06em;
+  color:#fff;
+  flex-shrink:0;
+}
+.brand-logo{width:22px;height:22px;object-fit:contain;flex-shrink:0}
+.brand .name{font-weight:500}
+
+.hdr-nav{
+  display:flex;
+  gap:2px;
+  font-size:12.5px;
+}
+.hdr-nav a{
+  padding:6px 11px;
+  color:var(--text-2);
+  border-radius:2px;
+  transition:color .1s,background .1s;
+}
+.hdr-nav a:hover{color:var(--text);background:#0d0d0d}
+.hdr-nav a.on{color:#fff}
+.hdr-nav a.admin-link{
+  color:var(--red);
+  border:1px solid var(--border-red-2);
+}
+.hdr-nav a.admin-link:hover{color:#fff;background:#150505}
+.hdr-nav a.vip-link{
+  color:var(--amber);
+  border:1px solid #3a2f0f;
+}
+.hdr-nav a.vip-link:hover{color:#fff;background:#0a0800}
+
+.hdr-right{
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-family:var(--mono);
+  font-size:11px;
+}
+.hdr-guest{display:flex;align-items:center;gap:8px}
+.hdr-guest .btn-log{
+  padding:6px 12px;
+  border:1px solid var(--border-2);
+  color:var(--text);
+  font-size:11.5px;
+  transition:background .1s,border-color .1s,color .1s;
+}
+.hdr-guest .btn-log:hover{background:var(--red);border-color:var(--red);color:#fff}
+.hdr-guest .btn-signup{
+  padding:6px 12px;
+  background:var(--red);
+  border:1px solid var(--red);
+  color:#fff;
+  font-size:11.5px;
+  transition:background .1s,border-color .1s;
+}
+.hdr-guest .btn-signup:hover{background:var(--red-2);border-color:var(--red-2)}
+
+.hdr-user{display:none;align-items:center;gap:8px}
+.user-chip{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:4px 10px 4px 4px;
+  border:1px solid var(--border-red-2);
+  background:#050505;
+  color:#e0e0e0;
+  font-size:11.5px;
+  transition:border-color .15s;
+}
+.user-chip:hover{border-color:var(--red)}
+.user-chip .avatar{
+  width:24px;height:24px;
+  background:#1a1a1a;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  flex-shrink:0;
+}
+.user-chip .avatar img{width:100%;height:100%;object-fit:cover}
+.user-chip .avatar .ph{font-size:10px;color:var(--text-3)}
+.user-chip .name{max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-flex;align-items:center;gap:4px}
+.btn-logout{
+  padding:6px 12px;
+  border:1px solid var(--border-2);
+  color:var(--text);
+  font-size:11.5px;
+  transition:background .1s,border-color .1s,color .1s;
+}
+.btn-logout:hover{background:var(--red);border-color:var(--red);color:#fff}
+
+.main{
+  max-width:1180px;
+  margin:0 auto;
+  padding:32px 20px 60px;
+}
+
+.page-head{
+  margin-bottom:24px;
+  padding-bottom:14px;
+  border-bottom:1px solid var(--border);
+  text-align:center;
+}
+.page-head h1{
+  font-family:var(--mono);
+  font-size:18px;
+  font-weight:600;
+  color:#fff;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.page-head .sub{
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--text-3);
+  letter-spacing:.04em;
+  margin-top:6px;
+}
+
+.forum-wrap{
+  display:flex;
+  justify-content:center;
+  padding:20px 0 40px;
+}
+
+.forum-card{
+  width:100%;
+  max-width:520px;
+  border:1px solid var(--border-red);
+  background:
+    linear-gradient(135deg, rgba(42,171,238,.05), rgba(0,0,0,0) 60%),
+    #030303;
+  padding:40px 32px 32px;
+  text-align:center;
+  transition:border-color .15s,box-shadow .15s;
+}
+.forum-card:hover{
+  border-color:var(--border-red-2);
+  box-shadow:0 0 20px rgba(42,171,238,.06);
+}
+
+.forum-logo{
+  width:110px;
+  height:110px;
+  margin:0 auto 20px;
+  border:1px solid var(--tg);
+  background:#000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  position:relative;
+  box-shadow:0 0 24px rgba(42,171,238,.15);
+}
+.forum-logo img{width:100%;height:100%;object-fit:cover}
+
+.forum-tag{
+  display:inline-block;
+  padding:3px 10px;
+  background:#031824;
+  border:1px solid var(--tg);
+  color:var(--tg);
+  font-family:var(--mono);
+  font-size:9.5px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  margin-bottom:16px;
+}
+
+.forum-name{
+  font-family:var(--mono);
+  font-size:22px;
+  font-weight:600;
+  color:#fff;
+  letter-spacing:.02em;
+  margin-bottom:10px;
+  line-height:1.3;
+  word-break:break-word;
+}
+
+.forum-desc{
+  font-family:var(--mono);
+  font-size:11.5px;
+  color:var(--text-2);
+  line-height:1.7;
+  margin-bottom:28px;
+  max-width:380px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.btn-join{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:13px 32px;
+  background:var(--tg);
+  border:1px solid var(--tg);
+  color:#fff;
+  font-family:var(--mono);
+  font-size:12.5px;
+  font-weight:600;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  transition:background .15s,border-color .15s,transform .15s;
+  min-width:220px;
+}
+.btn-join:hover{
+  background:var(--tg-2);
+  border-color:var(--tg-2);
+  color:#fff;
+}
+.btn-join .tg-ico{
+  font-size:16px;
+  line-height:1;
+}
+
+.forum-foot{
+  margin-top:22px;
+  padding-top:18px;
+  border-top:1px solid var(--border);
+  font-family:var(--mono);
+  font-size:9.5px;
+  color:var(--text-4);
+  letter-spacing:.08em;
+  line-height:1.8;
+}
+
+@media (max-width:640px){
+  .hdr-inner{padding:0 14px;gap:10px}
+  .hdr-nav{display:none}
+  .main{padding:20px 14px 60px}
+  .user-chip .name{max-width:80px}
+  .btn-logout{padding:6px 9px;font-size:10.5px}
+  .forum-card{padding:28px 20px 24px}
+  .forum-logo{width:88px;height:88px}
+  .forum-name{font-size:18px}
+  .btn-join{min-width:0;width:100%;padding:12px 20px}
+  .page-head h1{font-size:15px}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-inner">
+    <a href="index.html" class="brand">
+      <img src="silverfang.jpg" alt="SilverFang" class="brand-logo" />
+      <span class="name">SilverFang</span>
+    </a>
+
+    <nav class="hdr-nav">
+      <a href="index.html">Market</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="messages.html">Messages</a>
+      <a href="members.html">Members</a>
+      <a href="forum.html" class="on">Forum</a>
+      <a href="vip.html" class="vip-link" id="vipLink" style="display:none">VIP</a>
+      <a href="admin.html" class="admin-link" id="adminLink" style="display:none">Admin</a>
+    </nav>
+
+    <div class="hdr-right">
+      <div class="hdr-guest" id="hdrGuest">
+        <a href="login.html" class="btn-log">Login</a>
+        <a href="signup.html" class="btn-signup">Sign Up</a>
+      </div>
+
+      <div class="hdr-user" id="hdrUser">
+        <a href="dashboard.html" class="user-chip">
+          <span class="avatar" id="chipAvatar"><span class="ph">?</span></span>
+          <span class="name" id="chipName">…</span>
+        </a>
+        <button type="button" class="btn-logout" id="logoutBtn">Logout</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+  <div class="page-head">
+    <h1>Forum</h1>
+    <div class="sub">Join the official SilverFang community on Telegram</div>
+  </div>
+
+  <div class="forum-wrap">
+    <div class="forum-card">
+
+      <div class="forum-logo">
+        <img src="silverfang.jpg" alt="SilverFang Official" />
+      </div>
+
+      <span class="forum-tag">Telegram · Official</span>
+
+      <div class="forum-name">SilverFang Official</div>
+
+      <div class="forum-desc">
+        Join our official Telegram group for community updates, support, and discussion with other members.
+      </div>
+
+      <a href="https://t.me/+NxvrFZRioco4OTA9"
+         target="_blank"
+         rel="noopener noreferrer"
+         class="btn-join">
+        <span class="tg-ico">✈</span>
+        Join Group
+      </a>
+
+      <div class="forum-foot">
+        Opens Telegram in a new tab<br />
+        No account required on SilverFang
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="vip-helper.js"></script>
+<script>
+(function(){
+  'use strict';
+
+  const SUPABASE_URL = 'https://iygiioemtpfozxikhgmx.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_xHr9z0NCsm8gBivTQ2nH8Q_Y1uzdlis';
+
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const escapeHtml = SF_VIP.escapeHtml;
+  const renderUsername = SF_VIP.renderUsername;
+
+  const state = { session: null, me: null };
+
+  const $ = function(id){ return document.getElementById(id); };
+  const hdrGuest = $('hdrGuest');
+  const hdrUser = $('hdrUser');
+  const chipAvatar = $('chipAvatar');
+  const chipName = $('chipName');
+  const adminLink = $('adminLink');
+  const vipLink = $('vipLink');
+  const logoutBtn = $('logoutBtn');
+
+  function renderHeader(){
+    if (state.session && state.me){
+      hdrGuest.style.display = 'none';
+      hdrUser.style.display = 'flex';
+
+      chipName.innerHTML = renderUsername(state.me.username, state.me.username_effect, state.me.username_emoji);
+      chipAvatar.innerHTML = state.me.avatar_url
+        ? '<img src="' + escapeHtml(state.me.avatar_url) + '" alt="" />'
+        : '<span class="ph">' + escapeHtml((state.me.username || '?').charAt(0).toUpperCase()) + '</span>';
+
+      adminLink.style.display = state.me.is_admin ? 'inline-block' : 'none';
+      vipLink.style.display = (state.me.is_vip || state.me.is_admin) ? 'inline-block' : 'none';
+    } else {
+      hdrGuest.style.display = 'flex';
+      hdrUser.style.display = 'none';
+      adminLink.style.display = 'none';
+      vipLink.style.display = 'none';
+    }
+  }
+
+  async function initAuth(){
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      state.session = session;
+      if (session){
+        const { data: me } = await supabase
+          .from('profiles')
+          .select('id, username, avatar_url, is_admin, is_vip, username_effect, username_emoji')
+          .eq('id', session.user.id)
+          .maybeSingle();
+        state.me = me || null;
+      }
+    } catch(e){}
+    renderHeader();
+  }
+
+  logoutBtn.addEventListener('click', async function(){
+    logoutBtn.disabled = true;
+    try { await supabase.auth.signOut(); } catch(e){}
+    sessionStorage.removeItem('sf_signup_codes');
+    window.location.href = 'index.html';
+  });
+
+  initAuth();
+
+})();
+</script>
+</body>
+</html>
