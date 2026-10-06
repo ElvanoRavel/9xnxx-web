@@ -111,7 +111,7 @@ img,svg{display:block;max-width:100%}
   margin-left:auto;
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:8px;
   font-family:var(--mono);
   font-size:11px;
   color:var(--text-3);
@@ -127,6 +127,18 @@ img,svg{display:block;max-width:100%}
   background:var(--red);
   border-color:var(--red);
   color:#fff;
+}
+.hdr-right .btn-signup{
+  padding:6px 12px;
+  background:var(--red);
+  border:1px solid var(--red);
+  color:#fff;
+  font-size:11.5px;
+  transition:background .1s,border-color .1s;
+}
+.hdr-right .btn-signup:hover{
+  background:var(--red-2);
+  border-color:var(--red-2);
 }
 
 .hero{
@@ -422,133 +434,6 @@ img,svg{display:block;max-width:100%}
 .foot-inner a:hover{color:var(--text)}
 .foot-inner .sep{margin:0 8px;color:var(--text-4)}
 
-#loginView{
-  display:none;
-  min-height:100vh;
-  padding:40px 16px;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-}
-#loginView.on{display:flex}
-
-.login-box{
-  width:100%;
-  max-width:360px;
-  border:1px solid var(--border);
-  background:#000;
-}
-.login-head{
-  padding:12px 18px;
-  border-bottom:1px solid var(--border);
-  background:#050505;
-  font-family:var(--mono);
-  font-size:11px;
-  color:var(--text-3);
-  text-transform:uppercase;
-  letter-spacing:.1em;
-}
-.login-body{padding:22px 18px}
-.login-brand{
-  text-align:center;
-  margin-bottom:20px;
-  font-family:var(--mono);
-  font-size:16px;
-  letter-spacing:.06em;
-}
-.login-brand .name{color:#fff;font-weight:500}
-
-.lfield{margin-bottom:14px}
-.lfield label{
-  display:block;
-  font-family:var(--mono);
-  font-size:10.5px;
-  color:var(--text-3);
-  text-transform:uppercase;
-  letter-spacing:.08em;
-  margin-bottom:6px;
-}
-.lfield input{
-  width:100%;
-  height:34px;
-  padding:0 10px;
-  background:#000;
-  border:1px solid var(--border);
-  color:var(--text);
-  font-family:var(--mono);
-  font-size:12.5px;
-  outline:none;
-  transition:border-color .1s;
-}
-.lfield input:focus{border-color:var(--border-2)}
-.lfield input::placeholder{color:var(--text-4)}
-
-.lcheck{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  font-size:12px;
-  color:var(--text-2);
-  margin-bottom:18px;
-  cursor:pointer;
-}
-.lcheck input{
-  appearance:none;
-  -webkit-appearance:none;
-  width:13px;height:13px;
-  border:1px solid var(--border-2);
-  background:#000;
-  position:relative;
-  cursor:pointer;
-}
-.lcheck input:checked{background:var(--red);border-color:var(--red)}
-.lcheck input:checked::after{
-  content:'';
-  position:absolute;
-  left:4px;top:1px;
-  width:3px;height:7px;
-  border:solid #fff;
-  border-width:0 1.5px 1.5px 0;
-  transform:rotate(45deg);
-}
-
-.btn-sub{
-  width:100%;
-  height:36px;
-  background:var(--red);
-  color:#fff;
-  font-family:var(--mono);
-  font-size:12px;
-  letter-spacing:.08em;
-  text-transform:uppercase;
-  border:none;
-  transition:background .1s;
-}
-.btn-sub:hover{background:var(--red-2)}
-.btn-sub:disabled{opacity:.6;cursor:not-allowed}
-
-.login-alt{
-  display:flex;
-  justify-content:space-between;
-  margin-top:14px;
-  font-family:var(--mono);
-  font-size:11px;
-  color:var(--text-3);
-}
-.login-alt a:hover{color:var(--text)}
-
-.login-foot{
-  padding:10px 18px;
-  border-top:1px solid var(--border);
-  background:#050505;
-  font-family:var(--mono);
-  font-size:10px;
-  color:var(--text-4);
-  text-align:center;
-  letter-spacing:.05em;
-  line-height:1.8;
-}
-
 .toast{
   position:fixed;
   left:50%;
@@ -592,7 +477,10 @@ img,svg{display:block;max-width:100%}
   .hero-list .tag{font-size:10px;padding:3px 8px}
 }
 @media (max-width:560px){
-  .hdr-inner{padding:0 14px;gap:14px}
+  .hdr-inner{padding:0 14px;gap:10px}
+  .hdr-right{gap:6px}
+  .hdr-right .btn-log{padding:5px 9px;font-size:10.5px}
+  .hdr-right .btn-signup{padding:5px 9px;font-size:10.5px}
   .toolbar-inner{padding:0 14px;gap:10px;height:44px}
   .toolbar .search input{width:120px;height:26px;font-size:11px;padding:0 8px}
   .toolbar .search button{height:26px;padding:0 9px;font-size:10px}
@@ -614,6 +502,8 @@ img,svg{display:block;max-width:100%}
 @media (max-width:380px){
   .hero-title{font-size:13px}
   .toolbar .search input{width:100px}
+  .hdr-right .btn-log{padding:5px 8px;font-size:10px}
+  .hdr-right .btn-signup{padding:5px 8px;font-size:10px}
 }
 </style>
 </head>
@@ -636,7 +526,8 @@ img,svg{display:block;max-width:100%}
       </nav>
 
       <div class="hdr-right">
-        <a href="#login" class="btn-log" onclick="goLogin(event)">Login</a>
+        <a href="login.html" class="btn-log">Login</a>
+        <a href="signup.html" class="btn-signup">Sign Up</a>
       </div>
     </div>
   </header>
@@ -898,51 +789,6 @@ img,svg{display:block;max-width:100%}
 
 </div>
 
-<div id="loginView">
-
-  <div class="login-box">
-    <div class="login-head">Secure Access</div>
-
-    <div class="login-body">
-
-      <div class="login-brand">
-        <span class="name">SilverFang</span>
-      </div>
-
-      <form id="loginForm" onsubmit="handleLogin(event)">
-        <div class="lfield">
-          <label for="opid">Operator ID</label>
-          <input type="text" id="opid" placeholder="SF-0000" autocomplete="off" spellcheck="false" required />
-        </div>
-
-        <div class="lfield">
-          <label for="pass">Passphrase</label>
-          <input type="password" id="pass" placeholder="••••••••••••" autocomplete="off" required />
-        </div>
-
-        <label class="lcheck">
-          <input type="checkbox" id="remember" />
-          <span>Remember this session for 7 days</span>
-        </label>
-
-        <button type="submit" class="btn-sub" id="submitBtn">Login</button>
-
-        <div class="login-alt">
-          <a href="#" onclick="goHome(event)">← Back</a>
-          <a href="#">Forgot passphrase?</a>
-        </div>
-      </form>
-
-    </div>
-
-    <div class="login-foot">
-      Encrypted connection · AES-256 · Zero-Log<br />
-      Your IP address will not be stored on the server.
-    </div>
-  </div>
-
-</div>
-
 <div class="toast" id="toast">
   <span class="dot"></span>
   <span id="toastMsg">—</span>
@@ -952,35 +798,8 @@ img,svg{display:block;max-width:100%}
 (function(){
   'use strict';
 
-  var landing = document.getElementById('landingView');
-  var loginView = document.getElementById('loginView');
-
-  function route(){
-    var h = window.location.hash || '';
-    if (h === '#login'){
-      landing.style.display = 'none';
-      loginView.classList.add('on');
-      var opid = document.getElementById('opid');
-      if (opid) setTimeout(function(){ opid.focus(); }, 100);
-    } else {
-      landing.style.display = 'block';
-      loginView.classList.remove('on');
-    }
-  }
-
-  window.addEventListener('hashchange', route);
-  route();
-
-  window.goLogin = function(e){
-    if (e) e.preventDefault();
-    window.location.hash = '#login';
-  };
-
   window.goHome = function(e){
     if (e) e.preventDefault();
-    if (window.location.hash === '#login'){
-      window.location.hash = '';
-    }
     window.scrollTo({top:0});
   };
 
@@ -996,36 +815,6 @@ img,svg{display:block;max-width:100%}
     toastTimer = setTimeout(function(){
       toastEl.classList.remove('on');
     }, 3000);
-  };
-
-  var submitBtn = document.getElementById('submitBtn');
-
-  window.handleLogin = function(e){
-    e.preventDefault();
-
-    var opid = document.getElementById('opid').value.trim();
-    var pass = document.getElementById('pass').value;
-
-    if (!opid || !pass) return;
-
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'verifying…';
-
-    setTimeout(function(){
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Login';
-
-      if (!/^SF-\d{4}$/i.test(opid)){
-        toast('Invalid Operator ID format. Example: SF-0427');
-        return;
-      }
-      if (pass.length < 12){
-        toast('Passphrase must be at least 12 characters.');
-        return;
-      }
-
-      toast('Invalid credentials. Contact your operator.');
-    }, 900);
   };
 
 })();
