@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#000000" />
+<title>Dashboard · SilverFang</title>
+<link rel="icon" type="image/jpeg" href="silverfang.jpg" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:#000;
+  color:#c9c9c9;
+  font-size:13px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+a{color:inherit;text-decoration:none}
+a:hover{color:#fff}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;font-size:inherit}
+input,textarea,select{font-family:inherit;color:inherit;font-size:inherit}
+img{display:block;max-width:100%}
+::selection{background:#d92626;color:#fff}
+
+:root{
+  --border:#1a1a1a;
+  --border-2:#262626;
+  --border-red:#3a1414;
+  --border-red-2:#6b1f1f;
+  --text:#d4d4d4;
+  --text-2:#8a8a8a;
+  --text-3:#555;
+  --text-4:#333;
+  --red:#d92626;
+  --red-2:#a81c1c;
+  --green:#4a9e4a;
+  --amber:#c9a227;
+  --mono:'IBM Plex Mono',ui-monospace,'Courier New',monospace;
+}
+
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:#000}
+::-webkit-scrollbar-thumb{background:#1a1a1a;border:2px solid #000}
+::-webkit-scrollbar-thumb:hover{background:#282828}
+*{scrollbar-width:thin;scrollbar-color:#1a1a1a #000}
+
+.hdr{
+  border-bottom:1px solid var(--border);
+  background:#000;
+  position:sticky;
+  top:0;
+  z-index:50;
+}
+.hdr-inner{
+  max-width:1180px;
+  margin:0 auto;
+  padding:0 20px;
+  display:flex;
+  align-items:center;
+  height:52px;
+  gap:20px;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-family:var(--mono);
+  font-size:15px;
+  letter-spacing:.06em;
+  color:#fff;
+  flex-shrink:0;
+}
+.brand-logo{width:22px;height:22px;object-fit:contain;flex-shrink:0}
+.brand .name{font-weight:500}
+
+.hdr-nav{
+  display:flex;
+  gap:2px;
+  font-size:12.5px;
+  margin-left:8px;
+}
+.hdr-nav a{
+  padding:6px 11px;
+  color:var(--text-2);
+  border-radius:2px;
+}
+.hdr-nav a:hover{color:var(--text);background:#0d0d0d}
+.hdr-nav a.on{color:#fff}
+
+.hdr-right{
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-family:var(--mono);
+  font-size:11px;
+}
+.user-chip{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:4px 10px 4px 4px;
+  border:1px solid var(--border-red-2);
+  background:#050505;
+  color:#e0e0e0;
+  font-size:11.5px;
+  transition:border-color .15s;
+}
+.user-chip:hover{border-color:var(--red)}
+.user-chip .avatar{
+  width:24px;
+  height:24px;
+  background:#1a1a1a;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  flex-shrink:0;
+}
+.user-chip .avatar img{width:100%;height:100%;object-fit:cover}
+.user-chip .avatar .ph{
+  font-size:10px;
+  color:var(--text-3);
+  font-family:var(--mono);
+}
+.user-chip .name{
+  max-width:120px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.btn-logout{
+  padding:6px 12px;
+  border:1px solid var(--border-2);
+  color:var(--text);
+  font-size:11.5px;
+  font-family:var(--mono);
+  transition:background .1s,border-color .1s,color .1s;
+}
+.btn-logout:hover{background:var(--red);border-color:var(--red);color:#fff}
+
+.tabs{
+  border-bottom:1px solid var(--border);
+  background:#000;
+}
+.tabs-inner{
+  max-width:1180px;
+  margin:0 auto;
+  padding:0 20px;
+  display:flex;
+  gap:0;
+  height:44px;
+  align-items:stretch;
+}
+.tab-btn{
+  padding:0 18px;
+  color:var(--text-2);
+  font-family:var(--mono);
+  font-size:11.5px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  border-bottom:2px solid transparent;
+  transition:color .15s,border-color .15s;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.on{color:#fff;border-bottom-color:var(--red)}
+.tab-btn .count{
+  display:inline-block;
+  padding:1px 6px;
+  background:#0d0d0d;
+  border:1px solid var(--border-2);
+  color:var(--text-3);
+  font-size:9.5px;
+}
+
+.main{
+  max-width:1180px;
+  margin:0 auto;
+  padding:24px 20px 60px;
+}
+
+.panel{display:none}
+.panel.on{display:block}
+
+.sec-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:20px;
+  padding-bottom:14px;
+  border-bottom:1px solid var(--border);
+}
+.sec-head h2{
+  font-family:var(--mono);
+  font-size:14px;
+  font-weight:500;
+  color:#fff;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+.sec-head .sub{
+  font-family:var(--mono);
+  font-size:10.5px;
+  color:var(--text-3);
+  margin-top:4px;
+  letter-spacing:.04em;
+}
+
+.btn-primary{
+  padding:8px 14px;
+  background:var(--red);
+  border:1px solid var(--red);
+  color:#fff;
+  font-family:var(--mono);
+  font-size:11.5px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  transition:background .1s,border-color .1s;
+}
+.btn-primary:hover{background:var(--red-2);border-color:var(--red-2)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+
+.btn-ghost{
+  padding:8px 14px;
+  background:#0d0d0d;
+  border:1px solid var(--border-2);
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:11.5px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  transition:background .1s,border-color .1s,color .1s;
+}
+.btn-ghost:hover{background:#161616;border-color:var(--border-red-2);color:#fff}
+
+.profile-grid{
+  display:grid;
+  grid-template-columns:220px 1fr;
+  gap:32px;
+  align-items:start;
+}
+.avatar-card{
+  border:1px solid var(--border-red-2);
+  background:#050505;
+  padding:20px;
+  text-align:center;
+}
+.avatar-big{
+  width:140px;
+  height:140px;
+  margin:0 auto 14px;
+  background:#0d0d0d;
+  border:1px solid var(--border-2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  position:relative;
+}
+.avatar-big img{width:100%;height:100%;object-fit:cover}
+.avatar-big .ph{
+  font-family:var(--mono);
+  font-size:32px;
+  color:var(--text-4);
+}
+.avatar-card .uname{
+  font-family:var(--mono);
+  font-size:13px;
+  color:#e0e0e0;
+  margin-bottom:4px;
+  word-break:break-all;
+}
+.avatar-card .member{
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--text-3);
+  letter-spacing:.04em;
+  margin-bottom:14px;
+}
+.avatar-card .upload-btn{
+  display:block;
+  width:100%;
+  padding:7px 10px;
+  background:#0d0d0d;
+  border:1px solid var(--border-2);
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:10.5px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:background .1s,border-color .1s;
+}
+.avatar-card .upload-btn:hover{background:#161616;border-color:var(--border-red-2)}
+
+.form-grid{display:flex;flex-direction:column;gap:18px}
+.field label{
+  display:block;
+  font-family:var(--mono);
+  font-size:10.5px;
+  color:var(--text-3);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  margin-bottom:6px;
+}
+.field input[type=text],
+.field input[type=email],
+.field input[type=number],
+.field input[type=password],
+.field textarea{
+  width:100%;
+  padding:9px 11px;
+  background:#000;
+  border:1px solid var(--border-2);
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:12.5px;
+  outline:none;
+  transition:border-color .15s,box-shadow .15s;
+  resize:vertical;
+}
+.field input:focus,
+.field textarea:focus{
+  border-color:var(--border-red-2);
+  box-shadow:0 0 0 1px rgba(217,38,38,.15);
+}
+.field input::placeholder,
+.field textarea::placeholder{color:var(--text-4)}
+.field textarea{min-height:90px;line-height:1.6}
+.field .hint{
+  margin-top:5px;
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--text-3);
+  letter-spacing:.02em;
+}
+
+.form-row{
+  display:flex;
+  gap:10px;
+  justify-content:flex-end;
+  margin-top:4px;
+}
+
+.products-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+
+.prod-card{
+  border:1px solid var(--border-red);
+  background:#000;
+  display:flex;
+  flex-direction:column;
+  transition:border-color .15s,box-shadow .15s;
+  position:relative;
+}
+.prod-card:hover{
+  border-color:var(--border-red-2);
+  box-shadow:0 0 10px rgba(217,38,38,.06);
+}
+.prod-card-img{
+  aspect-ratio:1/1;
+  background:#050505;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  position:relative;
+}
+.prod-card-img img{width:100%;height:100%;object-fit:cover}
+.prod-card-img .ph{
+  font-family:var(--mono);
+  font-size:9.5px;
+  color:#1f1f1f;
+  letter-spacing:.3em;
+  text-transform:uppercase;
+}
+.prod-card-body{
+  padding:10px 12px 12px;
+  display:flex;
+  flex-direction:column;
+  flex:1;
+}
+.prod-card-name{
+  font-size:13px;
+  font-weight:500;
+  color:#e0e0e0;
+  margin-bottom:4px;
+  line-height:1.35;
+}
+.prod-card-seller{
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--text-3);
+  margin-bottom:10px;
+}
+.prod-card-foot{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-top:auto;
+  padding-top:10px;
+  border-top:1px solid var(--border);
+}
+.prod-card-price{
+  font-family:var(--mono);
+  font-size:12px;
+  color:#e0e0e0;
+  font-weight:500;
+  line-height:1.4;
+}
+.prod-card-price small{
+  font-size:10px;
+  color:var(--text-3);
+  font-weight:400;
+}
+.prod-card-price .row{display:block}
+.prod-card-rating{
+  font-family:var(--mono);
+  font-size:10.5px;
+  color:var(--amber);
+  white-space:nowrap;
+}
+.prod-card-actions{
+  display:flex;
+  gap:6px;
+  padding:8px 12px;
+  border-top:1px solid var(--border);
+  background:#050505;
+}
+.prod-card-actions button{
+  flex:1;
+  padding:6px 8px;
+  font-family:var(--mono);
+  font-size:10.5px;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  border:1px solid var(--border-2);
+  background:#0d0d0d;
+  color:var(--text-2);
+  transition:background .1s,color .1s,border-color .1s;
+}
+.prod-card-actions button:hover{
+  background:#161616;
+  color:var(--text);
+  border-color:var(--border-red-2);
+}
+.prod-card-actions button.del:hover{
+  background:#150505;
+  color:#e06060;
+  border-color:var(--border-red-2);
+}
+
+.empty{
+  padding:40px 20px;
+  text-align:center;
+  border:1px dashed var(--border-2);
+  background:#030303;
+  font-family:var(--mono);
+  font-size:11.5px;
+  color:var(--text-3);
+  line-height:1.7;
+}
+.empty strong{color:var(--text-2);display:block;margin-bottom:6px}
+
+.modal-bg{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  backdrop-filter:blur(2px);
+  z-index:100;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+.modal-bg.on{display:flex}
+.modal{
+  width:100%;
+  max-width:520px;
+  max-height:90vh;
+  overflow-y:auto;
+  background:#000;
+  border:1px solid var(--border-red-2);
+}
+.modal-head{
+  padding:14px 20px;
+  border-bottom:1px solid var(--border-red-2);
+  background:#050505;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  z-index:2;
+}
+.modal-head h3{
+  font-family:var(--mono);
+  font-size:12px;
+  font-weight:500;
+  color:#fff;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.modal-close{
+  color:var(--text-3);
+  font-family:var(--mono);
+  font-size:16px;
+  padding:0 4px;
+}
+.modal-close:hover{color:var(--red)}
+.modal-body{padding:20px}
+
+.img-drop{
+  width:100%;
+  aspect-ratio:16/10;
+  border:1px dashed var(--border-2);
+  background:#050505;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:border-color .15s;
+  overflow:hidden;
+  position:relative;
+}
+.img-drop:hover{border-color:var(--border-red-2)}
+.img-drop img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  background:#000;
+}
+.img-drop .label{
+  font-family:var(--mono);
+  font-size:10.5px;
+  color:var(--text-3);
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  text-align:center;
+  padding:20px;
+  line-height:1.7;
+}
+.img-drop.has-img .label{display:none}
+
+.price-toggle{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border:1px solid var(--border-2);
+  background:#050505;
+  cursor:pointer;
+  margin-bottom:10px;
+}
+.price-toggle input[type=checkbox]{
+  appearance:none;
+  -webkit-appearance:none;
+  width:14px;height:14px;
+  border:1px solid var(--border-2);
+  background:#000;
+  position:relative;
+  cursor:pointer;
+  flex-shrink:0;
+}
+.price-toggle input[type=checkbox]:checked{background:var(--red);border-color:var(--red)}
+.price-toggle input[type=checkbox]:checked::after{
+  content:'';
+  position:absolute;
+  left:4px;top:1px;
+  width:3px;height:7px;
+  border:solid #fff;
+  border-width:0 1.5px 1.5px 0;
+  transform:rotate(45deg);
+}
+.price-toggle .label{
+  font-family:var(--mono);
+  font-size:11.5px;
+  color:var(--text-2);
+  letter-spacing:.02em;
+}
+.price-toggle input[type=checkbox]:checked + .label{color:#fff}
+
+.price-input-wrap{
+  margin-bottom:14px;
+  padding-left:24px;
+  display:none;
+}
+.price-input-wrap.on{display:block}
+.price-input-wrap .hint{
+  margin-top:4px;
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--text-3);
+}
+
+.loading{
+  text-align:center;
+  padding:40px 20px;
+  font-family:var(--mono);
+  font-size:11.5px;
+  color:var(--text-3);
+}
+.loading .dot{
+  display:inline-block;
+  width:5px;height:5px;
+  background:var(--red);
+  border-radius:50%;
+  margin-right:6px;
+  vertical-align:middle;
+  animation:blink 1s infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:20px;
+  transform:translate(-50%,80px);
+  background:#0d0d0d;
+  border:1px solid var(--border-2);
+  padding:10px 16px;
+  font-family:var(--mono);
+  font-size:11.5px;
+  color:var(--text);
+  z-index:200;
+  transition:transform .25s ease;
+  max-width:90vw;
+}
+.toast.on{transform:translate(-50%,0)}
+.toast.ok{border-color:#1f3a1f;color:var(--green)}
+.toast.err{border-color:#4a1a1a;color:#e06060}
+.toast .dot{
+  display:inline-block;
+  width:5px;height:5px;
+  background:currentColor;
+  border-radius:50%;
+  margin-right:8px;
+  vertical-align:middle;
+}
+
+@media (max-width:900px){
+  .profile-grid{grid-template-columns:1fr;gap:20px}
+  .avatar-card{max-width:260px;margin:0 auto}
+  .products-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:640px){
+  .hdr-inner{padding:0 14px;gap:10px}
+  .hdr-nav{display:none}
+  .tabs-inner{padding:0 14px;overflow-x:auto;scrollbar-width:none}
+  .tabs-inner::-webkit-scrollbar{display:none}
+  .tab-btn{padding:0 12px;font-size:10.5px;white-space:nowrap}
+  .main{padding:16px 14px 60px}
+  .user-chip .name{max-width:70px}
+  .btn-logout{padding:6px 9px;font-size:10.5px}
+  .products-grid{grid-template-columns:1fr;gap:10px}
+  .avatar-big{width:110px;height:110px}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-inner">
+    <a href="index.html" class="brand">
+      <img src="silverfang.jpg" alt="SilverFang" class="brand-logo" />
+      <span class="name">SilverFang</span>
+    </a>
+
+    <nav class="hdr-nav">
+      <a href="index.html">Market</a>
+      <a href="dashboard.html" class="on">Dashboard</a>
+      <a href="messages.html">Messages</a>
+    </nav>
+
+    <div class="hdr-right">
+      <a href="#" class="user-chip" id="userChip">
+        <span class="avatar" id="chipAvatar">
+          <span class="ph">?</span>
+        </span>
+        <span class="name" id="chipName">…</span>
+      </a>
+      <button type="button" class="btn-logout" id="logoutBtn">Logout</button>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="tabs-inner">
+    <button type="button" class="tab-btn on" data-tab="profile">Profile</button>
+    <button type="button" class="tab-btn" data-tab="products">
+      My Products <span class="count" id="prodCount">0</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="market">Browse Market</button>
+  </div>
+</nav>
+
+<main class="main">
+
+  <!-- PROFILE PANEL -->
+  <section class="panel on" id="panel-profile">
+    <div class="sec-head">
+      <div>
+        <h2>My Profile</h2>
+        <div class="sub">Update your avatar and bio</div>
+      </div>
+    </div>
+
+    <div class="profile-grid">
+
+      <div class="avatar-card">
+        <div class="avatar-big" id="avatarBig">
+          <span class="ph" id="avatarPh">?</span>
+        </div>
+        <div class="uname" id="profileUsername">…</div>
+        <div class="member" id="profileMember">member since —</div>
+        <label class="upload-btn">
+          Change Avatar
+          <input type="file" id="avatarFile" accept="image/*" style="display:none" />
+        </label>
+      </div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label>Username (cannot be changed)</label>
+          <input type="text" id="usernameRO" readonly style="opacity:.7;cursor:not-allowed" />
+        </div>
+
+        <div class="field">
+          <label for="bio">Bio</label>
+          <textarea id="bio" placeholder="Tell the market about yourself…" maxlength="500"></textarea>
+          <div class="hint" id="bioCount">0 / 500</div>
+        </div>
+
+        <div class="form-row">
+          <button type="button" class="btn-primary" id="saveProfileBtn">Save Profile</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MY PRODUCTS PANEL -->
+  <section class="panel" id="panel-products">
+    <div class="sec-head">
+      <div>
+        <h2>My Products</h2>
+        <div class="sub">Manage your listings</div>
+      </div>
+      <button type="button" class="btn-primary" id="addProductBtn">+ Add Product</button>
+    </div>
+
+    <div id="myProductsArea">
+      <div class="loading"><span class="dot"></span>loading your products…</div>
+    </div>
+  </section>
+
+  <!-- MARKET PANEL -->
+  <section class="panel" id="panel-market">
+    <div class="sec-head">
+      <div>
+        <h2>Browse Market</h2>
+        <div class="sub">All listings from all sellers</div>
+      </div>
+    </div>
+
+    <div id="marketArea">
+      <div class="loading"><span class="dot"></span>loading market…</div>
+    </div>
+  </section>
+
+</main>
+
+<!-- PRODUCT FORM MODAL -->
+<div class="modal-bg" id="productModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="modalTitle">Add Product</h3>
+      <button type="button" class="modal-close" id="modalClose">✕</button>
+    </div>
+
+    <div class="modal-body">
+
+      <div class="field" style="margin-bottom:16px">
+        <label>Product Image</label>
+        <div class="img-drop" id="imgDrop">
+          <span class="label">Click to upload image<br />(PNG, JPG, WEBP)</span>
+        </div>
+        <input type="file" id="prodImgFile" accept="image/*" style="display:none" />
+      </div>
+
+      <div class="field" style="margin-bottom:14px">
+        <label for="prodName">Product Name</label>
+        <input type="text" id="prodName" placeholder="e.g. PhantomCore License" maxlength="120" />
+      </div>
+
+      <div class="field" style="margin-bottom:18px">
+        <label for="prodDesc">Description</label>
+        <textarea id="prodDesc" placeholder="What does this product do? Features, requirements, etc." maxlength="2000"></textarea>
+      </div>
+
+      <div class="field" style="margin-bottom:6px">
+        <label>Pricing</label>
+      </div>
+
+      <label class="price-toggle">
+        <input type="checkbox" id="hasMonthly" />
+        <span class="label">Monthly subscription</span>
+      </label>
+      <div class="price-input-wrap" id="monthlyWrap">
+        <input type="number" id="priceMonthly" placeholder="e.g. 149" min="0" step="0.01" />
+        <div class="hint">Price in USD per month</div>
+      </div>
+
+      <label class="price-toggle">
+        <input type="checkbox" id="hasLifetime" />
+        <span class="label">Lifetime / one-time purchase</span>
+      </label>
+      <div class="price-input-wrap" id="lifetimeWrap">
+        <input type="number" id="priceLifetime" placeholder="e.g. 499" min="0" step="0.01" />
+        <div class="hint">Price in USD, one-time payment</div>
+      </div>
+
+      <div class="form-row" style="margin-top:20px">
+        <button type="button" class="btn-ghost" id="cancelProductBtn">Cancel</button>
+        <button type="button" class="btn-primary" id="saveProductBtn">Save Product</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <span class="dot"></span>
+  <span id="toastMsg">—</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  'use strict';
+
+  const SUPABASE_URL = 'https://iygiioemtpfozxikhgmx.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_xHr9z0NCsm8gBivTQ2nH8Q_Y1uzdlis';
+
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const state = {
+    session: null,
+    profile: null,
+    myProducts: [],
+    marketProducts: [],
+    editingId: null,
+    pendingImageFile: null
+  };
+
+  const $ = function(id){ return document.getElementById(id); };
+
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const panels = {
+    profile: $('panel-profile'),
+    products: $('panel-products'),
+    market: $('panel-market')
+  };
+
+  const chipAvatar = $('chipAvatar');
+  const chipName = $('chipName');
+  const logoutBtn = $('logoutBtn');
+
+  const avatarBig = $('avatarBig');
+  const avatarPh = $('avatarPh');
+  const profileUsername = $('profileUsername');
+  const profileMember = $('profileMember');
+  const avatarFile = $('avatarFile');
+  const usernameRO = $('usernameRO');
+  const bioEl = $('bio');
+  const bioCount = $('bioCount');
+  const saveProfileBtn = $('saveProfileBtn');
+
+  const myProductsArea = $('myProductsArea');
+  const marketArea = $('marketArea');
+  const prodCount = $('prodCount');
+  const addProductBtn = $('addProductBtn');
+
+  const productModal = $('productModal');
+  const modalTitle = $('modalTitle');
+  const modalClose = $('modalClose');
+  const cancelProductBtn = $('cancelProductBtn');
+
+  const imgDrop = $('imgDrop');
+  const prodImgFile = $('prodImgFile');
+  const prodName = $('prodName');
+  const prodDesc = $('prodDesc');
+  const hasMonthly = $('hasMonthly');
+  const hasLifetime = $('hasLifetime');
+  const monthlyWrap = $('monthlyWrap');
+  const lifetimeWrap = $('lifetimeWrap');
+  const priceMonthly = $('priceMonthly');
+  const priceLifetime = $('priceLifetime');
+  const saveProductBtn = $('saveProductBtn');
+
+  const toastEl = $('toast');
+  const toastMsg = $('toastMsg');
+  let toastTimer;
+
+  function toast(msg, type){
+    toastMsg.textContent = msg;
+    toastEl.className = 'toast on ' + (type || '');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){
+      toastEl.className = 'toast';
+    }, 3000);
+  }
+
+  function escapeHtml(str){
+    if (str == null) return '';
+    return String(str)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;')
+      .replace(/'/g,'&#39;');
+  }
+
+  function fmtDate(iso){
+    if (!iso) return '—';
+    try {
+      const d = new Date(iso);
+      return d.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
+    } catch(e){ return '—'; }
+  }
+
+  function priceHTML(p){
+    const parts = [];
+    if (p.price_monthly != null){
+      parts.push('<span class="row">$' + Number(p.price_monthly).toFixed(0) + '<small>/mo</small></span>');
+    }
+    if (p.price_lifetime != null){
+      parts.push('<span class="row">$' + Number(p.price_lifetime).toFixed(0) + '<small> lifetime</small></span>');
+    }
+    return parts.join('');
+  }
+
+  function avatarHTML(url, fallbackChar){
+    if (url){
+      return '<img src="' + escapeHtml(url) + '" alt="" />';
+    }
+    return '<span class="ph">' + escapeHtml(fallbackChar || '?') + '</span>';
+  }
+
+  // ================= AUTH =================
+  async function init(){
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session){
+      window.location.href = 'login.html';
+      return;
+    }
+    state.session = session;
+
+    await loadProfile();
+    renderHeader();
+    await loadMyProducts();
+    await loadMarket();
+
+    bindEvents();
+    bindTabs();
+  }
+
+  async function loadProfile(){
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('id, username, avatar_url, bio, created_at')
+      .eq('id', state.session.user.id)
+      .maybeSingle();
+
+    if (error || !data){
+      toast('Failed to load profile.', 'err');
+      return;
+    }
+
+    state.profile = data;
+
+    profileUsername.textContent = data.username;
+    profileMember.textContent = 'member since ' + fmtDate(data.created_at);
+    usernameRO.value = data.username;
+
+    bioEl.value = data.bio || '';
+    updateBioCount();
+
+    if (data.avatar_url){
+      avatarBig.innerHTML = '<img src="' + escapeHtml(data.avatar_url) + '" alt="" />';
+    } else {
+      avatarBig.innerHTML = '<span class="ph">' + escapeHtml((data.username || '?').charAt(0).toUpperCase()) + '</span>';
+    }
+  }
+
+  function renderHeader(){
+    const p = state.profile;
+    if (!p) return;
+    chipName.textContent = p.username;
+    if (p.avatar_url){
+      chipAvatar.innerHTML = '<img src="' + escapeHtml(p.avatar_url) + '" alt="" />';
+    } else {
+      chipAvatar.innerHTML = '<span class="ph">' + escapeHtml((p.username || '?').charAt(0).toUpperCase()) + '</span>';
+    }
+  }
+
+  function updateBioCount(){
+    bioCount.textContent = bioEl.value.length + ' / 500';
+  }
+
+  // ================= TABS =================
+  function bindTabs(){
+    tabBtns.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        const target = btn.getAttribute('data-tab');
+        tabBtns.forEach(function(b){ b.classList.remove('on'); });
+        btn.classList.add('on');
+        Object.keys(panels).forEach(function(k){
+          panels[k].classList.toggle('on', k === target);
+        });
+      });
+    });
+  }
+
+  // ================= PROFILE UPDATE =================
+  function bindEvents(){
+    bioEl.addEventListener('input', updateBioCount);
+
+    avatarFile.addEventListener('change', async function(e){
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      if (!file.type.startsWith('image/')){
+        toast('Only image files allowed.', 'err');
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024){
+        toast('Image too large (max 5MB).', 'err');
+        return;
+      }
+
+      toast('Uploading avatar…', '');
+      try {
+        const ext = file.name.split('.').pop().toLowerCase() || 'jpg';
+        const path = state.session.user.id + '/' + Date.now() + '.' + ext;
+
+        const { error: upErr } = await supabase.storage
+          .from('avatars')
+          .upload(path, file, { upsert: false, cacheControl: '3600' });
+
+        if (upErr) throw upErr;
+
+        const { data: pub } = supabase.storage.from('avatars').getPublicUrl(path);
+        const publicUrl = pub.publicUrl;
+
+        const { error: updErr } = await supabase
+          .from('profiles')
+          .update({ avatar_url: publicUrl })
+          .eq('id', state.session.user.id);
+
+        if (updErr) throw updErr;
+
+        state.profile.avatar_url = publicUrl;
+        avatarBig.innerHTML = '<img src="' + escapeHtml(publicUrl) + '" alt="" />';
+        renderHeader();
+        toast('Avatar updated.', 'ok');
+      } catch (err){
+        toast('Upload failed: ' + (err.message || 'unknown'), 'err');
+      }
+      avatarFile.value = '';
+    });
+
+    saveProfileBtn.addEventListener('click', async function(){
+      saveProfileBtn.disabled = true;
+      saveProfileBtn.textContent = 'saving…';
+
+      const { error } = await supabase
+        .from('profiles')
+        .update({ bio: bioEl.value.trim() })
+        .eq('id', state.session.user.id);
+
+      saveProfileBtn.disabled = false;
+      saveProfileBtn.textContent = 'Save Profile';
+
+      if (error){
+        toast('Save failed: ' + error.message, 'err');
+        return;
+      }
+      toast('Profile saved.', 'ok');
+    });
+
+    logoutBtn.addEventListener('click', async function(){
+      logoutBtn.disabled = true;
+      await supabase.auth.signOut();
+      sessionStorage.removeItem('sf_signup_codes');
+      window.location.href = 'index.html';
+    });
+
+    // ===== PRODUCT MODAL =====
+    addProductBtn.addEventListener('click', function(){
+      openProductModal(null);
+    });
+
+    modalClose.addEventListener('click', closeProductModal);
+    cancelProductBtn.addEventListener('click', closeProductModal);
+
+    productModal.addEventListener('click', function(e){
+      if (e.target === productModal) closeProductModal();
+    });
+
+    hasMonthly.addEventListener('change', function(){
+      monthlyWrap.classList.toggle('on', hasMonthly.checked);
+    });
+    hasLifetime.addEventListener('change', function(){
+      lifetimeWrap.classList.toggle('on', hasLifetime.checked);
+    });
+
+    imgDrop.addEventListener('click', function(){
+      prodImgFile.click();
+    });
+    prodImgFile.addEventListener('change', function(e){
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      if (!file.type.startsWith('image/')){
+        toast('Only image files allowed.', 'err');
+        return;
+      }
+      if (file.size > 8 * 1024 * 1024){
+        toast('Image too large (max 8MB).', 'err');
+        return;
+      }
+      state.pendingImageFile = file;
+      const reader = new FileReader();
+      reader.onload = function(ev){
+        imgDrop.classList.add('has-img');
+        imgDrop.innerHTML = '<img src="' + ev.target.result + '" alt="" />';
+      };
+      reader.readAsDataURL(file);
+    });
+
+    saveProductBtn.addEventListener('click', saveProduct);
+  }
+
+  function openProductModal(product){
+    state.editingId = product ? product.id : null;
+    state.pendingImageFile = null;
+
+    modalTitle.textContent = product ? 'Edit Product' : 'Add Product';
+
+    prodName.value = product ? (product.name || '') : '';
+    prodDesc.value = product ? (product.description || '') : '';
+
+    hasMonthly.checked = !!(product && product.price_monthly != null);
+    hasLifetime.checked = !!(product && product.price_lifetime != null);
+
+    monthlyWrap.classList.toggle('on', hasMonthly.checked);
+    lifetimeWrap.classList.toggle('on', hasLifetime.checked);
+
+    priceMonthly.value = product && product.price_monthly != null ? product.price_monthly : '';
+    priceLifetime.value = product && product.price_lifetime != null ? product.price_lifetime : '';
+
+    if (product && product.image_url){
+      imgDrop.classList.add('has-img');
+      imgDrop.innerHTML = '<img src="' + escapeHtml(product.image_url) + '" alt="" />';
+    } else {
+      imgDrop.classList.remove('has-img');
+      imgDrop.innerHTML = '<span class="label">Click to upload image<br />(PNG, JPG, WEBP)</span>';
+    }
+
+    productModal.classList.add('on');
+  }
+
+  function closeProductModal(){
+    productModal.classList.remove('on');
+    state.editingId = null;
+    state.pendingImageFile = null;
+    prodImgFile.value = '';
+  }
+
+  async function uploadProductImage(file){
+    const ext = file.name.split('.').pop().toLowerCase() || 'jpg';
+    const path = state.session.user.id + '/' + Date.now() + '.' + ext;
+
+    const { error } = await supabase.storage
+      .from('product-images')
+      .upload(path, file, { upsert: false, cacheControl: '3600' });
+
+    if (error) throw error;
+
+    const { data: pub } = supabase.storage.from('product-images').getPublicUrl(path);
+    return pub.publicUrl;
+  }
+
+  async function saveProduct(){
+    const name = prodName.value.trim();
+    const desc = prodDesc.value.trim();
+    const useMonthly = hasMonthly.checked;
+    const useLifetime = hasLifetime.checked;
+    const pm = useMonthly ? parseFloat(priceMonthly.value) : null;
+    const pl = useLifetime ? parseFloat(priceLifetime.value) : null;
+
+    if (!name){ toast('Product name is required.', 'err'); return; }
+    if (!useMonthly && !useLifetime){ toast('Enable at least one price option.', 'err'); return; }
+    if (useMonthly && (!pm || pm <= 0)){ toast('Enter a valid monthly price.', 'err'); return; }
+    if (useLifetime && (!pl || pl <= 0)){ toast('Enter a valid lifetime price.', 'err'); return; }
+
+    saveProductBtn.disabled = true;
+    saveProductBtn.textContent = 'saving…';
+
+    try {
+      let imageUrl = null;
+
+      if (state.pendingImageFile){
+        imageUrl = await uploadProductImage(state.pendingImageFile);
+      } else if (state.editingId){
+        const found = state.myProducts.find(function(p){ return p.id === state.editingId; });
+        imageUrl = found ? found.image_url : null;
+      }
+
+      const payload = {
+        name: name,
+        description: desc || null,
+        price_monthly: useMonthly ? pm : null,
+        price_lifetime: useLifetime ? pl : null,
+        image_url: imageUrl
+      };
+
+      if (state.editingId){
+        const { error } = await supabase
+          .from('products')
+          .update(payload)
+          .eq('id', state.editingId);
+        if (error) throw error;
+        toast('Product updated.', 'ok');
+      } else {
+        payload.seller_id = state.session.user.id;
+        const { error } = await supabase
+          .from('products')
+          .insert(payload);
+        if (error) throw error;
+        toast('Product created.', 'ok');
+      }
+
+      closeProductModal();
+      await loadMyProducts();
+      await loadMarket();
+
+    } catch (err){
+      toast('Save failed: ' + (err.message || 'unknown'), 'err');
+    }
+
+    saveProductBtn.disabled = false;
+    saveProductBtn.textContent = 'Save Product';
+  }
+
+  // ================= PRODUCT LISTS =================
+  async function loadMyProducts(){
+    myProductsArea.innerHTML = '<div class="loading"><span class="dot"></span>loading your products…</div>';
+
+    const { data, error } = await supabase
+      .from('products')
+      .select('id, seller_id, name, description, image_url, price_monthly, price_lifetime, created_at')
+      .eq('seller_id', state.session.user.id)
+      .order('created_at', { ascending: false });
+
+    if (error){
+      myProductsArea.innerHTML = '<div class="empty">Failed to load: ' + escapeHtml(error.message) + '</div>';
+      return;
+    }
+
+    state.myProducts = data || [];
+    prodCount.textContent = state.myProducts.length;
+
+    if (state.myProducts.length === 0){
+      myProductsArea.innerHTML =
+        '<div class="empty">' +
+        '<strong>No products yet</strong>' +
+        'Click "+ Add Product" to list your first item.' +
+        '</div>';
+      return;
+    }
+
+    myProductsArea.innerHTML = '<div class="products-grid">' +
+      state.myProducts.map(renderMyProductCard).join('') +
+      '</div>';
+
+    document.querySelectorAll('[data-edit]').forEach(function(el){
+      el.addEventListener('click', function(){
+        const id = el.getAttribute('data-edit');
+        const prod = state.myProducts.find(function(p){ return p.id === id; });
+        if (prod) openProductModal(prod);
+      });
+    });
+
+    document.querySelectorAll('[data-del]').forEach(function(el){
+      el.addEventListener('click', async function(){
+        const id = el.getAttribute('data-del');
+        if (!confirm('Delete this product permanently?')) return;
+        const { error } = await supabase.from('products').delete().eq('id', id);
+        if (error){
+          toast('Delete failed: ' + error.message, 'err');
+          return;
+        }
+        toast('Product deleted.', 'ok');
+        await loadMyProducts();
+        await loadMarket();
+      });
+    });
+  }
+
+  function renderMyProductCard(p){
+    const img = p.image_url
+      ? '<img src="' + escapeHtml(p.image_url) + '" alt="" />'
+      : '<span class="ph">NO IMG</span>';
+
+    return (
+      '<div class="prod-card">' +
+        '<div class="prod-card-img">' + img + '</div>' +
+        '<div class="prod-card-body">' +
+          '<div class="prod-card-name">' + escapeHtml(p.name) + '</div>' +
+          '<div class="prod-card-seller">' + fmtDate(p.created_at) + '</div>' +
+          '<div class="prod-card-foot">' +
+            '<span class="prod-card-price">' + priceHTML(p) + '</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="prod-card-actions">' +
+          '<button type="button" data-edit="' + p.id + '">Edit</button>' +
+          '<button type="button" class="del" data-del="' + p.id + '">Delete</button>' +
+        '</div>' +
+      '</div>'
+    );
+  }
+
+  async function loadMarket(){
+    marketArea.innerHTML = '<div class="loading"><span class="dot"></span>loading market…</div>';
+
+    const { data, error } = await supabase
+      .from('products')
+      .select('id, seller_id, name, image_url, price_monthly, price_lifetime, created_at')
+      .order('created_at', { ascending: false })
+      .limit(60);
+
+    if (error){
+      marketArea.innerHTML = '<div class="empty">Failed to load: ' + escapeHtml(error.message) + '</div>';
+      return;
+    }
+
+    state.marketProducts = data || [];
+
+    if (state.marketProducts.length === 0){
+      marketArea.innerHTML =
+        '<div class="empty">' +
+        '<strong>Market is empty</strong>' +
+        'No products have been listed yet.' +
+        '</div>';
+      return;
+    }
+
+    // fetch seller usernames + avg ratings
+    const sellerIds = Array.from(new Set(state.marketProducts.map(function(p){ return p.seller_id; })));
+    const productIds = state.marketProducts.map(function(p){ return p.id; });
+
+    const [{ data: sellers }, { data: ratings }] = await Promise.all([
+      supabase.from('profiles').select('id, username, avatar_url').in('id', sellerIds),
+      supabase.from('ratings').select('product_id, stars').in('product_id', productIds)
+    ]);
+
+    const sellerMap = {};
+    (sellers || []).forEach(function(s){ sellerMap[s.id] = s; });
+
+    const ratingAgg = {};
+    (ratings || []).forEach(function(r){
+      if (!ratingAgg[r.product_id]) ratingAgg[r.product_id] = { sum: 0, count: 0 };
+      ratingAgg[r.product_id].sum += r.stars;
+      ratingAgg[r.product_id].count++;
+    });
+
+    marketArea.innerHTML = '<div class="products-grid">' +
+      state.marketProducts.map(function(p){
+        const seller = sellerMap[p.seller_id] || { username: 'unknown', avatar_url: null };
+        const agg = ratingAgg[p.id];
+        const avg = agg ? (agg.sum / agg.count).toFixed(1) : null;
+        const count = agg ? agg.count : 0;
+        const ratingHTML = avg
+          ? '<span class="prod-card-rating">★ ' + avg + ' (' + count + ')</span>'
+          : '<span class="prod-card-rating" style="color:var(--text-3)">no ratings</span>';
+
+        const img = p.image_url
+          ? '<img src="' + escapeHtml(p.image_url) + '" alt="" />'
+          : '<span class="ph">NO IMG</span>';
+
+        return (
+          '<a href="product.html?id=' + p.id + '" class="prod-card">' +
+            '<div class="prod-card-img">' + img + '</div>' +
+            '<div class="prod-card-body">' +
+              '<div class="prod-card-name">' + escapeHtml(p.name) + '</div>' +
+              '<div class="prod-card-seller">by ' + escapeHtml(seller.username) + '</div>' +
+              '<div class="prod-card-foot">' +
+                '<span class="prod-card-price">' + priceHTML(p) + '</span>' +
+                ratingHTML +
+              '</div>' +
+            '</div>' +
+          '</a>'
+        );
+      }).join('') +
+      '</div>';
+  }
+
+  init().catch(function(err){
+    console.error(err);
+    toast('Something went wrong.', 'err');
+  });
+
+})();
+</script>
+</body>
+</html>
