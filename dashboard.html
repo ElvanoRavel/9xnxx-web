@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#000000" />
 <title>Dashboard · SilverFang</title>
 <link rel="icon" type="image/jpeg" href="silverfang.jpg" />
+<link rel="stylesheet" href="vip-effects.css" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -94,6 +95,10 @@ img{display:block;max-width:100%}
 }
 .hdr-nav a:hover{color:var(--text);background:#0d0d0d}
 .hdr-nav a.on{color:#fff}
+.hdr-nav a.admin-link{color:var(--red);border:1px solid var(--border-red-2)}
+.hdr-nav a.admin-link:hover{color:#fff;background:#150505}
+.hdr-nav a.vip-link{color:var(--amber);border:1px solid #3a2f0f}
+.hdr-nav a.vip-link:hover{color:#fff;background:#0a0800}
 
 .hdr-right{
   margin-left:auto;
@@ -116,26 +121,22 @@ img{display:block;max-width:100%}
 }
 .user-chip:hover{border-color:var(--red)}
 .user-chip .avatar{
-  width:24px;
-  height:24px;
+  width:24px;height:24px;
   background:#1a1a1a;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  display:flex;align-items:center;justify-content:center;
   overflow:hidden;
   flex-shrink:0;
 }
 .user-chip .avatar img{width:100%;height:100%;object-fit:cover}
-.user-chip .avatar .ph{
-  font-size:10px;
-  color:var(--text-3);
-  font-family:var(--mono);
-}
+.user-chip .avatar .ph{font-size:10px;color:var(--text-3)}
 .user-chip .name{
-  max-width:120px;
+  max-width:140px;
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
 }
 .btn-logout{
   padding:6px 12px;
@@ -304,6 +305,23 @@ img{display:block;max-width:100%}
   transition:background .1s,border-color .1s;
 }
 .avatar-card .upload-btn:hover{background:#161616;border-color:var(--border-red-2)}
+
+.vip-banner{
+  margin-top:14px;
+  padding:10px 12px;
+  border:1px solid #3a2f0f;
+  background:#0a0800;
+  font-family:var(--mono);
+  font-size:10.5px;
+  color:var(--amber);
+  line-height:1.6;
+  text-align:center;
+}
+.vip-banner a{
+  color:var(--amber);
+  font-weight:600;
+  text-decoration:underline;
+}
 
 .form-grid{display:flex;flex-direction:column;gap:18px}
 .field label{
@@ -669,7 +687,7 @@ img{display:block;max-width:100%}
   .tabs-inner::-webkit-scrollbar{display:none}
   .tab-btn{padding:0 12px;font-size:10.5px;white-space:nowrap}
   .main{padding:16px 14px 60px}
-  .user-chip .name{max-width:70px}
+  .user-chip .name{max-width:80px}
   .btn-logout{padding:6px 9px;font-size:10.5px}
   .products-grid{grid-template-columns:1fr;gap:10px}
   .avatar-big{width:110px;height:110px}
@@ -689,13 +707,13 @@ img{display:block;max-width:100%}
       <a href="index.html">Market</a>
       <a href="dashboard.html" class="on">Dashboard</a>
       <a href="messages.html">Messages</a>
+      <a href="vip.html" class="vip-link" id="vipLink" style="display:none">VIP</a>
+      <a href="admin.html" class="admin-link" id="adminLink" style="display:none">Admin</a>
     </nav>
 
     <div class="hdr-right">
       <a href="#" class="user-chip" id="userChip">
-        <span class="avatar" id="chipAvatar">
-          <span class="ph">?</span>
-        </span>
+        <span class="avatar" id="chipAvatar"><span class="ph">?</span></span>
         <span class="name" id="chipName">…</span>
       </a>
       <button type="button" class="btn-logout" id="logoutBtn">Logout</button>
@@ -715,7 +733,6 @@ img{display:block;max-width:100%}
 
 <main class="main">
 
-  <!-- PROFILE PANEL -->
   <section class="panel on" id="panel-profile">
     <div class="sec-head">
       <div>
@@ -736,6 +753,9 @@ img{display:block;max-width:100%}
           Change Avatar
           <input type="file" id="avatarFile" accept="image/*" style="display:none" />
         </label>
+        <div class="vip-banner" id="vipBanner" style="display:none">
+          👑 VIP Member — <a href="vip.html">Customize username</a>
+        </div>
       </div>
 
       <div class="form-grid">
@@ -758,7 +778,6 @@ img{display:block;max-width:100%}
     </div>
   </section>
 
-  <!-- MY PRODUCTS PANEL -->
   <section class="panel" id="panel-products">
     <div class="sec-head">
       <div>
@@ -773,7 +792,6 @@ img{display:block;max-width:100%}
     </div>
   </section>
 
-  <!-- MARKET PANEL -->
   <section class="panel" id="panel-market">
     <div class="sec-head">
       <div>
@@ -789,7 +807,6 @@ img{display:block;max-width:100%}
 
 </main>
 
-<!-- PRODUCT FORM MODAL -->
 <div class="modal-bg" id="productModal">
   <div class="modal">
     <div class="modal-head">
@@ -854,6 +871,7 @@ img{display:block;max-width:100%}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="vip-helper.js"></script>
 <script>
 (function(){
   'use strict';
@@ -862,6 +880,8 @@ img{display:block;max-width:100%}
   const SUPABASE_ANON_KEY = 'sb_publishable_xHr9z0NCsm8gBivTQ2nH8Q_Y1uzdlis';
 
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const escapeHtml = SF_VIP.escapeHtml;
+  const renderUsername = SF_VIP.renderUsername;
 
   const state = {
     session: null,
@@ -883,10 +903,11 @@ img{display:block;max-width:100%}
 
   const chipAvatar = $('chipAvatar');
   const chipName = $('chipName');
+  const adminLink = $('adminLink');
+  const vipLink = $('vipLink');
   const logoutBtn = $('logoutBtn');
 
   const avatarBig = $('avatarBig');
-  const avatarPh = $('avatarPh');
   const profileUsername = $('profileUsername');
   const profileMember = $('profileMember');
   const avatarFile = $('avatarFile');
@@ -894,6 +915,7 @@ img{display:block;max-width:100%}
   const bioEl = $('bio');
   const bioCount = $('bioCount');
   const saveProfileBtn = $('saveProfileBtn');
+  const vipBanner = $('vipBanner');
 
   const myProductsArea = $('myProductsArea');
   const marketArea = $('marketArea');
@@ -930,16 +952,6 @@ img{display:block;max-width:100%}
     }, 3000);
   }
 
-  function escapeHtml(str){
-    if (str == null) return '';
-    return String(str)
-      .replace(/&/g,'&amp;')
-      .replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;')
-      .replace(/"/g,'&quot;')
-      .replace(/'/g,'&#39;');
-  }
-
   function fmtDate(iso){
     if (!iso) return '—';
     try {
@@ -957,13 +969,6 @@ img{display:block;max-width:100%}
       parts.push('<span class="row">$' + Number(p.price_lifetime).toFixed(0) + '<small> lifetime</small></span>');
     }
     return parts.join('');
-  }
-
-  function avatarHTML(url, fallbackChar){
-    if (url){
-      return '<img src="' + escapeHtml(url) + '" alt="" />';
-    }
-    return '<span class="ph">' + escapeHtml(fallbackChar || '?') + '</span>';
   }
 
   // ================= AUTH =================
@@ -987,7 +992,7 @@ img{display:block;max-width:100%}
   async function loadProfile(){
     const { data, error } = await supabase
       .from('profiles')
-      .select('id, username, avatar_url, bio, created_at')
+      .select('id, username, avatar_url, bio, created_at, is_admin, is_vip, username_effect, username_emoji')
       .eq('id', state.session.user.id)
       .maybeSingle();
 
@@ -998,7 +1003,7 @@ img{display:block;max-width:100%}
 
     state.profile = data;
 
-    profileUsername.textContent = data.username;
+    profileUsername.innerHTML = renderUsername(data.username, data.username_effect, data.username_emoji);
     profileMember.textContent = 'member since ' + fmtDate(data.created_at);
     usernameRO.value = data.username;
 
@@ -1010,17 +1015,28 @@ img{display:block;max-width:100%}
     } else {
       avatarBig.innerHTML = '<span class="ph">' + escapeHtml((data.username || '?').charAt(0).toUpperCase()) + '</span>';
     }
+
+    if (data.is_vip || data.is_admin){
+      vipBanner.style.display = 'block';
+    } else {
+      vipBanner.style.display = 'none';
+    }
   }
 
   function renderHeader(){
     const p = state.profile;
     if (!p) return;
-    chipName.textContent = p.username;
+
+    chipName.innerHTML = renderUsername(p.username, p.username_effect, p.username_emoji);
+
     if (p.avatar_url){
       chipAvatar.innerHTML = '<img src="' + escapeHtml(p.avatar_url) + '" alt="" />';
     } else {
       chipAvatar.innerHTML = '<span class="ph">' + escapeHtml((p.username || '?').charAt(0).toUpperCase()) + '</span>';
     }
+
+    adminLink.style.display = p.is_admin ? 'inline-block' : 'none';
+    vipLink.style.display = (p.is_vip || p.is_admin) ? 'inline-block' : 'none';
   }
 
   function updateBioCount(){
@@ -1114,7 +1130,6 @@ img{display:block;max-width:100%}
       window.location.href = 'index.html';
     });
 
-    // ===== PRODUCT MODAL =====
     addProductBtn.addEventListener('click', function(){
       openProductModal(null);
     });
@@ -1374,12 +1389,11 @@ img{display:block;max-width:100%}
       return;
     }
 
-    // fetch seller usernames + avg ratings
     const sellerIds = Array.from(new Set(state.marketProducts.map(function(p){ return p.seller_id; })));
     const productIds = state.marketProducts.map(function(p){ return p.id; });
 
     const [{ data: sellers }, { data: ratings }] = await Promise.all([
-      supabase.from('profiles').select('id, username, avatar_url').in('id', sellerIds),
+      supabase.from('profiles').select('id, username, avatar_url, username_effect, username_emoji').in('id', sellerIds),
       supabase.from('ratings').select('product_id, stars').in('product_id', productIds)
     ]);
 
@@ -1395,7 +1409,7 @@ img{display:block;max-width:100%}
 
     marketArea.innerHTML = '<div class="products-grid">' +
       state.marketProducts.map(function(p){
-        const seller = sellerMap[p.seller_id] || { username: 'unknown', avatar_url: null };
+        const seller = sellerMap[p.seller_id] || { username: 'unknown', username_effect: 'none', username_emoji: 'none' };
         const agg = ratingAgg[p.id];
         const avg = agg ? (agg.sum / agg.count).toFixed(1) : null;
         const count = agg ? agg.count : 0;
@@ -1412,7 +1426,7 @@ img{display:block;max-width:100%}
             '<div class="prod-card-img">' + img + '</div>' +
             '<div class="prod-card-body">' +
               '<div class="prod-card-name">' + escapeHtml(p.name) + '</div>' +
-              '<div class="prod-card-seller">by ' + escapeHtml(seller.username) + '</div>' +
+              '<div class="prod-card-seller">by ' + renderUsername(seller.username, seller.username_effect, seller.username_emoji) + '</div>' +
               '<div class="prod-card-foot">' +
                 '<span class="prod-card-price">' + priceHTML(p) + '</span>' +
                 ratingHTML +
