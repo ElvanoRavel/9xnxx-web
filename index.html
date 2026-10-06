@@ -116,19 +116,25 @@ img,svg{display:block;max-width:100%}
   font-size:11px;
   color:var(--text-3);
 }
-.hdr-right .btn-log{
+
+.hdr-guest{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.hdr-guest .btn-log{
   padding:6px 12px;
   border:1px solid var(--border-2);
   color:var(--text);
   font-size:11.5px;
   transition:background .1s,border-color .1s,color .1s;
 }
-.hdr-right .btn-log:hover{
+.hdr-guest .btn-log:hover{
   background:var(--red);
   border-color:var(--red);
   color:#fff;
 }
-.hdr-right .btn-signup{
+.hdr-guest .btn-signup{
   padding:6px 12px;
   background:var(--red);
   border:1px solid var(--red);
@@ -136,9 +142,53 @@ img,svg{display:block;max-width:100%}
   font-size:11.5px;
   transition:background .1s,border-color .1s;
 }
-.hdr-right .btn-signup:hover{
+.hdr-guest .btn-signup:hover{
   background:var(--red-2);
   border-color:var(--red-2);
+}
+
+.hdr-user{
+  display:none;
+  align-items:center;
+  gap:8px;
+}
+.user-chip{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:6px 11px;
+  border:1px solid var(--border-red-2);
+  background:#050505;
+  font-family:var(--mono);
+  font-size:11.5px;
+  color:#e0e0e0;
+  max-width:200px;
+}
+.user-chip .user-dot{
+  width:6px;
+  height:6px;
+  background:var(--green);
+  border-radius:50%;
+  box-shadow:0 0 6px rgba(74,158,74,.6);
+  flex-shrink:0;
+}
+.user-chip .user-name{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.btn-logout{
+  padding:6px 12px;
+  border:1px solid var(--border-2);
+  color:var(--text);
+  font-size:11.5px;
+  font-family:var(--mono);
+  transition:background .1s,border-color .1s,color .1s;
+}
+.btn-logout:hover{
+  background:var(--red);
+  border-color:var(--red);
+  color:#fff;
 }
 
 .hero{
@@ -479,8 +529,11 @@ img,svg{display:block;max-width:100%}
 @media (max-width:560px){
   .hdr-inner{padding:0 14px;gap:10px}
   .hdr-right{gap:6px}
-  .hdr-right .btn-log{padding:5px 9px;font-size:10.5px}
-  .hdr-right .btn-signup{padding:5px 9px;font-size:10.5px}
+  .hdr-guest{gap:6px}
+  .hdr-guest .btn-log{padding:5px 9px;font-size:10.5px}
+  .hdr-guest .btn-signup{padding:5px 9px;font-size:10.5px}
+  .user-chip{padding:5px 8px;font-size:10.5px;max-width:120px}
+  .btn-logout{padding:5px 9px;font-size:10.5px}
   .toolbar-inner{padding:0 14px;gap:10px;height:44px}
   .toolbar .search input{width:120px;height:26px;font-size:11px;padding:0 8px}
   .toolbar .search button{height:26px;padding:0 9px;font-size:10px}
@@ -502,8 +555,10 @@ img,svg{display:block;max-width:100%}
 @media (max-width:380px){
   .hero-title{font-size:13px}
   .toolbar .search input{width:100px}
-  .hdr-right .btn-log{padding:5px 8px;font-size:10px}
-  .hdr-right .btn-signup{padding:5px 8px;font-size:10px}
+  .hdr-guest .btn-log{padding:5px 8px;font-size:10px}
+  .hdr-guest .btn-signup{padding:5px 8px;font-size:10px}
+  .user-chip{padding:5px 7px;font-size:10px;max-width:90px}
+  .btn-logout{padding:5px 8px;font-size:10px}
 }
 </style>
 </head>
@@ -526,8 +581,20 @@ img,svg{display:block;max-width:100%}
       </nav>
 
       <div class="hdr-right">
-        <a href="login.html" class="btn-log">Login</a>
-        <a href="signup.html" class="btn-signup">Sign Up</a>
+
+        <div class="hdr-guest" id="hdrGuest">
+          <a href="login.html" class="btn-log">Login</a>
+          <a href="signup.html" class="btn-signup">Sign Up</a>
+        </div>
+
+        <div class="hdr-user" id="hdrUser">
+          <span class="user-chip">
+            <span class="user-dot"></span>
+            <span class="user-name" id="userName">—</span>
+          </span>
+          <button type="button" class="btn-logout" id="logoutBtn">Logout</button>
+        </div>
+
       </div>
     </div>
   </header>
@@ -794,9 +861,20 @@ img,svg{display:block;max-width:100%}
   <span id="toastMsg">—</span>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function(){
   'use strict';
+
+  const SUPABASE_URL = 'https://iygiioemtpfozxikhgmx.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_xHr9z0NCsm8gBivTQ2nH8Q_Y1uzdlis';
+
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const hdrGuest = document.getElementById('hdrGuest');
+  const hdrUser = document.getElementById('hdrUser');
+  const userNameEl = document.getElementById('userName');
+  const logoutBtn = document.getElementById('logoutBtn');
 
   window.goHome = function(e){
     if (e) e.preventDefault();
@@ -816,6 +894,54 @@ img,svg{display:block;max-width:100%}
       toastEl.classList.remove('on');
     }, 3000);
   };
+
+  async function updateHeader(){
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+
+      if (!session) {
+        hdrGuest.style.display = 'flex';
+        hdrUser.style.display = 'none';
+        return;
+      }
+
+      hdrGuest.style.display = 'none';
+      hdrUser.style.display = 'flex';
+
+      const { data: profile, error } = await supabase
+        .from('profiles')
+        .select('username')
+        .eq('id', session.user.id)
+        .maybeSingle();
+
+      if (error || !profile) {
+        userNameEl.textContent = 'operator';
+      } else {
+        userNameEl.textContent = profile.username;
+      }
+    } catch (e) {
+      hdrGuest.style.display = 'flex';
+      hdrUser.style.display = 'none';
+    }
+  }
+
+  logoutBtn.addEventListener('click', async function(){
+    logoutBtn.disabled = true;
+    logoutBtn.textContent = '…';
+    try {
+      await supabase.auth.signOut();
+    } catch (e) {
+      /* ignore */
+    }
+    sessionStorage.removeItem('sf_signup_codes');
+    window.location.href = 'index.html';
+  });
+
+  supabase.auth.onAuthStateChange(function(_event, _session){
+    updateHeader();
+  });
+
+  updateHeader();
 
 })();
 </script>
