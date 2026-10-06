@@ -116,13 +116,6 @@ input{font-family:inherit;color:inherit;font-size:inherit}
   box-shadow:0 0 0 1px rgba(217,38,38,.15);
 }
 .field input::placeholder{color:var(--text-4)}
-.field .hint{
-  margin-top:5px;
-  font-family:var(--mono);
-  font-size:10px;
-  color:var(--text-3);
-  letter-spacing:.02em;
-}
 
 .btn-sub{
   width:100%;
@@ -230,7 +223,7 @@ input{font-family:inherit;color:inherit;font-size:inherit}
             type="text"
             id="username"
             placeholder="your username"
-            autocomplete="off"
+            autocomplete="username"
             spellcheck="false"
             required
           />
@@ -247,24 +240,11 @@ input{font-family:inherit;color:inherit;font-size:inherit}
           />
         </div>
 
-        <div class="field">
-          <label for="code">Recovery Code</label>
-          <input
-            type="text"
-            id="code"
-            placeholder="one of your 12 codes"
-            autocomplete="off"
-            spellcheck="false"
-            required
-          />
-          <div class="hint">Paste any single code — it will be consumed after use.</div>
-        </div>
-
         <button type="submit" class="btn-sub" id="submitBtn">Login</button>
 
         <div class="alt">
           <a href="index.html">← Back</a>
-          <a href="signup.html">No account? Sign up</a>
+          <a href="forgot.html">Forgot password?</a>
         </div>
       </form>
 
@@ -277,8 +257,8 @@ input{font-family:inherit;color:inherit;font-size:inherit}
     </div>
 
     <div class="box-foot">
-      Anonymous access · Code-based verification<br />
-      One code is consumed per login
+      Anonymous access · No email required<br />
+      Don't have an account? <a href="signup.html" style="color:var(--amber)">Sign up</a>
     </div>
   </div>
 
@@ -331,10 +311,9 @@ input{font-family:inherit;color:inherit;font-size:inherit}
 
     const username = document.getElementById('username').value.trim();
     const pass = document.getElementById('pass').value;
-    const code = document.getElementById('code').value.trim();
 
-    if (!username || !pass || !code) {
-      showMsg('All three fields are required.', 'err');
+    if (!username || !pass) {
+      showMsg('Username and password are required.', 'err');
       return;
     }
 
@@ -356,44 +335,6 @@ input{font-family:inherit;color:inherit;font-size:inherit}
 
       if (!authData || !authData.user) {
         throw new Error('Login failed: no session returned.');
-      }
-
-      showLoading('verifying recovery code…');
-
-      const userId = authData.user.id;
-
-      const { data: codeRows, error: codeErr } = await supabase
-        .from('recovery_codes')
-        .select('id, code, used')
-        .eq('user_id', userId)
-        .eq('code', code)
-        .limit(1);
-
-      if (codeErr) {
-        await supabase.auth.signOut();
-        throw new Error('Verification failed: ' + codeErr.message);
-      }
-
-      if (!codeRows || codeRows.length === 0) {
-        await supabase.auth.signOut();
-        throw new Error('Invalid recovery code. Try another one of your 12 codes.');
-      }
-
-      if (codeRows[0].used) {
-        await supabase.auth.signOut();
-        throw new Error('This recovery code has already been used. Try another.');
-      }
-
-      showLoading('consuming code…');
-
-      const { error: updErr } = await supabase
-        .from('recovery_codes')
-        .update({ used: true })
-        .eq('id', codeRows[0].id);
-
-      if (updErr) {
-        await supabase.auth.signOut();
-        throw new Error('Failed to consume code: ' + updErr.message);
       }
 
       showLoading('redirecting…');
