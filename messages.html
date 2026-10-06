@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#000000" />
 <title>Messages · SilverFang</title>
 <link rel="icon" type="image/jpeg" href="silverfang.jpg" />
+<link rel="stylesheet" href="vip-effects.css" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -87,9 +88,17 @@ img{display:block;max-width:100%}
   font-size:12.5px;
   margin-left:8px;
 }
-.hdr-nav a{padding:6px 11px;color:var(--text-2);border-radius:2px}
+.hdr-nav a{
+  padding:6px 11px;
+  color:var(--text-2);
+  border-radius:2px;
+}
 .hdr-nav a:hover{color:var(--text);background:#0d0d0d}
 .hdr-nav a.on{color:#fff}
+.hdr-nav a.admin-link{color:var(--red);border:1px solid var(--border-red-2)}
+.hdr-nav a.admin-link:hover{color:#fff;background:#150505}
+.hdr-nav a.vip-link{color:var(--amber);border:1px solid #3a2f0f}
+.hdr-nav a.vip-link:hover{color:#fff;background:#0a0800}
 
 .hdr-right{
   margin-left:auto;
@@ -118,7 +127,15 @@ img{display:block;max-width:100%}
 }
 .user-chip .avatar img{width:100%;height:100%;object-fit:cover}
 .user-chip .avatar .ph{font-size:10px;color:var(--text-3)}
-.user-chip .name{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.user-chip .name{
+  max-width:140px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+}
 .btn-logout{
   padding:6px 12px;
   border:1px solid var(--border-2);
@@ -258,7 +275,13 @@ img{display:block;max-width:100%}
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  min-width:0;
 }
+.conv-item .uname .uei-none{display:none}
+.conv-item .uname .uemoji{font-size:11px}
 .conv-item .time{
   font-family:var(--mono);
   font-size:9.5px;
@@ -326,6 +349,10 @@ img{display:block;max-width:100%}
   color:#e0e0e0;
   word-break:break-all;
   margin-bottom:2px;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  flex-wrap:wrap;
 }
 .thread-head .sub{
   font-family:var(--mono);
@@ -513,7 +540,7 @@ img{display:block;max-width:100%}
 @media (max-width:640px){
   .hdr-inner{padding:0 14px;gap:10px}
   .hdr-nav{display:none}
-  .user-chip .name{max-width:70px}
+  .user-chip .name{max-width:80px}
   .btn-logout{padding:6px 9px;font-size:10.5px}
   .page-head h1{font-size:13px}
   .thread-scroll{padding:12px}
@@ -534,6 +561,8 @@ img{display:block;max-width:100%}
       <a href="index.html">Market</a>
       <a href="dashboard.html">Dashboard</a>
       <a href="messages.html" class="on">Messages</a>
+      <a href="vip.html" class="vip-link" id="vipLink" style="display:none">VIP</a>
+      <a href="admin.html" class="admin-link" id="adminLink" style="display:none">Admin</a>
     </nav>
 
     <div class="hdr-right">
@@ -585,6 +614,7 @@ img{display:block;max-width:100%}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="vip-helper.js"></script>
 <script>
 (function(){
   'use strict';
@@ -593,6 +623,8 @@ img{display:block;max-width:100%}
   const SUPABASE_ANON_KEY = 'sb_publishable_xHr9z0NCsm8gBivTQ2nH8Q_Y1uzdlis';
 
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const escapeHtml = SF_VIP.escapeHtml;
+  const renderUsername = SF_VIP.renderUsername;
 
   const params = new URLSearchParams(window.location.search);
   const initialWith = params.get('with');
@@ -600,7 +632,7 @@ img{display:block;max-width:100%}
   const state = {
     session: null,
     profile: null,
-    conversations: [],   // [{user_id, username, avatar_url, last_message, last_at, unread_count}]
+    conversations: [],
     activeUserId: null,
     activeUser: null,
     messages: [],
@@ -616,6 +648,8 @@ img{display:block;max-width:100%}
   const thread = $('thread');
   const chipAvatar = $('chipAvatar');
   const chipName = $('chipName');
+  const adminLink = $('adminLink');
+  const vipLink = $('vipLink');
   const logoutBtn = $('logoutBtn');
   const toastEl = $('toast');
   const toastMsg = $('toastMsg');
@@ -628,16 +662,6 @@ img{display:block;max-width:100%}
     toastTimer = setTimeout(function(){
       toastEl.className = 'toast';
     }, 3000);
-  }
-
-  function escapeHtml(str){
-    if (str == null) return '';
-    return String(str)
-      .replace(/&/g,'&amp;')
-      .replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;')
-      .replace(/"/g,'&quot;')
-      .replace(/'/g,'&#39;');
   }
 
   function fmtTime(iso){
@@ -681,14 +705,17 @@ img{display:block;max-width:100%}
 
     const { data: profile } = await supabase
       .from('profiles')
-      .select('id, username, avatar_url')
+      .select('id, username, avatar_url, is_admin, is_vip, username_effect, username_emoji')
       .eq('id', session.user.id)
       .maybeSingle();
 
-    state.profile = profile || { username: 'operator', avatar_url: null };
+    state.profile = profile || { username: 'operator', avatar_url: null, is_admin: false, is_vip: false, username_effect: 'none', username_emoji: 'none' };
 
-    chipName.textContent = state.profile.username;
+    chipName.innerHTML = renderUsername(state.profile.username, state.profile.username_effect, state.profile.username_emoji);
     chipAvatar.innerHTML = avatarHTML(state.profile.avatar_url, state.profile.username.charAt(0));
+
+    adminLink.style.display = state.profile.is_admin ? 'inline-block' : 'none';
+    vipLink.style.display = (state.profile.is_vip || state.profile.is_admin) ? 'inline-block' : 'none';
 
     bindEvents();
     await loadConversations();
@@ -720,7 +747,6 @@ img{display:block;max-width:100%}
 
     const myId = state.session.user.id;
 
-    // Get all messages involving me
     const { data: msgs, error } = await supabase
       .from('messages')
       .select('id, sender_id, receiver_id, content, read, created_at')
@@ -735,7 +761,6 @@ img{display:block;max-width:100%}
 
     const rows = msgs || [];
 
-    // Group by other user
     const convMap = new Map();
     rows.forEach(function(m){
       const otherId = m.sender_id === myId ? m.receiver_id : m.sender_id;
@@ -755,12 +780,11 @@ img{display:block;max-width:100%}
 
     const convArr = Array.from(convMap.values());
 
-    // Load profile info
     if (convArr.length > 0){
       const ids = convArr.map(function(c){ return c.user_id; });
       const { data: profiles } = await supabase
         .from('profiles')
-        .select('id, username, avatar_url')
+        .select('id, username, avatar_url, username_effect, username_emoji')
         .in('id', ids);
 
       const map = {};
@@ -770,14 +794,15 @@ img{display:block;max-width:100%}
         const p = map[c.user_id];
         c.username = p ? p.username : 'unknown';
         c.avatar_url = p ? p.avatar_url : null;
+        c.username_effect = p ? (p.username_effect || 'none') : 'none';
+        c.username_emoji = p ? (p.username_emoji || 'none') : 'none';
       });
     }
 
-    // If opened with a specific user that isn't in the list yet, prepend empty entry
     if (initialWith && !convMap.has(initialWith)){
       const { data: p } = await supabase
         .from('profiles')
-        .select('id, username, avatar_url')
+        .select('id, username, avatar_url, username_effect, username_emoji')
         .eq('id', initialWith)
         .maybeSingle();
       if (p){
@@ -785,6 +810,8 @@ img{display:block;max-width:100%}
           user_id: p.id,
           username: p.username,
           avatar_url: p.avatar_url,
+          username_effect: p.username_effect || 'none',
+          username_emoji: p.username_emoji || 'none',
           last_message: '',
           last_at: null,
           unread_count: 0
@@ -824,13 +851,14 @@ img{display:block;max-width:100%}
         : '<em style="color:var(--text-4)">no messages yet</em>';
       const time = c.last_at ? fmtTime(c.last_at) : '';
       const badge = c.unread_count > 0 ? '<span class="badge">' + c.unread_count + '</span>' : '';
+      const nameHTML = renderUsername(c.username, c.username_effect, c.username_emoji);
 
       return (
         '<div class="conv-item' + isOn + isUnread + '" data-uid="' + c.user_id + '">' +
           '<div class="av">' + av + '</div>' +
           '<div class="info">' +
             '<div class="top">' +
-              '<span class="uname">' + escapeHtml(c.username) + '</span>' +
+              '<span class="uname">' + nameHTML + '</span>' +
               '<span class="time">' + time + '</span>' +
             '</div>' +
             '<div class="preview">' + preview + '</div>' +
@@ -852,16 +880,20 @@ img{display:block;max-width:100%}
   async function openConversation(otherId){
     state.activeUserId = otherId;
 
-    // Load other user profile
     const { data: p } = await supabase
       .from('profiles')
-      .select('id, username, avatar_url')
+      .select('id, username, avatar_url, username_effect, username_emoji')
       .eq('id', otherId)
       .maybeSingle();
 
-    state.activeUser = p || { id: otherId, username: 'unknown', avatar_url: null };
+    state.activeUser = p || {
+      id: otherId,
+      username: 'unknown',
+      avatar_url: null,
+      username_effect: 'none',
+      username_emoji: 'none'
+    };
 
-    // Mobile: switch view
     chatShell.classList.add('show-thread');
 
     renderThread();
@@ -904,6 +936,7 @@ img{display:block;max-width:100%}
     }
 
     const av = avatarHTML(u.avatar_url, (u.username || '?').charAt(0));
+    const nameHTML = renderUsername(u.username, u.username_effect, u.username_emoji);
 
     const backBtn = '<button type="button" class="back-btn" id="backBtn">← Back</button>';
 
@@ -912,7 +945,7 @@ img{display:block;max-width:100%}
         backBtn +
         '<div class="av">' + av + '</div>' +
         '<div class="info">' +
-          '<div class="uname">' + escapeHtml(u.username) + '</div>' +
+          '<div class="uname">' + nameHTML + '</div>' +
           '<div class="sub">direct message</div>' +
         '</div>' +
         '<a href="user.html?id=' + escapeHtml(u.id) + '" class="view-profile">View Profile</a>' +
@@ -945,7 +978,6 @@ img{display:block;max-width:100%}
       '<div class="thread-scroll" id="threadScroll">' + messagesHTML + '</div>' +
       input;
 
-    // bind
     const backBtnEl = $('backBtn');
     if (backBtnEl){
       backBtnEl.addEventListener('click', function(){
@@ -1021,7 +1053,6 @@ img{display:block;max-width:100%}
     const myId = state.session.user.id;
     const otherId = state.activeUserId;
 
-    // update unread in local state first
     state.conversations.forEach(function(c){
       if (c.user_id === otherId) c.unread_count = 0;
     });
@@ -1035,7 +1066,6 @@ img{display:block;max-width:100%}
       .eq('read', false);
 
     if (error){
-      // silently ignore — non-critical
       console.warn('mark read failed:', error.message);
     }
   }
@@ -1057,7 +1087,6 @@ img{display:block;max-width:100%}
 
         const otherId = m.sender_id === myId ? m.receiver_id : m.sender_id;
 
-        // If it's for the active conversation, append
         if (state.activeUserId === otherId){
           state.messages.push(m);
           const scroller = $('threadScroll');
@@ -1076,7 +1105,6 @@ img{display:block;max-width:100%}
           }
         }
 
-        // Refresh conversation list
         refreshConversationsQuiet();
       })
       .subscribe();
@@ -1116,7 +1144,7 @@ img{display:block;max-width:100%}
       const ids = convArr.map(function(c){ return c.user_id; });
       const { data: profiles } = await supabase
         .from('profiles')
-        .select('id, username, avatar_url')
+        .select('id, username, avatar_url, username_effect, username_emoji')
         .in('id', ids);
 
       const map = {};
@@ -1125,10 +1153,11 @@ img{display:block;max-width:100%}
         const p = map[c.user_id];
         c.username = p ? p.username : 'unknown';
         c.avatar_url = p ? p.avatar_url : null;
+        c.username_effect = p ? (p.username_effect || 'none') : 'none';
+        c.username_emoji = p ? (p.username_emoji || 'none') : 'none';
       });
     }
 
-    // Preserve any existing entries that had 0 messages
     state.conversations.forEach(function(old){
       if (!convMap.has(old.user_id)){
         convArr.push(old);
