@@ -145,12 +145,16 @@ img,svg{display:block;max-width:100%}
   font-weight:600;
   color:#fff;
   letter-spacing:.02em;
-  line-height:1.4;
+  line-height:1.5;
   text-transform:uppercase;
   margin:0 auto;
+  word-break:normal;
+  overflow-wrap:normal;
+  hyphens:none;
 }
 .hero-title .accent{color:var(--red)}
 .hero-title .globe{color:var(--red)}
+.hero-title .nowrap{white-space:nowrap;display:inline-block}
 
 .hero-sub{
   margin:20px auto 0;
@@ -575,7 +579,7 @@ img,svg{display:block;max-width:100%}
   .item-price small{font-size:9px}
   .item-rep{font-size:9.5px}
   .hero-inner{padding:32px 20px 28px}
-  .hero-title{font-size:18px}
+  .hero-title{font-size:17px}
   .hero-sub{font-size:10.5px}
   .hero-list .tag{font-size:10px;padding:3px 8px}
 }
@@ -593,10 +597,13 @@ img,svg{display:block;max-width:100%}
   .pager{font-size:11px;margin-top:20px;padding-top:14px}
   .pager a,.pager span{min-width:26px;height:26px;padding:0 6px}
   .hero-inner{padding:26px 14px 22px}
-  .hero-title{font-size:15px;line-height:1.4}
+  .hero-title{font-size:14px;line-height:1.55}
   .hero-sub{font-size:10px}
   .hero-list{gap:6px 8px}
   .hero-list .tag{font-size:9.5px;padding:3px 7px}
+}
+@media (max-width:380px){
+  .hero-title{font-size:13px}
 }
 </style>
 </head>
@@ -627,7 +634,7 @@ img,svg{display:block;max-width:100%}
   <section class="hero">
     <div class="hero-inner">
       <h1 class="hero-title">
-        Connects You With The Top <span class="accent">Hackers</span>, <span class="accent">Crackers</span> And <span class="accent">Carders</span> Around The W<span class="globe">🌎</span>RLD
+        Connects You With The Top <span class="accent">Hackers</span>, <span class="accent">Crackers</span> And <span class="accent">Carders</span> Around The <span class="nowrap">W<span class="globe">🌎</span>RLD</span>
       </h1>
 
       <div class="hero-sub">
