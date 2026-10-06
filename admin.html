@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#000000" />
+<title>Admin · SilverFang</title>
+<link rel="icon" type="image/jpeg" href="silverfang.jpg" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:#000;
+  color:#c9c9c9;
+  font-size:13px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+a{color:inherit;text-decoration:none}
+a:hover{color:#fff}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;font-size:inherit}
+input,textarea,select{font-family:inherit;color:inherit;font-size:inherit}
+img{display:block;max-width:100%}
+::selection{background:#d92626;color:#fff}
+
+:root{
+  --border:#1a1a1a;
+  --border-2:#262626;
+  --border-red:#3a1414;
+  --border-red-2:#6b1f1f;
+  --text:#d4d4d4;
+  --text-2:#8a8a8a;
+  --text-3:#555;
+  --text-4:#333;
+  --red:#d92626;
+  --red-2:#a81c1c;
+  --green:#4a9e4a;
+  --amber:#c9a227;
+  --mono:'IBM Plex Mono',ui-monospace,'Courier New',monospace;
+}
+
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:#000}
+::-webkit-scrollbar-thumb{background:#1a1a1a;border:2px solid #000}
+::-webkit-scrollbar-thumb:hover{background:#282828}
+*{scrollbar-width:thin;scrollbar-color:#1a1a1a #000}
+
+.hdr{
+  border-bottom:1px solid var(--border);
+  background:#000;
+  position:sticky;
+  top:0;
+  z-index:50;
+}
+.hdr-inner{
+  max-width:1280px;
+  margin:0 auto;
+  padding:0 20px;
+  display:flex;
+  align-items:center;
+  height:52px;
+  gap:20px;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-family:var(--mono);
+  font-size:15px;
+  letter-spacing:.06em;
+  color:#fff;
+  flex-shrink:0;
+}
+.brand-logo{width:22px;height:22px;object-fit:contain;flex-shrink:0}
+.brand .name{font-weight:500}
+.brand .admin-badge{
+  padding:2px 7px;
+  margin-left:4px;
+  background:#150505;
+  border:1px solid var(--border-red-2);
+  color:var(--red);
+  font-size:9.5px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+
+.hdr-nav{
+  display:flex;
+  gap:2px;
+  font-size:12.5px;
+  margin-left:8px;
+}
+.hdr-nav a{padding:6px 11px;color:var(--text-2);border-radius:2px}
+.hdr-nav a:hover{color:var(--text);background:#0d0d0d}
+.hdr-nav a.on{color:#fff}
+
+.hdr-right{
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-family:var(--mono);
+  font-size:11px;
+}
+.user-chip{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:4px 10px 4px 4px;
+  border:1px solid var(--border-red-2);
+  background:#050505;
+  color:#e0e0e0;
+  font-size:11.5px;
+}
+.user-chip .avatar{
+  width:24px;height:24px;
+  background:#1a1a1a;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  flex-shrink:0;
+}
+.user-chip .avatar img{width:100%;height:100%;object-fit:cover}
+.user-chip .avatar .ph{font-size:10px;color:var(--text-3)}
+.user-chip .name{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btn-logout{
+  padding:6px 12px;
+  border:1px solid var(--border-2);
+  color:var(--text);
+  font-size:11.5px;
+  transition:background .1s,border-color .1s,color .1s;
+}
+.btn-logout:hover{background:var(--red);border-color:var(--red);color:#fff}
+
+.tabs{
+  border-bottom:1px solid var(--border);
+  background:#000;
+}
+.tabs-inner{
+  max-width:1280px;
+  margin:0 auto;
+  padding:0 20px;
+  display:flex;
+  gap:0;
+  height:44px;
+  align-items:stretch;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.tabs-inner::-webkit-scrollbar{display:none}
+.tab-btn{
+  padding:0 18px;
+  color:var(--text-2);
+  font-family:var(--mono);
+  font-size:11.5px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  border-bottom:2px solid transparent;
+  transition:color .15s,border-color .15s;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  white-space:nowrap;
+}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.on{color:#fff;border-bottom-color:var(--red)}
+.tab-btn .count{
+  display:inline-block;
+  padding:1px 6px;
+  background:#0d0d0d;
+  border:1px solid var(--border-2);
+  color:var(--text-3);
+  font-size:9.5px;
+}
+
+.main{
+  max-width:1280px;
+  margin:0 auto;
+  padding:24px 20px 60px;
+}
+
+.panel{display:none}
+.panel.on{display:block}
+
+.sec-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:20px;
+  padding-bottom:14px;
+  border-bottom:1px solid var(--border);
+  flex-wrap:wrap;
+}
+.sec-head h2{
+  font-family:var(--mono);
+  font-size:14px;
+  font-weight:500;
+  color:#fff;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+.sec-head .sub{
+  font-family:var(--mono);
+  font-size:10.5px;
+  color:var(--text-3);
+  margin-top:4px;
+  letter-spacing:.04em;
+}
+
+.btn-primary{
+  padding:8px 14px;
+  background:var(--red);
+  border:1px solid var(--red);
+  color:#fff;
+  font-family:var(--mono);
+  font-size:11.5px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  transition:background .1s,border-color .1s;
+}
+.btn-primary:hover{background:var(--red-2);border-color:var(--red-2)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+
+.btn-ghost{
+  padding:8px 14px;
+  background:#0d0d0d;
+  border:1px solid var(--border-2);
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:11.5px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  transition:background .1s,border-color .1s,color .1s;
+}
+.btn-ghost:hover{background:#161616;border-color:var(--border-red-2);color:#fff}
+
+.btn-sm{
+  padding:5px 10px;
+  font-family:var(--mono);
+  font-size:10.5px;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  border:1px solid var(--border-2);
+  background:#0d0d0d;
+  color:var(--text-2);
+  transition:background .1s,color .1s,border-color .1s;
+}
+.btn-sm:hover{background:#161616;color:var(--text);border-color:var(--border-red-2)}
+.btn-sm.danger:hover{background:#150505;color:#e06060;border-color:var(--border-red-2)}
+.btn-sm.success:hover{background:#020a02;color:var(--green);border-color:#1f3a1f}
+
+/* DASHBOARD STATS */
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+  margin-bottom:24px;
+}
+.stat-card{
+  padding:16px 18px;
+  border:1px solid var(--border-red);
+  background:#050505;
+  font-family:var(--mono);
+}
+.stat-card .num{
+  display:block;
+  font-size:26px;
+  color:#fff;
+  font-weight:600;
+  line-height:1.1;
+  margin-bottom:6px;
+}
+.stat-card .lbl{
+  font-size:10px;
+  color:var(--text-3);
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+
+/* ANNOUNCEMENTS */
+.ann-list{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.ann-item{
+  border:1px solid var(--border-2);
+  background:#050505;
+  padding:14px 16px;
+  position:relative;
+}
+.ann-item.level-info{border-left:3px solid #4a7cd9}
+.ann-item.level-success{border-left:3px solid var(--green)}
+.ann-item.level-warning{border-left:3px solid var(--amber)}
+.ann-item.level-danger{border-left:3px solid var(--red)}
+.ann-item.inactive{opacity:.5}
+.ann-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:14px;
+  margin-bottom:8px;
+  flex-wrap:wrap;
+}
+.ann-title{
+  font-family:var(--mono);
+  font-size:13px;
+  font-weight:600;
+  color:#fff;
+  line-height:1.3;
+  word-break:break-word;
+  flex:1;
+  min-width:200px;
+}
+.ann-meta{
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--text-3);
+  letter-spacing:.04em;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.ann-meta .pill{
+  padding:2px 7px;
+  border:1px solid var(--border-2);
+  font-size:9.5px;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+}
+.ann-meta .pill.info{color:#4a7cd9;border-color:#1a2d4a}
+.ann-meta .pill.success{color:var(--green);border-color:#1f3a1f}
+.ann-meta .pill.warning{color:var(--amber);border-color:#3a2f0f}
+.ann-meta .pill.danger{color:var(--red);border-color:var(--border-red-2)}
+.ann-meta .pill.active{color:var(--green);border-color:#1f3a1f}
+.ann-meta .pill.inactive{color:var(--text-3);border-color:var(--border-2)}
+.ann-content{
+  font-size:12.5px;
+  color:var(--text);
+  line-height:1.7;
+  white-space:pre-wrap;
+  word-break:break-word;
+  margin-bottom:12px;
+}
+.ann-actions{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+}
+
+/* TABLE (users, products, comments) */
+.tbl-wrap{
+  border:1px solid var(--border-2);
+  overflow-x:auto;
+  background:#000;
+}
+table.tbl{
+  width:100%;
+  border-collapse:collapse;
+  font-size:12.5px;
+  min-width:720px;
+}
+.tbl thead{
+  background:#050505;
+  border-bottom:1px solid var(--border-2);
+}
+.tbl th{
+  padding:11px 14px;
+  text-align:left;
+  font-family:var(--mono);
+  font-size:10px;
+  font-weight:500;
+  color:var(--text-3);
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+.tbl td{
+  padding:11px 14px;
+  border-bottom:1px solid var(--border);
+  vertical-align:middle;
+  font-size:12.5px;
+  color:var(--text);
+  word-break:break-word;
+}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:#050505}
+
+.row-user{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.row-avatar{
+  width:32px;height:32px;
+  background:#0d0d0d;
+  border:1px solid var(--border-2);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  flex-shrink:0;
+}
+.row-avatar img{width:100%;height:100%;object-fit:cover}
+.row-avatar .ph{font-family:var(--mono);font-size:11px;color:var(--text-3)}
+.row-user-info{min-width:0;flex:1}
+.row-username{
+  font-family:var(--mono);
+  font-size:12.5px;
+  color:#e0e0e0;
+  word-break:break-all;
+  line-height:1.3;
+}
+.row-sub{
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--text-3);
+  margin-top:2px;
+}
+
+.badge-tag{
+  display:inline-block;
+  padding:2px 7px;
+  font-family:var(--mono);
+  font-size:9.5px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  border:1px solid var(--border-2);
+  color:var(--text-3);
+}
+.badge-tag.admin{color:var(--amber);border-color:#3a2f0f}
+.badge-tag.banned{color:var(--red);border-color:var(--border-red-2)}
+.badge-tag.active{color:var(--green);border-color:#1f3a1f}
+
+.row-actions{display:flex;gap:6px;flex-wrap:wrap}
+
+.preview-text{
+  max-width:340px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  font-size:12px;
+  line-height:1.5;
+  color:var(--text-2);
+}
+
+.search-bar{
+  margin-bottom:16px;
+}
+.search-bar input{
+  width:100%;
+  max-width:360px;
+  padding:8px 12px;
+  background:#000;
+  border:1px solid var(--border-2);
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:12px;
+  outline:none;
+  transition:border-color .15s;
+}
+.search-bar input:focus{border-color:var(--border-red-2)}
+.search-bar input::placeholder{color:var(--text-4)}
+
+.empty{
+  padding:40px 20px;
+  text-align:center;
+  border:1px dashed var(--border-2);
+  background:#030303;
+  font-family:var(--mono);
+  font-size:11.5px;
+  color:var(--text-3);
+  line-height:1.7;
+}
+.empty strong{color:var(--text-2);display:block;margin-bottom:6px}
+
+.loading{
+  text-align:center;
+  padding:40px 20px;
+  font-family:var(--mono);
+  font-size:11.5px;
+  color:var(--text-3);
+}
+.loading .dot{
+  display:inline-block;
+  width:5px;height:5px;
+  background:var(--red);
+  border-radius:50%;
+  margin-right:6px;
+  vertical-align:middle;
+  animation:blink 1s infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* MODAL */
+.modal-bg{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  backdrop-filter:blur(2px);
+  z-index:100;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+.modal-bg.on{display:flex}
+.modal{
+  width:100%;
+  max-width:520px;
+  max-height:90vh;
+  overflow-y:auto;
+  background:#000;
+  border:1px solid var(--border-red-2);
+}
+.modal-head{
+  padding:14px 20px;
+  border-bottom:1px solid var(--border-red-2);
+  background:#050505;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  z-index:2;
+}
+.modal-head h3{
+  font-family:var(--mono);
+  font-size:12px;
+  font-weight:500;
+  color:#fff;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.modal-close{
+  color:var(--text-3);
+  font-family:var(--mono);
+  font-size:16px;
+  padding:0 4px;
+}
+.modal-close:hover{color:var(--red)}
+.modal-body{padding:20px}
+
+.field{margin-bottom:14px}
+.field label{
+  display:block;
+  font-family:var(--mono);
+  font-size:10.5px;
+  color:var(--text-3);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  margin-bottom:6px;
+}
+.field input[type=text],
+.field input[type=password],
+.field textarea,
+.field select{
+  width:100%;
+  padding:9px 11px;
+  background:#000;
+  border:1px solid var(--border-2);
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:12.5px;
+  outline:none;
+  transition:border-color .15s,box-shadow .15s;
+  resize:vertical;
+}
+.field input:focus,
+.field textarea:focus,
+.field select:focus{
+  border-color:var(--border-red-2);
+  box-shadow:0 0 0 1px rgba(217,38,38,.15);
+}
+.field input::placeholder,
+.field textarea::placeholder{color:var(--text-4)}
+.field textarea{min-height:110px;line-height:1.6}
+
+.level-picker{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+}
+.level-picker label{
+  flex:1;
+  min-width:80px;
+  padding:8px 10px;
+  border:1px solid var(--border-2);
+  background:#050505;
+  cursor:pointer;
+  text-align:center;
+  font-family:var(--mono);
+  font-size:10.5px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  transition:border-color .15s,background .15s;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+}
+.level-picker input{display:none}
+.level-picker label:hover{border-color:var(--border-red-2)}
+.level-picker label.sel-info{border-color:#4a7cd9;background:#040814;color:#7aa8e6}
+.level-picker label.sel-success{border-color:#1f3a1f;background:#020a02;color:var(--green)}
+.level-picker label.sel-warning{border-color:#3a2f0f;background:#0a0800;color:var(--amber)}
+.level-picker label.sel-danger{border-color:var(--border-red-2);background:#0a0202;color:var(--red)}
+
+.form-row{
+  display:flex;
+  gap:10px;
+  justify-content:flex-end;
+  margin-top:18px;
+  flex-wrap:wrap;
+}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:20px;
+  transform:translate(-50%,80px);
+  background:#0d0d0d;
+  border:1px solid var(--border-2);
+  padding:10px 16px;
+  font-family:var(--mono);
+  font-size:11.5px;
+  color:var(--text);
+  z-index:200;
+  transition:transform .25s ease;
+  max-width:90vw;
+}
+.toast.on{transform:translate(-50%,0)}
+.toast.ok{border-color:#1f3a1f;color:var(--green)}
+.toast.err{border-color:#4a1a1a;color:#e06060}
+.toast .dot{
+  display:inline-block;
+  width:5px;height:5px;
+  background:currentColor;
+  border-radius:50%;
+  margin-right:8px;
+  vertical-align:middle;
+}
+
+.denied{
+  text-align:center;
+  padding:80px 20px;
+  border:1px dashed var(--border-red-2);
+  font-family:var(--mono);
+  font-size:12px;
+  color:var(--text-3);
+  line-height:1.9;
+}
+.denied .big{font-size:42px;color:var(--red);margin-bottom:16px}
+.denied strong{color:#e06060;display:block;margin-bottom:10px;font-size:14px;letter-spacing:.08em;text-transform:uppercase}
+
+@media (max-width:1024px){
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:640px){
+  .hdr-inner{padding:0 14px;gap:10px}
+  .hdr-nav{display:none}
+  .tabs-inner{padding:0 14px}
+  .tab-btn{padding:0 12px;font-size:10.5px}
+  .main{padding:16px 14px 60px}
+  .user-chip .name{max-width:70px}
+  .btn-logout{padding:6px 9px;font-size:10.5px}
+  .stat-card .num{font-size:22px}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-inner">
+    <a href="index.html" class="brand">
+      <img src="silverfang.jpg" alt="SilverFang" class="brand-logo" />
+      <span class="name">SilverFang</span>
+      <span class="admin-badge">Admin</span>
+    </a>
+
+    <nav class="hdr-nav">
+      <a href="index.html">Market</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="messages.html">Messages</a>
+      <a href="admin.html" class="on">Admin</a>
+    </nav>
+
+    <div class="hdr-right">
+      <a href="dashboard.html" class="user-chip">
+        <span class="avatar" id="chipAvatar"><span class="ph">?</span></span>
+        <span class="name" id="chipName">…</span>
+      </a>
+      <button type="button" class="btn-logout" id="logoutBtn">Logout</button>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="tabs-inner">
+    <button type="button" class="tab-btn on" data-tab="overview">Overview</button>
+    <button type="button" class="tab-btn" data-tab="announcements">Announcements <span class="count" id="annCount">0</span></button>
+    <button type="button" class="tab-btn" data-tab="users">Users <span class="count" id="userCount">0</span></button>
+    <button type="button" class="tab-btn" data-tab="products">Products <span class="count" id="prodCount">0</span></button>
+    <button type="button" class="tab-btn" data-tab="comments">Comments <span class="count" id="commCount">0</span></button>
+  </div>
+</nav>
+
+<main class="main" id="mainArea">
+  <div class="loading"><span class="dot"></span>verifying access…</div>
+</main>
+
+<div class="toast" id="toast">
+  <span class="dot"></span>
+  <span id="toastMsg">—</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  'use strict';
+
+  const SUPABASE_URL = 'https://iygiioemtpfozxikhgmx.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_xHr9z0NCsm8gBivTQ2nH8Q_Y1uzdlis';
+
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const state = {
+    session: null,
+    me: null,
+    currentTab: 'overview',
+    announcements: [],
+    users: [],
+    products: [],
+    comments: [],
+    editingAnnId: null,
+    searchQuery: ''
+  };
+
+  const $ = function(id){ return document.getElementById(id); };
+  const mainArea = $('mainArea');
+  const chipAvatar = $('chipAvatar');
+  const chipName = $('chipName');
+  const logoutBtn = $('logoutBtn');
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const annCount = $('annCount');
+  const userCount = $('userCount');
+  const prodCount = $('prodCount');
+  const commCount = $('commCount');
+  const toastEl = $('toast');
+  const toastMsg = $('toastMsg');
+  let toastTimer;
+
+  function toast(msg, type){
+    toastMsg.textContent = msg;
+    toastEl.className = 'toast on ' + (type || '');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){
+      toastEl.className = 'toast';
+    }, 3000);
+  }
+
+  function escapeHtml(str){
+    if (str == null) return '';
+    return String(str)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;')
+      .replace(/'/g,'&#39;');
+  }
+
+  function fmtDate(iso){
+    if (!iso) return '—';
+    try {
+      const d = new Date(iso);
+      return d.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
+    } catch(e){ return '—'; }
+  }
+
+  function fmtFull(iso){
+    if (!iso) return '—';
+    try {
+      const d = new Date(iso);
+      return d.toLocaleString('en-US', { month:'short', day:'numeric', year:'numeric', hour:'2-digit', minute:'2-digit' });
+    } catch(e){ return '—'; }
+  }
+
+  function avatarHTML(url, ch){
+    if (url) return '<img src="' + escapeHtml(url) + '" alt="" />';
+    return '<span class="ph">' + escapeHtml((ch || '?').toUpperCase()) + '</span>';
+  }
+
+  // ================ INIT ================
+  async function init(){
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session){
+      window.location.href = 'login.html';
+      return;
+    }
+    state.session = session;
+
+    const { data: me, error } = await supabase
+      .from('profiles')
+      .select('id, username, avatar_url, is_admin, is_banned')
+      .eq('id', session.user.id)
+      .maybeSingle();
+
+    if (error || !me){
+      mainArea.innerHTML = '<div class="denied"><div class="big">✕</div><strong>Access Denied</strong>Could not load your profile.</div>';
+      return;
+    }
+
+    state.me = me;
+
+    if (!me.is_admin){
+      mainArea.innerHTML =
+        '<div class="denied">' +
+          '<div class="big">✕</div>' +
+          '<strong>Access Denied</strong>' +
+          'You do not have administrator privileges.' +
+        '</div>';
+      return;
+    }
+
+    chipName.textContent = me.username;
+    chipAvatar.innerHTML = avatarHTML(me.avatar_url, me.username.charAt(0));
+
+    bindTabs();
+    bindLogout();
+
+    await loadStats();
+    renderOverview();
+  }
+
+  function bindTabs(){
+    tabBtns.forEach(function(btn){
+      btn.addEventListener('click', async function(){
+        const tab = btn.getAttribute('data-tab');
+        state.currentTab = tab;
+        tabBtns.forEach(function(b){ b.classList.remove('on'); });
+        btn.classList.add('on');
+
+        if (tab === 'overview'){
+          await loadStats();
+          renderOverview();
+        } else if (tab === 'announcements'){
+          await loadAnnouncements();
+          renderAnnouncements();
+        } else if (tab === 'users'){
+          await loadUsers();
+          renderUsers();
+        } else if (tab === 'products'){
+          await loadProducts();
+          renderProducts();
+        } else if (tab === 'comments'){
+          await loadComments();
+          renderComments();
+        }
+      });
+    });
+  }
+
+  function bindLogout(){
+    logoutBtn.addEventListener('click', async function(){
+      logoutBtn.disabled = true;
+      try { await supabase.auth.signOut(); } catch(e){}
+      sessionStorage.removeItem('sf_signup_codes');
+      window.location.href = 'index.html';
+    });
+  }
+
+  // ================ OVERVIEW ================
+  async function loadStats(){
+    const [usersRes, prodsRes, commsRes, annsRes, bannedRes] = await Promise.all([
+      supabase.from('profiles').select('id', { count: 'exact', head: true }),
+      supabase.from('products').select('id', { count: 'exact', head: true }),
+      supabase.from('comments').select('id', { count: 'exact', head: true }),
+      supabase.from('announcements').select('id', { count: 'exact', head: true }),
+      supabase.from('profiles').select('id', { count: 'exact', head: true }).eq('is_banned', true)
+    ]);
+
+    userCount.textContent = usersRes.count || 0;
+    prodCount.textContent = prodsRes.count || 0;
+    commCount.textContent = commsRes.count || 0;
+    annCount.textContent = annsRes.count || 0;
+
+    state.stats = {
+      users: usersRes.count || 0,
+      products: prodsRes.count || 0,
+      comments: commsRes.count || 0,
+      announcements: annsRes.count || 0,
+      banned: bannedRes.count || 0
+    };
+  }
+
+  function renderOverview(){
+    const s = state.stats || { users: 0, products: 0, comments: 0, announcements: 0, banned: 0 };
+
+    mainArea.innerHTML =
+      '<div class="sec-head">' +
+        '<div>' +
+          '<h2>Overview</h2>' +
+          '<div class="sub">Signed in as ' + escapeHtml(state.me.username) + '</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="stats-grid">' +
+        '<div class="stat-card"><span class="num">' + s.users + '</span><span class="lbl">Total Users</span></div>' +
+        '<div class="stat-card"><span class="num">' + s.products + '</span><span class="lbl">Total Products</span></div>' +
+        '<div class="stat-card"><span class="num">' + s.comments + '</span><span class="lbl">Total Comments</span></div>' +
+        '<div class="stat-card"><span class="num">' + s.announcements + '</span><span class="lbl">Announcements</span></div>' +
+      '</div>' +
+
+      '<div class="stats-grid" style="grid-template-columns:repeat(4,1fr)">' +
+        '<div class="stat-card"><span class="num" style="color:#e06060">' + s.banned + '</span><span class="lbl">Banned Users</span></div>' +
+      '</div>';
+  }
+
+  // ================ ANNOUNCEMENTS ================
+  async function loadAnnouncements(){
+    mainArea.innerHTML = '<div class="loading"><span class="dot"></span>loading announcements…</div>';
+
+    const { data, error } = await supabase
+      .from('announcements')
+      .select('id, author_id, title, content, level, active, created_at, updated_at')
+      .order('created_at', { ascending: false });
+
+    if (error){
+      mainArea.innerHTML = '<div class="empty">Failed to load: ' + escapeHtml(error.message) + '</div>';
+      return;
+    }
+
+    state.announcements = data || [];
+    annCount.textContent = state.announcements.length;
+  }
+
+  function renderAnnouncements(){
+    const rows = state.announcements;
+
+    const body = rows.length === 0
+      ? '<div class="empty"><strong>No announcements yet</strong>Click "+ New Announcement" to create one.</div>'
+      : '<div class="ann-list">' + rows.map(function(a){
+          const inactive = a.active ? '' : ' inactive';
+          const levelPill = '<span class="pill ' + a.level + '">' + a.level + '</span>';
+          const statusPill = a.active
+            ? '<span class="pill active">active</span>'
+            : '<span class="pill inactive">inactive</span>';
+          return (
+            '<div class="ann-item level-' + a.level + inactive + '">' +
+              '<div class="ann-head">' +
+                '<div class="ann-title">' + escapeHtml(a.title) + '</div>' +
+                '<div class="ann-meta">' + levelPill + statusPill + '<span>' + escapeHtml(fmtFull(a.created_at)) + '</span></div>' +
+              '</div>' +
+              '<div class="ann-content">' + escapeHtml(a.content) + '</div>' +
+              '<div class="ann-actions">' +
+                '<button type="button" class="btn-sm" data-toggle="' + a.id + '">' + (a.active ? 'Disable' : 'Enable') + '</button>' +
+                '<button type="button" class="btn-sm" data-edit="' + a.id + '">Edit</button>' +
+                '<button type="button" class="btn-sm danger" data-del="' + a.id + '">Delete</button>' +
+              '</div>' +
+            '</div>'
+          );
+        }).join('') + '</div>';
+
+    mainArea.innerHTML =
+      '<div class="sec-head">' +
+        '<div>' +
+          '<h2>Announcements</h2>' +
+          '<div class="sub">Shown as banner on the homepage (guest &amp; user view)</div>' +
+        '</div>' +
+        '<button type="button" class="btn-primary" id="newAnnBtn">+ New Announcement</button>' +
+      '</div>' + body;
+
+    $('newAnnBtn').addEventListener('click', function(){ openAnnModal(null); });
+
+    document.querySelectorAll('[data-toggle]').forEach(function(el){
+      el.addEventListener('click', async function(){
+        const id = el.getAttribute('data-toggle');
+        const row = state.announcements.find(function(a){ return a.id === id; });
+        if (!row) return;
+        const { error } = await supabase
+          .from('announcements')
+          .update({ active: !row.active, updated_at: new Date().toISOString() })
+          .eq('id', id);
+        if (error){ toast('Failed: ' + error.message, 'err'); return; }
+        toast(row.active ? 'Disabled.' : 'Enabled.', 'ok');
+        await loadAnnouncements();
+        renderAnnouncements();
+      });
+    });
+
+    document.querySelectorAll('[data-edit]').forEach(function(el){
+      el.addEventListener('click', function(){
+        const id = el.getAttribute('data-edit');
+        const row = state.announcements.find(function(a){ return a.id === id; });
+        if (row) openAnnModal(row);
+      });
+    });
+
+    document.querySelectorAll('[data-del]').forEach(function(el){
+      el.addEventListener('click', async function(){
+        const id = el.getAttribute('data-del');
+        if (!confirm('Delete this announcement permanently?')) return;
+        const { error } = await supabase.from('announcements').delete().eq('id', id);
+        if (error){ toast('Delete failed: ' + error.message, 'err'); return; }
+        toast('Deleted.', 'ok');
+        await loadAnnouncements();
+        renderAnnouncements();
+      });
+    });
+  }
+
+  function openAnnModal(ann){
+    state.editingAnnId = ann ? ann.id : null;
+
+    const existing = $('annModal');
+    if (existing) existing.remove();
+
+    const isEdit = !!ann;
+    const title = ann ? ann.title : '';
+    const content = ann ? ann.content : '';
+    const level = ann ? ann.level : 'info';
+
+    const modal = document.createElement('div');
+    modal.className = 'modal-bg on';
+    modal.id = 'annModal';
+    modal.innerHTML =
+      '<div class="modal">' +
+        '<div class="modal-head">' +
+          '<h3>' + (isEdit ? 'Edit Announcement' : 'New Announcement') + '</h3>' +
+          '<button type="button" class="modal-close" id="annClose">✕</button>' +
+        '</div>' +
+        '<div class="modal-body">' +
+          '<div class="field">' +
+            '<label for="annTitle">Title</label>' +
+            '<input type="text" id="annTitle" placeholder="e.g. Maintenance window tonight" maxlength="120" value="' + escapeHtml(title) + '" />' +
+          '</div>' +
+          '<div class="field">' +
+            '<label for="annContent">Content</label>' +
+            '<textarea id="annContent" placeholder="Write your announcement here…" maxlength="2000">' + escapeHtml(content) + '</textarea>' +
+          '</div>' +
+          '<div class="field">' +
+            '<label>Level</label>' +
+            '<div class="level-picker" id="levelPicker">' +
+              '<label data-level="info" class="' + (level === 'info' ? 'sel-info' : '') + '">Info</label>' +
+              '<label data-level="success" class="' + (level === 'success' ? 'sel-success' : '') + '">Success</label>' +
+              '<label data-level="warning" class="' + (level === 'warning' ? 'sel-warning' : '') + '">Warning</label>' +
+              '<label data-level="danger" class="' + (level === 'danger' ? 'sel-danger' : '') + '">Danger</label>' +
+            '</div>' +
+          '</div>' +
+          '<div class="form-row">' +
+            '<button type="button" class="btn-ghost" id="annCancel">Cancel</button>' +
+            '<button type="button" class="btn-primary" id="annSave">' + (isEdit ? 'Save Changes' : 'Publish') + '</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
+    document.body.appendChild(modal);
+
+    let selectedLevel = level;
+    const picker = $('levelPicker');
+    picker.querySelectorAll('label').forEach(function(lbl){
+      lbl.addEventListener('click', function(){
+        selectedLevel = lbl.getAttribute('data-level');
+        picker.querySelectorAll('label').forEach(function(l){
+          l.classList.remove('sel-info','sel-success','sel-warning','sel-danger');
+        });
+        lbl.classList.add('sel-' + selectedLevel);
+      });
+    });
+
+    function close(){
+      modal.remove();
+      state.editingAnnId = null;
+    }
+
+    $('annClose').addEventListener('click', close);
+    $('annCancel').addEventListener('click', close);
+    modal.addEventListener('click', function(e){ if (e.target === modal) close(); });
+
+    $('annSave').addEventListener('click', async function(){
+      const t = $('annTitle').value.trim();
+      const c = $('annContent').value.trim();
+
+      if (!t){ toast('Title is required.', 'err'); return; }
+      if (!c){ toast('Content is required.', 'err'); return; }
+
+      const saveBtn = $('annSave');
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'saving…';
+
+      let err;
+      if (state.editingAnnId){
+        const res = await supabase
+          .from('announcements')
+          .update({
+            title: t,
+            content: c,
+            level: selectedLevel,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', state.editingAnnId);
+        err = res.error;
+      } else {
+        const res = await supabase
+          .from('announcements')
+          .insert({
+            author_id: state.session.user.id,
+            title: t,
+            content: c,
+            level: selectedLevel,
+            active: true
+          });
+        err = res.error;
+      }
+
+      if (err){
+        saveBtn.disabled = false;
+        saveBtn.textContent = isEdit ? 'Save Changes' : 'Publish';
+        toast('Save failed: ' + err.message, 'err');
+        return;
+      }
+
+      toast(isEdit ? 'Announcement updated.' : 'Announcement published.', 'ok');
+      close();
+      await loadAnnouncements();
+      renderAnnouncements();
+    });
+  }
+
+  // ================ USERS ================
+  async function loadUsers(){
+    mainArea.innerHTML = '<div class="loading"><span class="dot"></span>loading users…</div>';
+
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('id, username, avatar_url, is_admin, is_banned, banned_at, ban_reason, created_at')
+      .order('created_at', { ascending: false });
+
+    if (error){
+      mainArea.innerHTML = '<div class="empty">Failed to load: ' + escapeHtml(error.message) + '</div>';
+      return;
+    }
+
+    state.users = data || [];
+    userCount.textContent = state.users.length;
+  }
+
+  function renderUsers(){
+    const q = state.searchQuery.toLowerCase();
+    const rows = q
+      ? state.users.filter(function(u){ return (u.username || '').toLowerCase().indexOf(q) !== -1; })
+      : state.users;
+
+    const body = rows.length === 0
+      ? '<div class="empty"><strong>No users</strong>' + (q ? 'No match for "' + escapeHtml(state.searchQuery) + '".' : '') + '</div>'
+      : '<div class="tbl-wrap"><table class="tbl">' +
+        '<thead><tr>' +
+          '<th>User</th>' +
+          '<th>Status</th>' +
+          '<th>Joined</th>' +
+          '<th style="text-align:right">Actions</th>' +
+        '</tr></thead>' +
+        '<tbody>' +
+        rows.map(function(u){
+          const isSelf = u.id === state.me.id;
+          const av = avatarHTML(u.avatar_url, (u.username || '?').charAt(0));
+
+          let statusTags = '';
+          if (u.is_admin) statusTags += '<span class="badge-tag admin">Admin</span> ';
+          if (u.is_banned) statusTags += '<span class="badge-tag banned">Banned</span>';
+          if (!u.is_admin && !u.is_banned) statusTags += '<span class="badge-tag active">Active</span>';
+          if (isSelf) statusTags += ' <span class="badge-tag">You</span>';
+
+          const banReason = u.is_banned && u.ban_reason
+            ? '<div class="row-sub" style="color:#e06060">Reason: ' + escapeHtml(u.ban_reason) + '</div>'
+            : '';
+
+          let actions = '';
+          if (isSelf){
+            actions = '<span style="color:var(--text-3);font-family:var(--mono);font-size:10.5px">—</span>';
+          } else {
+            if (u.is_banned){
+              actions += '<button type="button" class="btn-sm success" data-unban="' + u.id + '">Unban</button>';
+            } else {
+              actions += '<button type="button" class="btn-sm danger" data-ban="' + u.id + '">Ban</button>';
+            }
+            actions += '<button type="button" class="btn-sm danger" data-delu="' + u.id + '">Delete</button>';
+          }
+
+          return (
+            '<tr>' +
+              '<td>' +
+                '<div class="row-user">' +
+                  '<div class="row-avatar">' + av + '</div>' +
+                  '<div class="row-user-info">' +
+                    '<div class="row-username">' + escapeHtml(u.username) + '</div>' +
+                    '<div class="row-sub">' + escapeHtml(u.id.slice(0, 8)) + '…</div>' +
+                    banReason +
+                  '</div>' +
+                '</div>' +
+              '</td>' +
+              '<td>' + statusTags + '</td>' +
+              '<td style="font-family:var(--mono);font-size:11px;color:var(--text-3)">' + escapeHtml(fmtDate(u.created_at)) + '</td>' +
+              '<td style="text-align:right"><div class="row-actions" style="justify-content:flex-end">' + actions + '</div></td>' +
+            '</tr>'
+          );
+        }).join('') +
+        '</tbody></table></div>';
+
+    mainArea.innerHTML =
+      '<div class="sec-head">' +
+        '<div>' +
+          '<h2>Users</h2>' +
+          '<div class="sub">' + state.users.length + ' total</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="search-bar"><input type="text" id="userSearch" placeholder="search username…" value="' + escapeHtml(state.searchQuery) + '" /></div>' +
+      body;
+
+    const searchEl = $('userSearch');
+    searchEl.addEventListener('input', function(){
+      state.searchQuery = searchEl.value.trim();
+      renderUsers();
+      const newEl = $('userSearch');
+      if (newEl){
+        newEl.focus();
+        newEl.setSelectionRange(state.searchQuery.length, state.searchQuery.length);
+      }
+    });
+
+    document.querySelectorAll('[data-ban]').forEach(function(el){
+      el.addEventListener('click', function(){ openBanModal(el.getAttribute('data-ban')); });
+    });
+
+    document.querySelectorAll('[data-unban]').forEach(function(el){
+      el.addEventListener('click', async function(){
+        const id = el.getAttribute('data-unban');
+        if (!confirm('Unban this user?')) return;
+        const { data, error } = await supabase.rpc('admin_unban_user', { p_user_id: id });
+        if (error || !data || !data.success){
+          toast((data && data.error) || error.message || 'Failed.', 'err');
+          return;
+        }
+        toast('User unbanned.', 'ok');
+        await loadUsers();
+        renderUsers();
+      });
+    });
+
+    document.querySelectorAll('[data-delu]').forEach(function(el){
+      el.addEventListener('click', async function(){
+        const id = el.getAttribute('data-delu');
+        const u = state.users.find(function(x){ return x.id === id; });
+        if (!u) return;
+        if (!confirm('PERMANENTLY delete user "' + u.username + '"?\n\nThis will remove ALL their products, comments, ratings, follows, and messages. This cannot be undone.')) return;
+        if (!confirm('Are you absolutely sure?')) return;
+
+        const { data, error } = await supabase.rpc('admin_delete_user', { p_user_id: id });
+        if (error || !data || !data.success){
+          toast((data && data.error) || error.message || 'Failed.', 'err');
+          return;
+        }
+        toast('User deleted.', 'ok');
+        await loadUsers();
+        renderUsers();
+        await loadStats();
+      });
+    });
+  }
+
+  function openBanModal(userId){
+    const u = state.users.find(function(x){ return x.id === userId; });
+    if (!u) return;
+
+    const existing = $('banModal');
+    if (existing) existing.remove();
+
+    const modal = document.createElement('div');
+    modal.className = 'modal-bg on';
+    modal.id = 'banModal';
+    modal.innerHTML =
+      '<div class="modal">' +
+        '<div class="modal-head">' +
+          '<h3>Ban User</h3>' +
+          '<button type="button" class="modal-close" id="banClose">✕</button>' +
+        '</div>' +
+        '<div class="modal-body">' +
+          '<div class="field">' +
+            '<label>User</label>' +
+            '<div style="padding:9px 11px;border:1px solid var(--border-2);background:#050505;font-family:var(--mono);font-size:12.5px;color:#e0e0e0">' + escapeHtml(u.username) + '</div>' +
+          '</div>' +
+          '<div class="field">' +
+            '<label for="banReason">Reason (optional)</label>' +
+            '<textarea id="banReason" placeholder="e.g. Scam attempts, fake products…" maxlength="500"></textarea>' +
+          '</div>' +
+          '<div class="form-row">' +
+            '<button type="button" class="btn-ghost" id="banCancel">Cancel</button>' +
+            '<button type="button" class="btn-primary" id="banConfirm">Confirm Ban</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
+    document.body.appendChild(modal);
+
+    function close(){ modal.remove(); }
+
+    $('banClose').addEventListener('click', close);
+    $('banCancel').addEventListener('click', close);
+    modal.addEventListener('click', function(e){ if (e.target === modal) close(); });
+
+    $('banConfirm').addEventListener('click', async function(){
+      const reason = $('banReason').value.trim() || null;
+      const btn = $('banConfirm');
+      btn.disabled = true;
+      btn.textContent = 'banning…';
+
+      const { data, error } = await supabase.rpc('admin_ban_user', {
+        p_user_id: userId,
+        p_reason: reason
+      });
+
+      if (error || !data || !data.success){
+        btn.disabled = false;
+        btn.textContent = 'Confirm Ban';
+        toast((data && data.error) || error.message || 'Failed.', 'err');
+        return;
+      }
+
+      toast('User banned.', 'ok');
+      close();
+      await loadUsers();
+      renderUsers();
+      await loadStats();
+    });
+  }
+
+  // ================ PRODUCTS ================
+  async function loadProducts(){
+    mainArea.innerHTML = '<div class="loading"><span class="dot"></span>loading products…</div>';
+
+    const { data, error } = await supabase
+      .from('products')
+      .select('id, seller_id, name, description, image_url, price_monthly, price_lifetime, created_at')
+      .order('created_at', { ascending: false })
+      .limit(200);
+
+    if (error){
+      mainArea.innerHTML = '<div class="empty">Failed to load: ' + escapeHtml(error.message) + '</div>';
+      return;
+    }
+
+    const rows = data || [];
+
+    if (rows.length > 0){
+      const sellerIds = Array.from(new Set(rows.map(function(p){ return p.seller_id; })));
+      const { data: sellers } = await supabase
+        .from('profiles')
+        .select('id, username')
+        .in('id', sellerIds);
+      const map = {};
+      (sellers || []).forEach(function(s){ map[s.id] = s; });
+      rows.forEach(function(p){
+        p._sellerName = (map[p.seller_id] && map[p.seller_id].username) || 'unknown';
+      });
+    }
+
+    state.products = rows;
+    prodCount.textContent = rows.length;
+  }
+
+  function renderProducts(){
+    const q = state.searchQuery.toLowerCase();
+    const rows = q
+      ? state.products.filter(function(p){ return (p.name || '').toLowerCase().indexOf(q) !== -1 || (p._sellerName || '').toLowerCase().indexOf(q) !== -1; })
+      : state.products;
+
+    const body = rows.length === 0
+      ? '<div class="empty"><strong>No products</strong>' + (q ? 'No match for "' + escapeHtml(state.searchQuery) + '".' : '') + '</div>'
+      : '<div class="tbl-wrap"><table class="tbl">' +
+        '<thead><tr>' +
+          '<th>Product</th>' +
+          '<th>Seller</th>' +
+          '<th>Price</th>' +
+          '<th>Listed</th>' +
+          '<th style="text-align:right">Actions</th>' +
+        '</tr></thead>' +
+        '<tbody>' +
+        rows.map(function(p){
+          const img = p.image_url
+            ? '<img src="' + escapeHtml(p.image_url) + '" alt="" style="width:32px;height:32px;object-fit:cover;border:1px solid var(--border-2)" />'
+            : '<div style="width:32px;height:32px;background:#0d0d0d;border:1px solid var(--border-2);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:8px;color:var(--text-4)">N/A</div>';
+
+          let price = '';
+          if (p.price_monthly != null) price += '$' + Number(p.price_monthly).toFixed(0) + '/mo ';
+          if (p.price_lifetime != null) price += '$' + Number(p.price_lifetime).toFixed(0) + ' lifetime';
+
+          return (
+            '<tr>' +
+              '<td>' +
+                '<div class="row-user">' +
+                  img +
+                  '<div class="row-user-info">' +
+                    '<div class="row-username">' + escapeHtml(p.name) + '</div>' +
+                    '<div class="row-sub">' + escapeHtml(p.id.slice(0,8)) + '…</div>' +
+                  '</div>' +
+                '</div>' +
+              '</td>' +
+              '<td style="font-family:var(--mono);font-size:11.5px">' + escapeHtml(p._sellerName) + '</td>' +
+              '<td style="font-family:var(--mono);font-size:11px;color:var(--amber)">' + escapeHtml(price.trim()) + '</td>' +
+              '<td style="font-family:var(--mono);font-size:11px;color:var(--text-3)">' + escapeHtml(fmtDate(p.created_at)) + '</td>' +
+              '<td style="text-align:right">' +
+                '<div class="row-actions" style="justify-content:flex-end">' +
+                  '<a href="product.html?id=' + p.id + '" class="btn-sm" target="_blank">View</a>' +
+                  '<button type="button" class="btn-sm danger" data-delp="' + p.id + '">Delete</button>' +
+                '</div>' +
+              '</td>' +
+            '</tr>'
+          );
+        }).join('') +
+        '</tbody></table></div>';
+
+    mainArea.innerHTML =
+      '<div class="sec-head">' +
+        '<div>' +
+          '<h2>Products</h2>' +
+          '<div class="sub">' + state.products.length + ' total</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="search-bar"><input type="text" id="prodSearch" placeholder="search name or seller…" value="' + escapeHtml(state.searchQuery) + '" /></div>' +
+      body;
+
+    const searchEl = $('prodSearch');
+    searchEl.addEventListener('input', function(){
+      state.searchQuery = searchEl.value.trim();
+      renderProducts();
+      const newEl = $('prodSearch');
+      if (newEl){
+        newEl.focus();
+        newEl.setSelectionRange(state.searchQuery.length, state.searchQuery.length);
+      }
+    });
+
+    document.querySelectorAll('[data-delp]').forEach(function(el){
+      el.addEventListener('click', async function(){
+        const id = el.getAttribute('data-delp');
+        if (!confirm('Delete this product permanently?')) return;
+        const { data, error } = await supabase.rpc('admin_delete_product', { p_product_id: id });
+        if (error || !data || !data.success){
+          toast((data && data.error) || error.message || 'Failed.', 'err');
+          return;
+        }
+        toast('Product deleted.', 'ok');
+        await loadProducts();
+        renderProducts();
+        await loadStats();
+      });
+    });
+  }
+
+  // ================ COMMENTS ================
+  async function loadComments(){
+    mainArea.innerHTML = '<div class="loading"><span class="dot"></span>loading comments…</div>';
+
+    const { data, error } = await supabase
+      .from('comments')
+      .select('id, product_id, user_id, content, created_at')
+      .order('created_at', { ascending: false })
+      .limit(200);
+
+    if (error){
+      mainArea.innerHTML = '<div class="empty">Failed to load: ' + escapeHtml(error.message) + '</div>';
+      return;
+    }
+
+    const rows = data || [];
+
+    if (rows.length > 0){
+      const userIds = Array.from(new Set(rows.map(function(c){ return c.user_id; })));
+      const prodIds = Array.from(new Set(rows.map(function(c){ return c.product_id; })));
+
+      const [{ data: users }, { data: prods }] = await Promise.all([
+        supabase.from('profiles').select('id, username').in('id', userIds),
+        supabase.from('products').select('id, name').in('id', prodIds)
+      ]);
+
+      const uMap = {};
+      (users || []).forEach(function(u){ uMap[u.id] = u.username; });
+      const pMap = {};
+      (prods || []).forEach(function(p){ pMap[p.id] = p.name; });
+
+      rows.forEach(function(c){
+        c._username = uMap[c.user_id] || 'unknown';
+        c._productName = pMap[c.product_id] || 'deleted product';
+      });
+    }
+
+    state.comments = rows;
+    commCount.textContent = rows.length;
+  }
+
+  function renderComments(){
+    const q = state.searchQuery.toLowerCase();
+    const rows = q
+      ? state.comments.filter(function(c){
+          return (c.content || '').toLowerCase().indexOf(q) !== -1
+            || (c._username || '').toLowerCase().indexOf(q) !== -1;
+        })
+      : state.comments;
+
+    const body = rows.length === 0
+      ? '<div class="empty"><strong>No comments</strong>' + (q ? 'No match.' : '') + '</div>'
+      : '<div class="tbl-wrap"><table class="tbl">' +
+        '<thead><tr>' +
+          '<th>Comment</th>' +
+          '<th>Author</th>' +
+          '<th>Product</th>' +
+          '<th>Date</th>' +
+          '<th style="text-align:right">Actions</th>' +
+        '</tr></thead>' +
+        '<tbody>' +
+        rows.map(function(c){
+          return (
+            '<tr>' +
+              '<td><div class="preview-text">' + escapeHtml(c.content) + '</div></td>' +
+              '<td style="font-family:var(--mono);font-size:11.5px">' + escapeHtml(c._username) + '</td>' +
+              '<td style="font-family:var(--mono);font-size:11.5px;color:var(--text-2)">' +
+                '<a href="product.html?id=' + c.product_id + '" target="_blank" style="color:var(--amber)">' + escapeHtml(c._productName) + '</a>' +
+              '</td>' +
+              '<td style="font-family:var(--mono);font-size:11px;color:var(--text-3)">' + escapeHtml(fmtDate(c.created_at)) + '</td>' +
+              '<td style="text-align:right">' +
+                '<div class="row-actions" style="justify-content:flex-end">' +
+                  '<button type="button" class="btn-sm danger" data-delc="' + c.id + '">Delete</button>' +
+                '</div>' +
+              '</td>' +
+            '</tr>'
+          );
+        }).join('') +
+        '</tbody></table></div>';
+
+    mainArea.innerHTML =
+      '<div class="sec-head">' +
+        '<div>' +
+          '<h2>Comments</h2>' +
+          '<div class="sub">' + state.comments.length + ' total</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="search-bar"><input type="text" id="commSearch" placeholder="search comment or author…" value="' + escapeHtml(state.searchQuery) + '" /></div>' +
+      body;
+
+    const searchEl = $('commSearch');
+    searchEl.addEventListener('input', function(){
+      state.searchQuery = searchEl.value.trim();
+      renderComments();
+      const newEl = $('commSearch');
+      if (newEl){
+        newEl.focus();
+        newEl.setSelectionRange(state.searchQuery.length, state.searchQuery.length);
+      }
+    });
+
+    document.querySelectorAll('[data-delc]').forEach(function(el){
+      el.addEventListener('click', async function(){
+        const id = el.getAttribute('data-delc');
+        if (!confirm('Delete this comment?')) return;
+        const { data, error } = await supabase.rpc('admin_delete_comment', { p_comment_id: id });
+        if (error || !data || !data.success){
+          toast((data && data.error) || error.message || 'Failed.', 'err');
+          return;
+        }
+        toast('Comment deleted.', 'ok');
+        await loadComments();
+        renderComments();
+        await loadStats();
+      });
+    });
+  }
+
+  // reset search when switching tabs
+  tabBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      state.searchQuery = '';
+    });
+  });
+
+  init().catch(function(err){
+    console.error(err);
+    mainArea.innerHTML = '<div class="denied"><div class="big">✕</div><strong>Error</strong>' + escapeHtml(err.message) + '</div>';
+  });
+
+})();
+</script>
+</body>
+</html>
