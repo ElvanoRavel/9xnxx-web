@@ -199,6 +199,60 @@ input{font-family:inherit;color:inherit;font-size:inherit}
   50%{opacity:.3}
 }
 
+/* BANNED SCREEN */
+.banned-box{
+  display:none;
+  padding:26px 6px 18px;
+  text-align:center;
+}
+.banned-box.on{display:block}
+.banned-box .ban-ico{
+  font-size:42px;
+  color:var(--red);
+  line-height:1;
+  margin-bottom:16px;
+  font-family:var(--mono);
+}
+.banned-box h2{
+  font-family:var(--mono);
+  font-size:14px;
+  font-weight:600;
+  color:#e06060;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  margin-bottom:10px;
+}
+.banned-box p{
+  font-family:var(--mono);
+  font-size:11.5px;
+  color:var(--text-2);
+  line-height:1.75;
+  margin-bottom:14px;
+}
+.banned-box .ban-reason{
+  display:inline-block;
+  margin:0 auto 18px;
+  padding:10px 14px;
+  border:1px solid var(--border-red-2);
+  background:#0a0202;
+  font-family:var(--mono);
+  font-size:11.5px;
+  color:var(--amber);
+  line-height:1.6;
+  max-width:100%;
+  text-align:left;
+  word-break:break-word;
+  white-space:pre-wrap;
+}
+.banned-box .ban-reason .lbl{
+  display:block;
+  color:var(--text-3);
+  font-size:9.5px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  margin-bottom:4px;
+}
+
 @media (max-width:520px){
   .page{padding:24px 12px}
   .box-body{padding:20px 16px}
@@ -216,42 +270,60 @@ input{font-family:inherit;color:inherit;font-size:inherit}
 
       <div class="brand">SilverFang</div>
 
-      <form id="loginForm">
-        <div class="field">
-          <label for="username">Username</label>
-          <input
-            type="text"
-            id="username"
-            placeholder="your username"
-            autocomplete="username"
-            spellcheck="false"
-            required
-          />
+      <div id="formSection">
+
+        <form id="loginForm">
+          <div class="field">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              placeholder="your username"
+              autocomplete="username"
+              spellcheck="false"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="pass">Password</label>
+            <input
+              type="password"
+              id="pass"
+              placeholder="your password"
+              autocomplete="current-password"
+              required
+            />
+          </div>
+
+          <button type="submit" class="btn-sub" id="submitBtn">Login</button>
+
+          <div class="alt">
+            <a href="index.html">← Back</a>
+            <a href="forgot.html">Forgot password?</a>
+          </div>
+        </form>
+
+        <div class="msg" id="msg"></div>
+
+        <div class="loading" id="loading">
+          <span class="dot"></span><span id="loadingText">verifying…</span>
         </div>
 
-        <div class="field">
-          <label for="pass">Password</label>
-          <input
-            type="password"
-            id="pass"
-            placeholder="your password"
-            autocomplete="current-password"
-            required
-          />
+      </div>
+
+      <div class="banned-box" id="bannedBox">
+        <div class="ban-ico">✕</div>
+        <h2>Account Suspended</h2>
+        <p>
+          Your account has been suspended by an administrator.<br />
+          If you believe this is a mistake, contact support.
+        </p>
+        <div class="ban-reason" id="banReason" style="display:none">
+          <span class="lbl">Reason</span>
+          <span id="banReasonText">—</span>
         </div>
-
-        <button type="submit" class="btn-sub" id="submitBtn">Login</button>
-
-        <div class="alt">
-          <a href="index.html">← Back</a>
-          <a href="forgot.html">Forgot password?</a>
-        </div>
-      </form>
-
-      <div class="msg" id="msg"></div>
-
-      <div class="loading" id="loading">
-        <span class="dot"></span><span id="loadingText">verifying…</span>
+        <a href="index.html" class="btn-sub" style="display:flex;align-items:center;justify-content:center;text-decoration:none">Back to Home</a>
       </div>
 
     </div>
@@ -279,6 +351,10 @@ input{font-family:inherit;color:inherit;font-size:inherit}
   const msgEl = document.getElementById('msg');
   const loadingEl = document.getElementById('loading');
   const loadingText = document.getElementById('loadingText');
+  const formSection = document.getElementById('formSection');
+  const bannedBox = document.getElementById('bannedBox');
+  const banReasonEl = document.getElementById('banReason');
+  const banReasonText = document.getElementById('banReasonText');
 
   function showMsg(text, type) {
     msgEl.textContent = text;
@@ -295,6 +371,17 @@ input{font-family:inherit;color:inherit;font-size:inherit}
 
   function hideLoading() {
     loadingEl.className = 'loading';
+  }
+
+  function showBanned(reason) {
+    formSection.style.display = 'none';
+    bannedBox.classList.add('on');
+    if (reason && reason.trim()){
+      banReasonEl.style.display = 'inline-block';
+      banReasonText.textContent = reason.trim();
+    } else {
+      banReasonEl.style.display = 'none';
+    }
   }
 
   async function usernameToEmail(username) {
@@ -337,8 +424,33 @@ input{font-family:inherit;color:inherit;font-size:inherit}
         throw new Error('Login failed: no session returned.');
       }
 
-      showLoading('redirecting…');
+      // === Cek apakah user di-ban ===
+      showLoading('checking status…');
 
+      const { data: profile, error: profileErr } = await supabase
+        .from('profiles')
+        .select('is_banned, ban_reason')
+        .eq('id', authData.user.id)
+        .maybeSingle();
+
+      if (profileErr) {
+        // kalau gagal cek, tetap izinkan login — jangan blokir karena error
+        console.warn('ban check failed:', profileErr.message);
+        window.location.href = 'index.html';
+        return;
+      }
+
+      if (profile && profile.is_banned){
+        // sign out dulu biar session-nya nggak nyangkut
+        await supabase.auth.signOut();
+        hideLoading();
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Login';
+        showBanned(profile.ban_reason || '');
+        return;
+      }
+
+      showLoading('redirecting…');
       window.location.href = 'index.html';
 
     } catch (err) {
@@ -352,9 +464,21 @@ input{font-family:inherit;color:inherit;font-size:inherit}
   (async function init(){
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
+      if (session){
+        // Kalau udah login, cek banned juga
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('is_banned, ban_reason')
+          .eq('id', session.user.id)
+          .maybeSingle();
+
+        if (profile && profile.is_banned){
+          await supabase.auth.signOut();
+          showBanned(profile.ban_reason || '');
+          return;
+        }
+
         window.location.href = 'index.html';
-        return;
       }
     } catch (e) {
       /* ignore */
