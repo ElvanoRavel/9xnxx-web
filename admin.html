@@ -43,6 +43,8 @@ img{display:block;max-width:100%}
   --red-2:#a81c1c;
   --green:#4a9e4a;
   --amber:#c9a227;
+  --vip:#c9a227;
+  --vip-2:#8a6f1a;
   --mono:'IBM Plex Mono',ui-monospace,'Courier New',monospace;
 }
 
@@ -255,8 +257,14 @@ img{display:block;max-width:100%}
 .btn-sm:hover{background:#161616;color:var(--text);border-color:var(--border-red-2)}
 .btn-sm.danger:hover{background:#150505;color:#e06060;border-color:var(--border-red-2)}
 .btn-sm.success:hover{background:#020a02;color:var(--green);border-color:#1f3a1f}
+.btn-sm.vip{
+  color:var(--vip);
+  border-color:var(--vip-2);
+  background:#0a0800;
+}
+.btn-sm.vip:hover{background:#150f00;border-color:var(--vip);color:#e6c34d}
+.btn-sm.unvip:hover{background:#150505;color:#e06060;border-color:var(--border-red-2)}
 
-/* DASHBOARD STATS */
 .stats-grid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
@@ -283,8 +291,8 @@ img{display:block;max-width:100%}
   letter-spacing:.1em;
   text-transform:uppercase;
 }
+.stat-card .num.vip{color:var(--vip)}
 
-/* ANNOUNCEMENTS */
 .ann-list{
   display:flex;
   flex-direction:column;
@@ -355,7 +363,6 @@ img{display:block;max-width:100%}
   flex-wrap:wrap;
 }
 
-/* TABLE (users, products, comments) */
 .tbl-wrap{
   border:1px solid var(--border-2);
   overflow-x:auto;
@@ -365,7 +372,7 @@ table.tbl{
   width:100%;
   border-collapse:collapse;
   font-size:12.5px;
-  min-width:720px;
+  min-width:820px;
 }
 .tbl thead{
   background:#050505;
@@ -426,6 +433,8 @@ table.tbl{
 .badge-tag{
   display:inline-block;
   padding:2px 7px;
+  margin-right:4px;
+  margin-bottom:2px;
   font-family:var(--mono);
   font-size:9.5px;
   letter-spacing:.08em;
@@ -436,6 +445,13 @@ table.tbl{
 .badge-tag.admin{color:var(--amber);border-color:#3a2f0f}
 .badge-tag.banned{color:var(--red);border-color:var(--border-red-2)}
 .badge-tag.active{color:var(--green);border-color:#1f3a1f}
+.badge-tag.vip{
+  color:#000;
+  background:linear-gradient(135deg, #e6c34d, #b8912a);
+  border-color:#8a6f1a;
+  font-weight:600;
+  letter-spacing:.12em;
+}
 
 .row-actions{display:flex;gap:6px;flex-wrap:wrap}
 
@@ -499,7 +515,6 @@ table.tbl{
 }
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* MODAL */
 .modal-bg{
   position:fixed;
   inset:0;
@@ -639,6 +654,7 @@ table.tbl{
 .toast.on{transform:translate(-50%,0)}
 .toast.ok{border-color:#1f3a1f;color:var(--green)}
 .toast.err{border-color:#4a1a1a;color:#e06060}
+.toast.vip{border-color:var(--vip-2);color:var(--vip)}
 .toast .dot{
   display:inline-block;
   width:5px;height:5px;
@@ -844,6 +860,7 @@ table.tbl{
       btn.addEventListener('click', async function(){
         const tab = btn.getAttribute('data-tab');
         state.currentTab = tab;
+        state.searchQuery = '';
         tabBtns.forEach(function(b){ b.classList.remove('on'); });
         btn.classList.add('on');
 
@@ -878,12 +895,13 @@ table.tbl{
 
   // ================ OVERVIEW ================
   async function loadStats(){
-    const [usersRes, prodsRes, commsRes, annsRes, bannedRes] = await Promise.all([
+    const [usersRes, prodsRes, commsRes, annsRes, bannedRes, vipRes] = await Promise.all([
       supabase.from('profiles').select('id', { count: 'exact', head: true }),
       supabase.from('products').select('id', { count: 'exact', head: true }),
       supabase.from('comments').select('id', { count: 'exact', head: true }),
       supabase.from('announcements').select('id', { count: 'exact', head: true }),
-      supabase.from('profiles').select('id', { count: 'exact', head: true }).eq('is_banned', true)
+      supabase.from('profiles').select('id', { count: 'exact', head: true }).eq('is_banned', true),
+      supabase.from('profiles').select('id', { count: 'exact', head: true }).eq('is_vip', true)
     ]);
 
     userCount.textContent = usersRes.count || 0;
@@ -896,12 +914,13 @@ table.tbl{
       products: prodsRes.count || 0,
       comments: commsRes.count || 0,
       announcements: annsRes.count || 0,
-      banned: bannedRes.count || 0
+      banned: bannedRes.count || 0,
+      vip: vipRes.count || 0
     };
   }
 
   function renderOverview(){
-    const s = state.stats || { users: 0, products: 0, comments: 0, announcements: 0, banned: 0 };
+    const s = state.stats || { users: 0, products: 0, comments: 0, announcements: 0, banned: 0, vip: 0 };
 
     mainArea.innerHTML =
       '<div class="sec-head">' +
@@ -913,12 +932,13 @@ table.tbl{
 
       '<div class="stats-grid">' +
         '<div class="stat-card"><span class="num">' + s.users + '</span><span class="lbl">Total Users</span></div>' +
+        '<div class="stat-card"><span class="num vip">' + s.vip + '</span><span class="lbl">VIP Members</span></div>' +
         '<div class="stat-card"><span class="num">' + s.products + '</span><span class="lbl">Total Products</span></div>' +
         '<div class="stat-card"><span class="num">' + s.comments + '</span><span class="lbl">Total Comments</span></div>' +
-        '<div class="stat-card"><span class="num">' + s.announcements + '</span><span class="lbl">Announcements</span></div>' +
       '</div>' +
 
       '<div class="stats-grid" style="grid-template-columns:repeat(4,1fr)">' +
+        '<div class="stat-card"><span class="num">' + s.announcements + '</span><span class="lbl">Announcements</span></div>' +
         '<div class="stat-card"><span class="num" style="color:#e06060">' + s.banned + '</span><span class="lbl">Banned Users</span></div>' +
       '</div>';
   }
@@ -1140,7 +1160,7 @@ table.tbl{
 
     const { data, error } = await supabase
       .from('profiles')
-      .select('id, username, avatar_url, is_admin, is_banned, banned_at, ban_reason, created_at')
+      .select('id, username, avatar_url, is_admin, is_vip, vip_granted_at, is_banned, banned_at, ban_reason, created_at')
       .order('created_at', { ascending: false });
 
     if (error){
@@ -1173,13 +1193,18 @@ table.tbl{
           const av = avatarHTML(u.avatar_url, (u.username || '?').charAt(0));
 
           let statusTags = '';
-          if (u.is_admin) statusTags += '<span class="badge-tag admin">Admin</span> ';
+          if (u.is_admin) statusTags += '<span class="badge-tag admin">Admin</span>';
+          if (u.is_vip) statusTags += '<span class="badge-tag vip">VIP</span>';
           if (u.is_banned) statusTags += '<span class="badge-tag banned">Banned</span>';
-          if (!u.is_admin && !u.is_banned) statusTags += '<span class="badge-tag active">Active</span>';
-          if (isSelf) statusTags += ' <span class="badge-tag">You</span>';
+          if (!u.is_admin && !u.is_vip && !u.is_banned) statusTags += '<span class="badge-tag active">Active</span>';
+          if (isSelf) statusTags += '<span class="badge-tag">You</span>';
 
           const banReason = u.is_banned && u.ban_reason
             ? '<div class="row-sub" style="color:#e06060">Reason: ' + escapeHtml(u.ban_reason) + '</div>'
+            : '';
+
+          const vipInfo = u.is_vip && u.vip_granted_at
+            ? '<div class="row-sub" style="color:var(--vip)">VIP since ' + escapeHtml(fmtDate(u.vip_granted_at)) + '</div>'
             : '';
 
           let actions = '';
@@ -1191,6 +1216,13 @@ table.tbl{
             } else {
               actions += '<button type="button" class="btn-sm danger" data-ban="' + u.id + '">Ban</button>';
             }
+
+            if (u.is_vip){
+              actions += '<button type="button" class="btn-sm unvip" data-revokevip="' + u.id + '">Revoke VIP</button>';
+            } else {
+              actions += '<button type="button" class="btn-sm vip" data-grantvip="' + u.id + '">Grant VIP</button>';
+            }
+
             actions += '<button type="button" class="btn-sm danger" data-delu="' + u.id + '">Delete</button>';
           }
 
@@ -1202,6 +1234,7 @@ table.tbl{
                   '<div class="row-user-info">' +
                     '<div class="row-username">' + escapeHtml(u.username) + '</div>' +
                     '<div class="row-sub">' + escapeHtml(u.id.slice(0, 8)) + '…</div>' +
+                    vipInfo +
                     banReason +
                   '</div>' +
                 '</div>' +
@@ -1218,7 +1251,7 @@ table.tbl{
       '<div class="sec-head">' +
         '<div>' +
           '<h2>Users</h2>' +
-          '<div class="sub">' + state.users.length + ' total</div>' +
+          '<div class="sub">' + state.users.length + ' total · Grant VIP to unlock custom username effects</div>' +
         '</div>' +
       '</div>' +
       '<div class="search-bar"><input type="text" id="userSearch" placeholder="search username…" value="' + escapeHtml(state.searchQuery) + '" /></div>' +
@@ -1251,6 +1284,43 @@ table.tbl{
         toast('User unbanned.', 'ok');
         await loadUsers();
         renderUsers();
+        await loadStats();
+      });
+    });
+
+    document.querySelectorAll('[data-grantvip]').forEach(function(el){
+      el.addEventListener('click', async function(){
+        const id = el.getAttribute('data-grantvip');
+        const u = state.users.find(function(x){ return x.id === id; });
+        if (!u) return;
+        if (!confirm('Grant VIP status to "' + u.username + '"?\n\nThey will be able to customize their username with effects and emojis.')) return;
+        const { data, error } = await supabase.rpc('admin_grant_vip', { p_user_id: id });
+        if (error || !data || !data.success){
+          toast((data && data.error) || error.message || 'Failed.', 'err');
+          return;
+        }
+        toast('VIP granted to ' + u.username + '.', 'vip');
+        await loadUsers();
+        renderUsers();
+        await loadStats();
+      });
+    });
+
+    document.querySelectorAll('[data-revokevip]').forEach(function(el){
+      el.addEventListener('click', async function(){
+        const id = el.getAttribute('data-revokevip');
+        const u = state.users.find(function(x){ return x.id === id; });
+        if (!u) return;
+        if (!confirm('Revoke VIP status from "' + u.username + '"?\n\nTheir custom username effect and emoji will be removed.')) return;
+        const { data, error } = await supabase.rpc('admin_revoke_vip', { p_user_id: id });
+        if (error || !data || !data.success){
+          toast((data && data.error) || error.message || 'Failed.', 'err');
+          return;
+        }
+        toast('VIP revoked from ' + u.username + '.', 'ok');
+        await loadUsers();
+        renderUsers();
+        await loadStats();
       });
     });
 
@@ -1581,13 +1651,6 @@ table.tbl{
       });
     });
   }
-
-  // reset search when switching tabs
-  tabBtns.forEach(function(btn){
-    btn.addEventListener('click', function(){
-      state.searchQuery = '';
-    });
-  });
 
   init().catch(function(err){
     console.error(err);
