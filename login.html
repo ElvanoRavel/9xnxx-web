@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#000000" />
+<title>Login · SilverFang</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:#000;
+  color:#c9c9c9;
+  font-size:13px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+a{color:inherit;text-decoration:none}
+a:hover{color:#fff}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;font-size:inherit}
+input{font-family:inherit;color:inherit;font-size:inherit}
+::selection{background:#d92626;color:#fff}
+
+:root{
+  --border:#1a1a1a;
+  --border-2:#262626;
+  --border-red:#3a1414;
+  --border-red-2:#6b1f1f;
+  --text:#d4d4d4;
+  --text-2:#8a8a8a;
+  --text-3:#555;
+  --text-4:#333;
+  --red:#d92626;
+  --red-2:#a81c1c;
+  --green:#4a9e4a;
+  --amber:#c9a227;
+  --mono:'IBM Plex Mono',ui-monospace,'Courier New',monospace;
+}
+
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:#000}
+::-webkit-scrollbar-thumb{background:#1a1a1a;border:2px solid #000}
+::-webkit-scrollbar-thumb:hover{background:#282828}
+*{scrollbar-width:thin;scrollbar-color:#1a1a1a #000}
+
+.page{
+  min-height:100vh;
+  padding:40px 16px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+
+.box{
+  width:100%;
+  max-width:400px;
+  border:1px solid var(--border-red-2);
+  background:#000;
+}
+
+.box-head{
+  padding:12px 18px;
+  border-bottom:1px solid var(--border-red-2);
+  background:#050505;
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--text-3);
+  text-transform:uppercase;
+  letter-spacing:.1em;
+}
+.box-body{padding:24px 20px}
+
+.brand{
+  text-align:center;
+  margin-bottom:22px;
+  font-family:var(--mono);
+  font-size:16px;
+  letter-spacing:.06em;
+  color:#fff;
+  font-weight:500;
+}
+
+.field{margin-bottom:14px}
+.field label{
+  display:block;
+  font-family:var(--mono);
+  font-size:10.5px;
+  color:var(--text-3);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  margin-bottom:6px;
+}
+.field input{
+  width:100%;
+  height:36px;
+  padding:0 10px;
+  background:#000;
+  border:1px solid var(--border-2);
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:12.5px;
+  outline:none;
+  transition:border-color .15s,box-shadow .15s;
+}
+.field input:focus{
+  border-color:var(--border-red-2);
+  box-shadow:0 0 0 1px rgba(217,38,38,.15);
+}
+.field input::placeholder{color:var(--text-4)}
+.field .hint{
+  margin-top:5px;
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--text-3);
+  letter-spacing:.02em;
+}
+
+.btn-sub{
+  width:100%;
+  height:38px;
+  margin-top:6px;
+  background:var(--red);
+  color:#fff;
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  border:none;
+  transition:background .1s;
+}
+.btn-sub:hover{background:var(--red-2)}
+.btn-sub:disabled{opacity:.5;cursor:not-allowed}
+
+.alt{
+  display:flex;
+  justify-content:space-between;
+  margin-top:16px;
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--text-3);
+}
+.alt a:hover{color:var(--text)}
+
+.box-foot{
+  padding:10px 18px;
+  border-top:1px solid var(--border-red-2);
+  background:#050505;
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--text-4);
+  text-align:center;
+  letter-spacing:.05em;
+  line-height:1.8;
+}
+
+.msg{
+  margin-top:14px;
+  padding:9px 12px;
+  font-family:var(--mono);
+  font-size:11px;
+  line-height:1.5;
+  border:1px solid transparent;
+  display:none;
+}
+.msg.on{display:block}
+.msg.err{
+  border-color:#4a1a1a;
+  background:#150505;
+  color:#e06060;
+}
+.msg.ok{
+  border-color:#1f3a1f;
+  background:#020a02;
+  color:var(--green);
+}
+
+.loading{
+  text-align:center;
+  font-family:var(--mono);
+  font-size:11.5px;
+  color:var(--text-3);
+  padding:12px 0;
+  display:none;
+}
+.loading.on{display:block}
+.loading .dot{
+  display:inline-block;
+  width:5px;height:5px;
+  background:var(--red);
+  border-radius:50%;
+  margin-right:6px;
+  vertical-align:middle;
+  animation:blink 1s infinite;
+}
+@keyframes blink{
+  0%,100%{opacity:1}
+  50%{opacity:.3}
+}
+
+@media (max-width:520px){
+  .page{padding:24px 12px}
+  .box-body{padding:20px 16px}
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="box">
+    <div class="box-head">Secure Access · Operator Login</div>
+
+    <div class="box-body">
+
+      <div class="brand">SilverFang</div>
+
+      <form id="loginForm">
+        <div class="field">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            placeholder="your username"
+            autocomplete="off"
+            spellcheck="false"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label for="pass">Password</label>
+          <input
+            type="password"
+            id="pass"
+            placeholder="your password"
+            autocomplete="current-password"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label for="code">Recovery Code</label>
+          <input
+            type="text"
+            id="code"
+            placeholder="one of your 12 codes"
+            autocomplete="off"
+            spellcheck="false"
+            required
+          />
+          <div class="hint">Paste any single code — it will be consumed after use.</div>
+        </div>
+
+        <button type="submit" class="btn-sub" id="submitBtn">Login</button>
+
+        <div class="alt">
+          <a href="index.html">← Back</a>
+          <a href="signup.html">No account? Sign up</a>
+        </div>
+      </form>
+
+      <div class="msg" id="msg"></div>
+
+      <div class="loading" id="loading">
+        <span class="dot"></span><span id="loadingText">verifying…</span>
+      </div>
+
+    </div>
+
+    <div class="box-foot">
+      Anonymous access · Code-based verification<br />
+      One code is consumed per login
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  'use strict';
+
+  const SUPABASE_URL = 'https://iygiioemtpfozxikhgmx.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_xHr9z0NCsm8gBivTQ2nH8Q_Y1uzdlis';
+
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const loginForm = document.getElementById('loginForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const msgEl = document.getElementById('msg');
+  const loadingEl = document.getElementById('loading');
+  const loadingText = document.getElementById('loadingText');
+
+  function showMsg(text, type) {
+    msgEl.textContent = text;
+    msgEl.className = 'msg on ' + (type || 'err');
+    loadingEl.className = 'loading';
+  }
+
+  function showLoading(text) {
+    msgEl.className = 'msg';
+    msgEl.textContent = '';
+    loadingText.textContent = text || 'verifying…';
+    loadingEl.className = 'loading on';
+  }
+
+  function hideLoading() {
+    loadingEl.className = 'loading';
+  }
+
+  async function usernameToEmail(username) {
+    const enc = new TextEncoder();
+    const data = enc.encode('sf:' + username.toLowerCase());
+    const hashBuf = await crypto.subtle.digest('SHA-256', data);
+    const hashArr = Array.from(new Uint8Array(hashBuf));
+    const hex = hashArr.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hex.slice(0, 32) + '@sf.local';
+  }
+
+  loginForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+
+    const username = document.getElementById('username').value.trim();
+    const pass = document.getElementById('pass').value;
+    const code = document.getElementById('code').value.trim();
+
+    if (!username || !pass || !code) {
+      showMsg('All three fields are required.', 'err');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'logging in…';
+    showLoading('authenticating…');
+
+    try {
+      const pseudoEmail = await usernameToEmail(username);
+
+      const { data: authData, error: authErr } = await supabase.auth.signInWithPassword({
+        email: pseudoEmail,
+        password: pass
+      });
+
+      if (authErr) {
+        throw new Error('Invalid username or password.');
+      }
+
+      if (!authData || !authData.user) {
+        throw new Error('Login failed: no session returned.');
+      }
+
+      showLoading('verifying recovery code…');
+
+      const userId = authData.user.id;
+
+      const { data: codeRows, error: codeErr } = await supabase
+        .from('recovery_codes')
+        .select('id, code, used')
+        .eq('user_id', userId)
+        .eq('code', code)
+        .limit(1);
+
+      if (codeErr) {
+        await supabase.auth.signOut();
+        throw new Error('Verification failed: ' + codeErr.message);
+      }
+
+      if (!codeRows || codeRows.length === 0) {
+        await supabase.auth.signOut();
+        throw new Error('Invalid recovery code. Try another one of your 12 codes.');
+      }
+
+      if (codeRows[0].used) {
+        await supabase.auth.signOut();
+        throw new Error('This recovery code has already been used. Try another.');
+      }
+
+      showLoading('consuming code…');
+
+      const { error: updErr } = await supabase
+        .from('recovery_codes')
+        .update({ used: true })
+        .eq('id', codeRows[0].id);
+
+      if (updErr) {
+        await supabase.auth.signOut();
+        throw new Error('Failed to consume code: ' + updErr.message);
+      }
+
+      showLoading('redirecting…');
+
+      window.location.href = 'index.html';
+
+    } catch (err) {
+      hideLoading();
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Login';
+      showMsg(err.message || 'Something went wrong. Try again.', 'err');
+    }
+  });
+
+  (async function init(){
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        window.location.href = 'index.html';
+        return;
+      }
+    } catch (e) {
+      /* ignore */
+    }
+  })();
+
+})();
+</script>
+</body>
+</html>
