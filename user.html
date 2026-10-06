@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#000000" />
 <title>User · SilverFang</title>
 <link rel="icon" type="image/jpeg" href="silverfang.jpg" />
+<link rel="stylesheet" href="vip-effects.css" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -87,9 +88,17 @@ img{display:block;max-width:100%}
   font-size:12.5px;
   margin-left:8px;
 }
-.hdr-nav a{padding:6px 11px;color:var(--text-2);border-radius:2px}
+.hdr-nav a{
+  padding:6px 11px;
+  color:var(--text-2);
+  border-radius:2px;
+}
 .hdr-nav a:hover{color:var(--text);background:#0d0d0d}
 .hdr-nav a.on{color:#fff}
+.hdr-nav a.admin-link{color:var(--red);border:1px solid var(--border-red-2)}
+.hdr-nav a.admin-link:hover{color:#fff;background:#150505}
+.hdr-nav a.vip-link{color:var(--amber);border:1px solid #3a2f0f}
+.hdr-nav a.vip-link:hover{color:#fff;background:#0a0800}
 
 .hdr-right{
   margin-left:auto;
@@ -138,7 +147,15 @@ img{display:block;max-width:100%}
 }
 .user-chip .avatar img{width:100%;height:100%;object-fit:cover}
 .user-chip .avatar .ph{font-size:10px;color:var(--text-3)}
-.user-chip .name{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.user-chip .name{
+  max-width:140px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+}
 .btn-logout{
   padding:6px 12px;
   border:1px solid var(--border-2);
@@ -211,6 +228,10 @@ img{display:block;max-width:100%}
   line-height:1.25;
   word-break:break-all;
   margin-bottom:4px;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  flex-wrap:wrap;
 }
 .hero-joined{
   font-family:var(--mono);
@@ -487,7 +508,7 @@ img{display:block;max-width:100%}
   .hdr-inner{padding:0 14px;gap:10px}
   .hdr-nav{display:none}
   .main{padding:16px 14px 60px}
-  .user-chip .name{max-width:70px}
+  .user-chip .name{max-width:80px}
   .btn-logout{padding:6px 9px;font-size:10.5px}
   .hero-username{font-size:18px}
   .products-grid{grid-template-columns:1fr;gap:10px}
@@ -508,6 +529,8 @@ img{display:block;max-width:100%}
       <a href="index.html">Market</a>
       <a href="dashboard.html">Dashboard</a>
       <a href="messages.html">Messages</a>
+      <a href="vip.html" class="vip-link" id="vipLink" style="display:none">VIP</a>
+      <a href="admin.html" class="admin-link" id="adminLink" style="display:none">Admin</a>
     </nav>
 
     <div class="hdr-right">
@@ -537,6 +560,7 @@ img{display:block;max-width:100%}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="vip-helper.js"></script>
 <script>
 (function(){
   'use strict';
@@ -545,6 +569,8 @@ img{display:block;max-width:100%}
   const SUPABASE_ANON_KEY = 'sb_publishable_xHr9z0NCsm8gBivTQ2nH8Q_Y1uzdlis';
 
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const escapeHtml = SF_VIP.escapeHtml;
+  const renderUsername = SF_VIP.renderUsername;
 
   const params = new URLSearchParams(window.location.search);
   const targetUserId = params.get('id');
@@ -565,6 +591,8 @@ img{display:block;max-width:100%}
   const hdrUser = $('hdrUser');
   const chipAvatar = $('chipAvatar');
   const chipName = $('chipName');
+  const adminLink = $('adminLink');
+  const vipLink = $('vipLink');
   const logoutBtn = $('logoutBtn');
   const toastEl = $('toast');
   const toastMsg = $('toastMsg');
@@ -577,16 +605,6 @@ img{display:block;max-width:100%}
     toastTimer = setTimeout(function(){
       toastEl.className = 'toast';
     }, 3000);
-  }
-
-  function escapeHtml(str){
-    if (str == null) return '';
-    return String(str)
-      .replace(/&/g,'&amp;')
-      .replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;')
-      .replace(/"/g,'&quot;')
-      .replace(/'/g,'&#39;');
   }
 
   function fmtDate(iso){
@@ -626,7 +644,7 @@ img{display:block;max-width:100%}
     if (session){
       const { data: me } = await supabase
         .from('profiles')
-        .select('id, username, avatar_url')
+        .select('id, username, avatar_url, is_admin, is_vip, username_effect, username_emoji')
         .eq('id', session.user.id)
         .maybeSingle();
       state.me = me || null;
@@ -635,7 +653,7 @@ img{display:block;max-width:100%}
 
     const { data: user, error } = await supabase
       .from('profiles')
-      .select('id, username, avatar_url, bio, created_at')
+      .select('id, username, avatar_url, bio, created_at, is_vip, username_effect, username_emoji')
       .eq('id', targetUserId)
       .maybeSingle();
 
@@ -658,13 +676,19 @@ img{display:block;max-width:100%}
     if (state.session && state.me){
       hdrGuest.style.display = 'none';
       hdrUser.style.display = 'flex';
-      chipName.textContent = state.me.username;
+
+      chipName.innerHTML = renderUsername(state.me.username, state.me.username_effect, state.me.username_emoji);
       chipAvatar.innerHTML = state.me.avatar_url
         ? '<img src="' + escapeHtml(state.me.avatar_url) + '" alt="" />'
         : '<span class="ph">' + escapeHtml((state.me.username || '?').charAt(0).toUpperCase()) + '</span>';
+
+      adminLink.style.display = state.me.is_admin ? 'inline-block' : 'none';
+      vipLink.style.display = (state.me.is_vip || state.me.is_admin) ? 'inline-block' : 'none';
     } else {
       hdrGuest.style.display = 'flex';
       hdrUser.style.display = 'none';
+      adminLink.style.display = 'none';
+      vipLink.style.display = 'none';
     }
   }
 
@@ -729,6 +753,7 @@ img{display:block;max-width:100%}
     const isLoggedIn = !!state.session;
 
     const av = avatarHTML(u.avatar_url, (u.username || '?').charAt(0));
+    const nameHTML = renderUsername(u.username, u.username_effect, u.username_emoji);
 
     const bioHTML = u.bio
       ? '<div class="hero-bio">' + escapeHtml(u.bio) + '</div>'
@@ -793,7 +818,7 @@ img{display:block;max-width:100%}
           '<div class="hero-avatar">' + av + '</div>' +
           '<div class="hero-info">' +
             '<div class="hero-text">' +
-              '<div class="hero-username">' + escapeHtml(u.username) + '</div>' +
+              '<div class="hero-username">' + nameHTML + '</div>' +
               '<div class="hero-joined">joined ' + escapeHtml(fmtDate(u.created_at)) + '</div>' +
               bioHTML +
             '</div>' +
@@ -815,7 +840,6 @@ img{display:block;max-width:100%}
         '<div class="sec-body">' + productsHTML + '</div>' +
       '</section>';
 
-    // bind follow button
     const followBtn = $('followBtn');
     if (followBtn){
       followBtn.addEventListener('click', toggleFollow);
