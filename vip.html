@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#000000" />
+<title>VIP Studio · SilverFang</title>
+<link rel="icon" type="image/jpeg" href="silverfang.jpg" />
+<link rel="stylesheet" href="vip-effects.css" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:#000;
+  color:#c9c9c9;
+  font-size:13px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+a{color:inherit;text-decoration:none}
+a:hover{color:#fff}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;font-size:inherit}
+img{display:block;max-width:100%}
+::selection{background:#d92626;color:#fff}
+
+:root{
+  --border:#1a1a1a;
+  --border-2:#262626;
+  --border-red:#3a1414;
+  --border-red-2:#6b1f1f;
+  --border-vip:#4a3a0f;
+  --border-vip-2:#8a6f1a;
+  --text:#d4d4d4;
+  --text-2:#8a8a8a;
+  --text-3:#555;
+  --text-4:#333;
+  --red:#d92626;
+  --red-2:#a81c1c;
+  --green:#4a9e4a;
+  --amber:#c9a227;
+  --vip:#e6c34d;
+  --vip-2:#8a6f1a;
+  --mono:'IBM Plex Mono',ui-monospace,'Courier New',monospace;
+}
+
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:#000}
+::-webkit-scrollbar-thumb{background:#1a1a1a;border:2px solid #000}
+::-webkit-scrollbar-thumb:hover{background:#282828}
+*{scrollbar-width:thin;scrollbar-color:#1a1a1a #000}
+
+.hdr{
+  border-bottom:1px solid var(--border);
+  background:#000;
+  position:sticky;
+  top:0;
+  z-index:50;
+}
+.hdr-inner{
+  max-width:1180px;
+  margin:0 auto;
+  padding:0 20px;
+  display:flex;
+  align-items:center;
+  height:52px;
+  gap:20px;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-family:var(--mono);
+  font-size:15px;
+  letter-spacing:.06em;
+  color:#fff;
+  flex-shrink:0;
+}
+.brand-logo{width:22px;height:22px;object-fit:contain;flex-shrink:0}
+.brand .name{font-weight:500}
+
+.hdr-nav{
+  display:flex;
+  gap:2px;
+  font-size:12.5px;
+  margin-left:8px;
+}
+.hdr-nav a{padding:6px 11px;color:var(--text-2);border-radius:2px}
+.hdr-nav a:hover{color:var(--text);background:#0d0d0d}
+.hdr-nav a.on{color:#fff}
+
+.hdr-right{
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-family:var(--mono);
+  font-size:11px;
+}
+.user-chip{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:4px 10px 4px 4px;
+  border:1px solid var(--border-vip-2);
+  background:#0a0800;
+  color:#e0e0e0;
+  font-size:11.5px;
+}
+.user-chip .avatar{
+  width:24px;height:24px;
+  background:#1a1a1a;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  flex-shrink:0;
+}
+.user-chip .avatar img{width:100%;height:100%;object-fit:cover}
+.user-chip .avatar .ph{font-size:10px;color:var(--text-3)}
+.user-chip .name{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btn-logout{
+  padding:6px 12px;
+  border:1px solid var(--border-2);
+  color:var(--text);
+  font-size:11.5px;
+  transition:background .1s,border-color .1s,color .1s;
+}
+.btn-logout:hover{background:var(--red);border-color:var(--red);color:#fff}
+
+.main{
+  max-width:1180px;
+  margin:0 auto;
+  padding:24px 20px 60px;
+}
+
+.page-head{
+  margin-bottom:22px;
+  padding-bottom:14px;
+  border-bottom:1px solid var(--border-vip);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+}
+.page-head h1{
+  font-family:var(--mono);
+  font-size:18px;
+  font-weight:600;
+  color:#fff;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  margin-bottom:4px;
+}
+.page-head h1 .crown{
+  display:inline-block;
+  background:linear-gradient(135deg, #e6c34d, #b8912a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color:transparent;
+  margin-right:6px;
+  font-weight:700;
+}
+.page-head .sub{
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--text-3);
+  letter-spacing:.04em;
+}
+
+.preview-box{
+  border:1px solid var(--border-vip-2);
+  background:
+    linear-gradient(135deg, rgba(201,162,39,.03), rgba(0,0,0,0) 60%),
+    #030303;
+  padding:28px 24px;
+  margin-bottom:28px;
+  text-align:center;
+  position:relative;
+}
+.preview-box .lbl{
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--text-3);
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  margin-bottom:22px;
+  display:block;
+}
+.preview-display{
+  font-family:var(--mono);
+  font-size:34px;
+  font-weight:600;
+  color:#e0e0e0;
+  line-height:1.4;
+  padding:14px 0;
+  word-break:break-word;
+}
+.preview-display .uname{
+  display: inline;
+}
+.preview-display .uemoji{
+  font-size: 0.9em;
+}
+.preview-meta{
+  margin-top:16px;
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--text-3);
+  letter-spacing:.04em;
+}
+.preview-meta .k{color:var(--vip)}
+
+.sec{
+  margin-bottom:28px;
+}
+.sec-title{
+  font-family:var(--mono);
+  font-size:12px;
+  font-weight:600;
+  color:#fff;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  margin-bottom:14px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.sec-title .pill{
+  padding:2px 8px;
+  background:#0a0800;
+  border:1px solid var(--border-vip-2);
+  color:var(--vip);
+  font-size:9.5px;
+  font-weight:500;
+  letter-spacing:.12em;
+}
+
+.effects-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.effect-btn{
+  border:1px solid var(--border-2);
+  background:#050505;
+  padding:16px 12px;
+  cursor:pointer;
+  transition:border-color .15s,background .15s;
+  position:relative;
+  overflow:hidden;
+  text-align:center;
+}
+.effect-btn:hover{
+  border-color:var(--border-red-2);
+  background:#080808;
+}
+.effect-btn.on{
+  border-color:var(--vip-2);
+  background:#0a0800;
+}
+.effect-btn.on::after{
+  content:'✓';
+  position:absolute;
+  top:6px;
+  right:8px;
+  font-family:var(--mono);
+  font-size:12px;
+  color:var(--vip);
+  font-weight:700;
+}
+.effect-btn .sample{
+  font-family:var(--mono);
+  font-size:15px;
+  font-weight:600;
+  line-height:1.4;
+  display:block;
+  margin-bottom:8px;
+  word-break:break-word;
+}
+.effect-btn .name{
+  font-family:var(--mono);
+  font-size:9.5px;
+  color:var(--text-3);
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.effect-btn.on .name{color:var(--vip)}
+
+.emojis-grid{
+  display:grid;
+  grid-template-columns:repeat(10,1fr);
+  gap:8px;
+}
+.emoji-btn{
+  aspect-ratio:1/1;
+  border:1px solid var(--border-2);
+  background:#050505;
+  cursor:pointer;
+  transition:border-color .15s,background .15s;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;
+  position:relative;
+}
+.emoji-btn:hover{
+  border-color:var(--border-red-2);
+  background:#080808;
+}
+.emoji-btn.on{
+  border-color:var(--vip-2);
+  background:#0a0800;
+}
+.emoji-btn .check{
+  position:absolute;
+  top:2px;
+  right:4px;
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--vip);
+  font-weight:700;
+  display:none;
+}
+.emoji-btn.on .check{display:block}
+.emoji-btn.none-btn{
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--text-3);
+  letter-spacing:.04em;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  justify-content:flex-end;
+  padding-top:20px;
+  border-top:1px solid var(--border);
+  flex-wrap:wrap;
+}
+
+.btn-primary{
+  padding:10px 20px;
+  background:linear-gradient(135deg, #e6c34d, #b8912a);
+  border:1px solid var(--border-vip-2);
+  color:#000;
+  font-family:var(--mono);
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  transition:filter .15s;
+}
+.btn-primary:hover{filter:brightness(1.15)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+
+.btn-ghost{
+  padding:10px 20px;
+  background:#0d0d0d;
+  border:1px solid var(--border-2);
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  transition:background .15s,border-color .15s;
+}
+.btn-ghost:hover{background:#161616;border-color:var(--border-vip-2)}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:20px;
+  transform:translate(-50%,80px);
+  background:#0d0d0d;
+  border:1px solid var(--border-2);
+  padding:10px 16px;
+  font-family:var(--mono);
+  font-size:11.5px;
+  color:var(--text);
+  z-index:200;
+  transition:transform .25s ease;
+  max-width:90vw;
+}
+.toast.on{transform:translate(-50%,0)}
+.toast.ok{border-color:#1f3a1f;color:var(--green)}
+.toast.err{border-color:#4a1a1a;color:#e06060}
+.toast.vip{border-color:var(--border-vip-2);color:var(--vip)}
+.toast .dot{
+  display:inline-block;
+  width:5px;height:5px;
+  background:currentColor;
+  border-radius:50%;
+  margin-right:8px;
+  vertical-align:middle;
+}
+
+.denied{
+  text-align:center;
+  padding:70px 20px;
+  border:1px dashed var(--border-vip-2);
+  background:#050400;
+  font-family:var(--mono);
+  font-size:12px;
+  color:var(--text-3);
+  line-height:1.9;
+}
+.denied .big{
+  font-size:52px;
+  color:var(--vip);
+  margin-bottom:18px;
+  display:block;
+}
+.denied strong{
+  color:var(--vip);
+  display:block;
+  margin-bottom:12px;
+  font-size:15px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+.denied .desc{
+  color:var(--text-2);
+  font-size:11.5px;
+  line-height:1.85;
+  max-width:420px;
+  margin:0 auto 20px;
+}
+
+.loading{
+  text-align:center;
+  padding:60px 20px;
+  font-family:var(--mono);
+  font-size:11.5px;
+  color:var(--text-3);
+}
+.loading .dot{
+  display:inline-block;
+  width:5px;height:5px;
+  background:var(--vip);
+  border-radius:50%;
+  margin-right:6px;
+  vertical-align:middle;
+  animation:blink 1s infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+@media (max-width:1024px){
+  .effects-grid{grid-template-columns:repeat(2,1fr)}
+  .emojis-grid{grid-template-columns:repeat(6,1fr)}
+}
+@media (max-width:640px){
+  .hdr-inner{padding:0 14px;gap:10px}
+  .hdr-nav{display:none}
+  .main{padding:16px 14px 60px}
+  .user-chip .name{max-width:70px}
+  .btn-logout{padding:6px 9px;font-size:10.5px}
+  .page-head h1{font-size:15px}
+  .preview-display{font-size:24px}
+  .effects-grid{grid-template-columns:1fr;gap:8px}
+  .emojis-grid{grid-template-columns:repeat(4,1fr)}
+  .emoji-btn{font-size:22px}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-inner">
+    <a href="index.html" class="brand">
+      <img src="silverfang.jpg" alt="SilverFang" class="brand-logo" />
+      <span class="name">SilverFang</span>
+    </a>
+
+    <nav class="hdr-nav">
+      <a href="index.html">Market</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="messages.html">Messages</a>
+      <a href="vip.html" class="on">VIP</a>
+    </nav>
+
+    <div class="hdr-right">
+      <a href="dashboard.html" class="user-chip">
+        <span class="avatar" id="chipAvatar"><span class="ph">?</span></span>
+        <span class="name" id="chipName">…</span>
+      </a>
+      <button type="button" class="btn-logout" id="logoutBtn">Logout</button>
+    </div>
+  </div>
+</header>
+
+<main class="main" id="mainArea">
+  <div class="loading"><span class="dot"></span>loading…</div>
+</main>
+
+<div class="toast" id="toast">
+  <span class="dot"></span>
+  <span id="toastMsg">—</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  'use strict';
+
+  const SUPABASE_URL = 'https://iygiioemtpfozxikhgmx.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_xHr9z0NCsm8gBivTQ2nH8Q_Y1uzdlis';
+  const ADMIN_USERNAME = 'SilverFang';
+
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const EFFECTS = [
+    { id:'none',     name:'None' },
+    { id:'neon',     name:'Neon' },
+    { id:'fire',     name:'Fire' },
+    { id:'ice',      name:'Ice' },
+    { id:'toxic',    name:'Toxic' },
+    { id:'blood',    name:'Blood' },
+    { id:'glitch',   name:'Glitch' },
+    { id:'chrome',   name:'Chrome' },
+    { id:'pulse',    name:'Pulse' },
+    { id:'hologram', name:'Hologram' },
+    { id:'matrix',   name:'Matrix' },
+    { id:'plasma',   name:'Plasma' },
+    { id:'void',     name:'Void' },
+    { id:'shock',    name:'Shock' },
+    { id:'crimson',  name:'Crimson' },
+    { id:'gold',     name:'Gold' }
+  ];
+
+  const EMOJIS = [
+    { id:'none',       char:'',   name:'None' },
+    { id:'skull',      char:'💀', name:'Skull' },
+    { id:'crossbones', char:'☠️', name:'Crossbones' },
+    { id:'fire',       char:'🔥', name:'Fire' },
+    { id:'lightning',  char:'⚡', name:'Lightning' },
+    { id:'dagger',     char:'🗡️', name:'Dagger' },
+    { id:'swords',     char:'⚔️', name:'Swords' },
+    { id:'spider',     char:'🕷️', name:'Spider' },
+    { id:'scorpion',   char:'🦂', name:'Scorpion' },
+    { id:'snake',      char:'🐍', name:'Snake' },
+    { id:'eagle',      char:'🦅', name:'Eagle' },
+    { id:'wolf',       char:'🐺', name:'Wolf' },
+    { id:'bat',        char:'🦇', name:'Bat' },
+    { id:'eye',        char:'👁️', name:'Eye' },
+    { id:'diamond',    char:'💎', name:'Diamond' },
+    { id:'chains',     char:'⛓️', name:'Chains' },
+    { id:'web',        char:'🕸️', name:'Web' },
+    { id:'radioactive',char:'☢️', name:'Radioactive' },
+    { id:'biohazard',  char:'☣️', name:'Biohazard' },
+    { id:'alarm',      char:'🚨', name:'Alarm' },
+    { id:'trident',    char:'🔱', name:'Trident' }
+  ];
+
+  const state = {
+    session: null,
+    me: null,
+    currentEffect: 'none',
+    currentEmoji: 'none',
+    originalEffect: 'none',
+    originalEmoji: 'none'
+  };
+
+  const $ = function(id){ return document.getElementById(id); };
+  const mainArea = $('mainArea');
+  const chipAvatar = $('chipAvatar');
+  const chipName = $('chipName');
+  const logoutBtn = $('logoutBtn');
+  const toastEl = $('toast');
+  const toastMsg = $('toastMsg');
+  let toastTimer;
+
+  function toast(msg, type){
+    toastMsg.textContent = msg;
+    toastEl.className = 'toast on ' + (type || '');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toastEl.className = 'toast'; }, 3000);
+  }
+
+  function escapeHtml(str){
+    if (str == null) return '';
+    return String(str)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;')
+      .replace(/'/g,'&#39;');
+  }
+
+  function avatarHTML(url, ch){
+    if (url) return '<img src="' + escapeHtml(url) + '" alt="" />';
+    return '<span class="ph">' + escapeHtml((ch || '?').toUpperCase()) + '</span>';
+  }
+
+  async function init(){
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session){
+      window.location.href = 'login.html';
+      return;
+    }
+    state.session = session;
+
+    const { data: me } = await supabase
+      .from('profiles')
+      .select('id, username, avatar_url, is_vip, username_effect, username_emoji')
+      .eq('id', session.user.id)
+      .maybeSingle();
+
+    if (!me){
+      mainArea.innerHTML = '<div class="denied"><span class="big">✕</span><strong>Error</strong>Could not load profile.</div>';
+      return;
+    }
+    state.me = me;
+
+    chipName.textContent = me.username;
+    chipAvatar.innerHTML = avatarHTML(me.avatar_url, me.username.charAt(0));
+
+    if (!me.is_vip){
+      await renderDenied();
+      return;
+    }
+
+    state.currentEffect = me.username_effect || 'none';
+    state.currentEmoji = me.username_emoji || 'none';
+    state.originalEffect = state.currentEffect;
+    state.originalEmoji = state.currentEmoji;
+
+    renderStudio();
+  }
+
+  async function renderDenied(){
+    // Cari admin
+    const { data: admin } = await supabase
+      .from('profiles')
+      .select('id, username')
+      .eq('is_admin', true)
+      .limit(1)
+      .maybeSingle();
+
+    const adminName = (admin && admin.username) || ADMIN_USERNAME;
+    const adminId = (admin && admin.id) || '';
+    const msgLink = adminId ? 'messages.html?with=' + adminId : 'messages.html';
+
+    mainArea.innerHTML =
+      '<div class="denied">' +
+        '<span class="big">👑</span>' +
+        '<strong>VIP Access Required</strong>' +
+        '<div class="desc">' +
+          'This area is for VIP members only.<br />' +
+          'To apply for VIP, send a private message to admin <strong style="display:inline;color:var(--vip)">' + escapeHtml(adminName) + '</strong>.' +
+          '<br /><br />' +
+          'VIP members unlock:<br />' +
+          '• 15 animated username effects<br />' +
+          '• 20 animated hacker emojis' +
+        '</div>' +
+        '<a href="' + msgLink + '" class="btn-primary" style="display:inline-block;text-decoration:none">Message Admin</a>' +
+      '</div>';
+  }
+
+  function renderStudio(){
+    const previewHTML =
+      '<span id="prevName" class="uname">' + escapeHtml(state.me.username) + '</span>' +
+      '<span id="prevEmoji" class="uemoji"></span>';
+
+    const effectsHTML = EFFECTS.map(function(e){
+      const sampleClass = e.id === 'none' ? '' : 'ue-' + e.id;
+      const onClass = state.currentEffect === e.id ? ' on' : '';
+      return (
+        '<button type="button" class="effect-btn' + onClass + '" data-effect="' + e.id + '">' +
+          '<span class="sample ' + sampleClass + '">' + escapeHtml(state.me.username) + '</span>' +
+          '<span class="name">' + escapeHtml(e.name) + '</span>' +
+        '</button>'
+      );
+    }).join('');
+
+    const emojisHTML = EMOJIS.map(function(e){
+      const onClass = state.currentEmoji === e.id ? ' on' : '';
+      const isNone = e.id === 'none';
+      const content = isNone
+        ? '<span style="font-size:10px;color:var(--text-3)">None</span>'
+        : '<span class="uei-' + e.id + '">' + e.char + '</span>';
+      return (
+        '<button type="button" class="emoji-btn' + onClass + (isNone ? ' none-btn' : '') + '" data-emoji="' + e.id + '" title="' + escapeHtml(e.name) + '">' +
+          content +
+          '<span class="check">✓</span>' +
+        '</button>'
+      );
+    }).join('');
+
+    mainArea.innerHTML =
+      '<div class="page-head">' +
+        '<div>' +
+          '<h1><span class="crown">👑</span>VIP Studio</h1>' +
+          '<div class="sub">Customize how your username appears across SilverFang</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="preview-box">' +
+        '<span class="lbl">Live Preview</span>' +
+        '<div class="preview-display" id="previewDisplay">' + previewHTML + '</div>' +
+        '<div class="preview-meta">' +
+          'effect: <span class="k" id="metaEffect">none</span> &nbsp;·&nbsp; ' +
+          'emoji: <span class="k" id="metaEmoji">none</span>' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="sec">' +
+        '<div class="sec-title">Username Effect <span class="pill">15 OPTIONS</span></div>' +
+        '<div class="effects-grid" id="effectsGrid">' + effectsHTML + '</div>' +
+      '</div>' +
+
+      '<div class="sec">' +
+        '<div class="sec-title">Username Emoji <span class="pill">20 OPTIONS</span></div>' +
+        '<div class="emojis-grid" id="emojisGrid">' + emojisHTML + '</div>' +
+      '</div>' +
+
+      '<div class="actions">' +
+        '<button type="button" class="btn-ghost" id="resetBtn">Reset to Saved</button>' +
+        '<button type="button" class="btn-primary" id="saveBtn">Save Changes</button>' +
+      '</div>';
+
+    bindStudio();
+    applyPreview();
+  }
+
+  function bindStudio(){
+    document.querySelectorAll('.effect-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        state.currentEffect = btn.getAttribute('data-effect');
+        document.querySelectorAll('.effect-btn').forEach(function(b){ b.classList.remove('on'); });
+        btn.classList.add('on');
+        applyPreview();
+      });
+    });
+
+    document.querySelectorAll('.emoji-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        state.currentEmoji = btn.getAttribute('data-emoji');
+        document.querySelectorAll('.emoji-btn').forEach(function(b){ b.classList.remove('on'); });
+        btn.classList.add('on');
+        applyPreview();
+      });
+    });
+
+    $('resetBtn').addEventListener('click', function(){
+      state.currentEffect = state.originalEffect;
+      state.currentEmoji = state.originalEmoji;
+      renderStudio();
+      toast('Reverted to saved settings.', 'ok');
+    });
+
+    $('saveBtn').addEventListener('click', saveSettings);
+
+    logoutBtn.addEventListener('click', async function(){
+      logoutBtn.disabled = true;
+      try { await supabase.auth.signOut(); } catch(e){}
+      sessionStorage.removeItem('sf_signup_codes');
+      window.location.href = 'index.html';
+    });
+  }
+
+  function applyPreview(){
+    const nameEl = $('prevName');
+    const emojiEl = $('prevEmoji');
+    if (!nameEl || !emojiEl) return;
+
+    nameEl.className = 'uname' + (state.currentEffect !== 'none' ? ' ue-' + state.currentEffect : '');
+    emojiEl.className = 'uemoji' + (state.currentEmoji !== 'none' ? ' uei-' + state.currentEmoji : ' uei-none');
+
+    const eObj = EMOJIS.find(function(x){ return x.id === state.currentEmoji; });
+    emojiEl.textContent = eObj && eObj.char ? eObj.char : '';
+
+    $('metaEffect').textContent = state.currentEffect;
+    $('metaEmoji').textContent = state.currentEmoji;
+  }
+
+  async function saveSettings(){
+    const btn = $('saveBtn');
+    btn.disabled = true;
+    btn.textContent = 'saving…';
+
+    const { error } = await supabase
+      .from('profiles')
+      .update({
+        username_effect: state.currentEffect,
+        username_emoji: state.currentEmoji
+      })
+      .eq('id', state.session.user.id);
+
+    btn.disabled = false;
+    btn.textContent = 'Save Changes';
+
+    if (error){
+      toast('Save failed: ' + error.message, 'err');
+      return;
+    }
+
+    state.originalEffect = state.currentEffect;
+    state.originalEmoji = state.currentEmoji;
+    toast('VIP settings saved.', 'vip');
+  }
+
+  init().catch(function(err){
+    console.error(err);
+    mainArea.innerHTML = '<div class="denied"><span class="big">✕</span><strong>Error</strong>' + escapeHtml(err.message) + '</div>';
+  });
+
+})();
+</script>
+</body>
+</html>
