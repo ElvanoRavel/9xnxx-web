@@ -1,5 +1,5 @@
 /* ============================================================
-   SILVERFANG VIP — USERNAME EFFECTS + ANIMATED EMOJIS
+   SILVERFANG VIP — USERNAME EFFECTS + CUSTOM SVG EMOJIS
    ============================================================ */
 
 /* ---------- USERNAME EFFECTS ---------- */
@@ -208,15 +208,25 @@
 }
 
 
-/* ---------- ANIMATED EMOJI ---------- */
+/* ---------- CUSTOM SVG EMOJIS ---------- */
 
 .uemoji {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   margin-left: 6px;
-  vertical-align: middle;
-  font-size: 1em;
+  vertical-align: -0.15em;
+  width: 1.15em;
+  height: 1.15em;
   line-height: 1;
-  font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+  flex-shrink: 0;
+}
+
+.uemoji svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
 }
 
 .uei-none { display: none; }
