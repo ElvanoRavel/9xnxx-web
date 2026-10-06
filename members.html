@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#000000" />
+<title>Members · SilverFang</title>
+<link rel="icon" type="image/jpeg" href="silverfang.jpg" />
+<link rel="stylesheet" href="vip-effects.css" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:#000;
+  color:#c9c9c9;
+  font-size:13px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+a{color:inherit;text-decoration:none}
+a:hover{color:#fff}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;font-size:inherit}
+input,select{font-family:inherit;color:inherit;font-size:inherit}
+img{display:block;max-width:100%}
+::selection{background:#d92626;color:#fff}
+
+:root{
+  --border:#1a1a1a;
+  --border-2:#262626;
+  --border-red:#3a1414;
+  --border-red-2:#6b1f1f;
+  --text:#d4d4d4;
+  --text-2:#8a8a8a;
+  --text-3:#555;
+  --text-4:#333;
+  --red:#d92626;
+  --red-2:#a81c1c;
+  --green:#4a9e4a;
+  --amber:#c9a227;
+  --vip:#c9a227;
+  --vip-2:#8a6f1a;
+  --mono:'IBM Plex Mono',ui-monospace,'Courier New',monospace;
+}
+
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:#000}
+::-webkit-scrollbar-thumb{background:#1a1a1a;border:2px solid #000}
+::-webkit-scrollbar-thumb:hover{background:#282828}
+*{scrollbar-width:thin;scrollbar-color:#1a1a1a #000}
+
+.hdr{
+  border-bottom:1px solid var(--border);
+  background:#000;
+  position:sticky;
+  top:0;
+  z-index:50;
+}
+.hdr-inner{
+  max-width:1180px;
+  margin:0 auto;
+  padding:0 20px;
+  display:flex;
+  align-items:center;
+  height:52px;
+  gap:20px;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-family:var(--mono);
+  font-size:15px;
+  letter-spacing:.06em;
+  color:#fff;
+  flex-shrink:0;
+}
+.brand-logo{width:22px;height:22px;object-fit:contain;flex-shrink:0}
+.brand .name{font-weight:500}
+
+.hdr-nav{
+  display:flex;
+  gap:2px;
+  font-size:12.5px;
+}
+.hdr-nav a{
+  padding:6px 11px;
+  color:var(--text-2);
+  border-radius:2px;
+  transition:color .1s,background .1s;
+}
+.hdr-nav a:hover{color:var(--text);background:#0d0d0d}
+.hdr-nav a.on{color:#fff}
+.hdr-nav a.admin-link{
+  color:var(--red);
+  border:1px solid var(--border-red-2);
+}
+.hdr-nav a.admin-link:hover{color:#fff;background:#150505}
+.hdr-nav a.vip-link{
+  color:var(--amber);
+  border:1px solid #3a2f0f;
+}
+.hdr-nav a.vip-link:hover{color:#fff;background:#0a0800}
+
+.hdr-right{
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-family:var(--mono);
+  font-size:11px;
+}
+.hdr-guest{display:flex;align-items:center;gap:8px}
+.hdr-guest .btn-log{
+  padding:6px 12px;
+  border:1px solid var(--border-2);
+  color:var(--text);
+  font-size:11.5px;
+  transition:background .1s,border-color .1s,color .1s;
+}
+.hdr-guest .btn-log:hover{background:var(--red);border-color:var(--red);color:#fff}
+.hdr-guest .btn-signup{
+  padding:6px 12px;
+  background:var(--red);
+  border:1px solid var(--red);
+  color:#fff;
+  font-size:11.5px;
+  transition:background .1s,border-color .1s;
+}
+.hdr-guest .btn-signup:hover{background:var(--red-2);border-color:var(--red-2)}
+
+.hdr-user{display:none;align-items:center;gap:8px}
+.user-chip{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:4px 10px 4px 4px;
+  border:1px solid var(--border-red-2);
+  background:#050505;
+  color:#e0e0e0;
+  font-size:11.5px;
+  transition:border-color .15s;
+}
+.user-chip:hover{border-color:var(--red)}
+.user-chip .avatar{
+  width:24px;height:24px;
+  background:#1a1a1a;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  flex-shrink:0;
+}
+.user-chip .avatar img{width:100%;height:100%;object-fit:cover}
+.user-chip .avatar .ph{font-size:10px;color:var(--text-3)}
+.user-chip .name{max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-flex;align-items:center;gap:4px}
+.btn-logout{
+  padding:6px 12px;
+  border:1px solid var(--border-2);
+  color:var(--text);
+  font-size:11.5px;
+  transition:background .1s,border-color .1s,color .1s;
+}
+.btn-logout:hover{background:var(--red);border-color:var(--red);color:#fff}
+
+.main{
+  max-width:1180px;
+  margin:0 auto;
+  padding:24px 20px 60px;
+}
+
+.page-head{
+  margin-bottom:20px;
+  padding-bottom:14px;
+  border-bottom:1px solid var(--border);
+}
+.page-head h1{
+  font-family:var(--mono);
+  font-size:18px;
+  font-weight:600;
+  color:#fff;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.page-head .sub{
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--text-3);
+  letter-spacing:.04em;
+  margin-top:5px;
+}
+
+.toolbar{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+  margin-bottom:20px;
+}
+.toolbar .search{
+  flex:1;
+  min-width:200px;
+  max-width:360px;
+}
+.toolbar .search input{
+  width:100%;
+  padding:8px 12px;
+  background:#000;
+  border:1px solid var(--border-2);
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:12px;
+  outline:none;
+  transition:border-color .15s;
+}
+.toolbar .search input:focus{border-color:var(--border-red-2)}
+.toolbar .search input::placeholder{color:var(--text-4)}
+
+.filters{display:flex;gap:4px}
+.filter-btn{
+  padding:7px 13px;
+  border:1px solid var(--border-2);
+  background:#0d0d0d;
+  color:var(--text-3);
+  font-family:var(--mono);
+  font-size:10.5px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  transition:background .1s,border-color .1s,color .1s;
+}
+.filter-btn:hover{color:var(--text)}
+.filter-btn.on{
+  background:#150505;
+  border-color:var(--border-red-2);
+  color:#fff;
+}
+
+.toolbar select{
+  padding:8px 10px;
+  background:#0d0d0d;
+  border:1px solid var(--border-2);
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:11px;
+  outline:none;
+  cursor:pointer;
+  margin-left:auto;
+}
+.toolbar select:focus{border-color:var(--border-red-2)}
+
+.members-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+.members-grid > .full{
+  grid-column:1/-1;
+}
+
+.member-card{
+  border:1px solid var(--border-red);
+  background:#050505;
+  padding:20px 16px 16px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  transition:border-color .15s,box-shadow .15s,transform .15s;
+  text-align:center;
+  position:relative;
+}
+.member-card:hover{
+  border-color:var(--border-red-2);
+  box-shadow:0 0 12px rgba(217,38,38,.06);
+}
+
+.member-avatar{
+  width:72px;height:72px;
+  background:#0d0d0d;
+  border:1px solid var(--border-2);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  flex-shrink:0;
+}
+.member-avatar img{width:100%;height:100%;object-fit:cover}
+.member-avatar .ph{
+  font-family:var(--mono);
+  font-size:26px;
+  color:var(--text-4);
+}
+
+.member-name{
+  font-family:var(--mono);
+  font-size:13px;
+  color:#e0e0e0;
+  font-weight:500;
+  word-break:break-all;
+  line-height:1.4;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+.member-badges{
+  display:flex;
+  gap:4px;
+  flex-wrap:wrap;
+  justify-content:center;
+  min-height:18px;
+}
+.badge{
+  display:inline-block;
+  padding:2px 7px;
+  font-family:var(--mono);
+  font-size:9px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  border:1px solid var(--border-2);
+  color:var(--text-3);
+}
+.badge.admin{color:var(--amber);border-color:#3a2f0f}
+.badge.vip{
+  color:#000;
+  background:linear-gradient(135deg,#e6c34d,#b8912a);
+  border-color:#8a6f1a;
+  font-weight:700;
+  letter-spacing:.12em;
+}
+
+.member-bio{
+  font-size:11.5px;
+  color:var(--text-3);
+  line-height:1.5;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+  min-height:34px;
+  max-height:34px;
+  word-break:break-word;
+  width:100%;
+}
+.member-bio.empty{color:var(--text-4);font-style:italic;font-family:var(--mono)}
+
+.member-stats{
+  display:flex;
+  justify-content:center;
+  gap:16px;
+  width:100%;
+  padding-top:10px;
+  border-top:1px solid var(--border);
+  font-family:var(--mono);
+  font-size:10.5px;
+  color:var(--text-3);
+}
+.member-stats .stat strong{color:#e0e0e0;font-weight:600}
+
+.member-joined{
+  font-family:var(--mono);
+  font-size:9.5px;
+  color:var(--text-4);
+  letter-spacing:.04em;
+}
+
+.load-more-wrap{
+  text-align:center;
+  margin-top:26px;
+}
+.btn-load-more{
+  padding:10px 26px;
+  background:#0d0d0d;
+  border:1px solid var(--border-2);
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:11.5px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  transition:background .15s,border-color .15s,color .15s;
+}
+.btn-load-more:hover:not(:disabled){
+  background:#161616;
+  border-color:var(--border-red-2);
+  color:#fff;
+}
+.btn-load-more:disabled{opacity:.5;cursor:not-allowed}
+
+.loading-state,
+.empty-state{
+  text-align:center;
+  padding:60px 20px;
+  font-family:var(--mono);
+  font-size:11.5px;
+  color:var(--text-3);
+  border:1px dashed var(--border-2);
+  background:#030303;
+  line-height:1.7;
+}
+.loading-state .dot{
+  display:inline-block;
+  width:5px;height:5px;
+  background:var(--red);
+  border-radius:50%;
+  margin-right:6px;
+  vertical-align:middle;
+  animation:blink 1s infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.empty-state strong{color:var(--text-2);display:block;margin-bottom:6px}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:20px;
+  transform:translate(-50%,80px);
+  background:#0d0d0d;
+  border:1px solid var(--border-2);
+  padding:10px 16px;
+  font-family:var(--mono);
+  font-size:11.5px;
+  color:var(--text);
+  z-index:200;
+  transition:transform .25s ease;
+  max-width:90vw;
+}
+.toast.on{transform:translate(-50%,0)}
+.toast.err{border-color:#4a1a1a;color:#e06060}
+.toast .dot{
+  display:inline-block;
+  width:5px;height:5px;
+  background:currentColor;
+  border-radius:50%;
+  margin-right:8px;
+  vertical-align:middle;
+}
+
+@media (max-width:900px){
+  .members-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:640px){
+  .hdr-inner{padding:0 14px;gap:10px}
+  .hdr-nav{display:none}
+  .main{padding:16px 14px 60px}
+  .user-chip .name{max-width:80px}
+  .btn-logout{padding:6px 9px;font-size:10.5px}
+  .toolbar{gap:8px}
+  .toolbar select{margin-left:0;width:100%}
+  .filters{width:100%;justify-content:space-between}
+  .filter-btn{flex:1;text-align:center}
+  .members-grid{grid-template-columns:1fr}
+  .member-avatar{width:64px;height:64px}
+  .page-head h1{font-size:15px}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-inner">
+    <a href="index.html" class="brand">
+      <img src="silverfang.jpg" alt="SilverFang" class="brand-logo" />
+      <span class="name">SilverFang</span>
+    </a>
+
+    <nav class="hdr-nav">
+      <a href="index.html">Market</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="messages.html">Messages</a>
+      <a href="members.html" class="on">Members</a>
+      <a href="forum.html">Forum</a>
+      <a href="vip.html" class="vip-link" id="vipLink" style="display:none">VIP</a>
+      <a href="admin.html" class="admin-link" id="adminLink" style="display:none">Admin</a>
+    </nav>
+
+    <div class="hdr-right">
+      <div class="hdr-guest" id="hdrGuest">
+        <a href="login.html" class="btn-log">Login</a>
+        <a href="signup.html" class="btn-signup">Sign Up</a>
+      </div>
+
+      <div class="hdr-user" id="hdrUser">
+        <a href="dashboard.html" class="user-chip">
+          <span class="avatar" id="chipAvatar"><span class="ph">?</span></span>
+          <span class="name" id="chipName">…</span>
+        </a>
+        <button type="button" class="btn-logout" id="logoutBtn">Logout</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+  <div class="page-head">
+    <h1>Members</h1>
+    <div class="sub" id="pageSub">loading…</div>
+  </div>
+
+  <div class="toolbar">
+    <div class="search">
+      <input type="text" id="searchInput" placeholder="search username…" autocomplete="off" spellcheck="false" />
+    </div>
+    <div class="filters">
+      <button type="button" class="filter-btn on" data-filter="all">All</button>
+      <button type="button" class="filter-btn" data-filter="vip">VIP</button>
+      <button type="button" class="filter-btn" data-filter="admin">Admin</button>
+    </div>
+    <select id="sortSelect">
+      <option value="newest">Newest first</option>
+      <option value="oldest">Oldest first</option>
+      <option value="alphabetical">Username A → Z</option>
+    </select>
+  </div>
+
+  <div class="members-grid" id="membersGrid">
+    <div class="full loading-state"><span class="dot"></span>loading members…</div>
+  </div>
+
+  <div class="load-more-wrap" id="loadMoreWrap" style="display:none">
+    <button type="button" class="btn-load-more" id="loadMoreBtn">Load More</button>
+  </div>
+
+</main>
+
+<div class="toast" id="toast">
+  <span class="dot"></span>
+  <span id="toastMsg">—</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="vip-helper.js"></script>
+<script>
+(function(){
+  'use strict';
+
+  const SUPABASE_URL = 'https://iygiioemtpfozxikhgmx.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_xHr9z0NCsm8gBivTQ2nH8Q_Y1uzdlis';
+
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const escapeHtml = SF_VIP.escapeHtml;
+  const renderUsername = SF_VIP.renderUsername;
+
+  const PAGE_SIZE = 10;
+
+  const state = {
+    session: null,
+    me: null,
+    members: [],
+    offset: 0,
+    hasMore: true,
+    loading: false,
+    searchQuery: '',
+    filter: 'all',
+    sort: 'newest',
+    totalLoaded: 0
+  };
+
+  const $ = function(id){ return document.getElementById(id); };
+  const membersGrid = $('membersGrid');
+  const loadMoreWrap = $('loadMoreWrap');
+  const loadMoreBtn = $('loadMoreBtn');
+  const searchInput = $('searchInput');
+  const sortSelect = $('sortSelect');
+  const pageSub = $('pageSub');
+
+  const hdrGuest = $('hdrGuest');
+  const hdrUser = $('hdrUser');
+  const chipAvatar = $('chipAvatar');
+  const chipName = $('chipName');
+  const adminLink = $('adminLink');
+  const vipLink = $('vipLink');
+  const logoutBtn = $('logoutBtn');
+
+  const toastEl = $('toast');
+  const toastMsg = $('toastMsg');
+  let toastTimer;
+
+  function toast(msg, type){
+    toastMsg.textContent = msg;
+    toastEl.className = 'toast on ' + (type || '');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toastEl.className = 'toast'; }, 3000);
+  }
+
+  function fmtDate(iso){
+    if (!iso) return '—';
+    try {
+      const d = new Date(iso);
+      return d.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
+    } catch(e){ return '—'; }
+  }
+
+  function avatarHTML(url, ch){
+    if (url) return '<img src="' + escapeHtml(url) + '" alt="" />';
+    return '<span class="ph">' + escapeHtml((ch || '?').toUpperCase()) + '</span>';
+  }
+
+  // ============ AUTH + HEADER ============
+  async function initAuth(){
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      state.session = session;
+      if (session){
+        const { data: me } = await supabase
+          .from('profiles')
+          .select('id, username, avatar_url, is_admin, is_vip, username_effect, username_emoji')
+          .eq('id', session.user.id)
+          .maybeSingle();
+        state.me = me || null;
+      }
+    } catch(e){}
+    renderHeader();
+  }
+
+  function renderHeader(){
+    if (state.session && state.me){
+      hdrGuest.style.display = 'none';
+      hdrUser.style.display = 'flex';
+
+      chipName.innerHTML = renderUsername(state.me.username, state.me.username_effect, state.me.username_emoji);
+      chipAvatar.innerHTML = state.me.avatar_url
+        ? '<img src="' + escapeHtml(state.me.avatar_url) + '" alt="" />'
+        : '<span class="ph">' + escapeHtml((state.me.username || '?').charAt(0).toUpperCase()) + '</span>';
+
+      adminLink.style.display = state.me.is_admin ? 'inline-block' : 'none';
+      vipLink.style.display = (state.me.is_vip || state.me.is_admin) ? 'inline-block' : 'none';
+    } else {
+      hdrGuest.style.display = 'flex';
+      hdrUser.style.display = 'none';
+      adminLink.style.display = 'none';
+      vipLink.style.display = 'none';
+    }
+  }
+
+  logoutBtn.addEventListener('click', async function(){
+    logoutBtn.disabled = true;
+    try { await supabase.auth.signOut(); } catch(e){}
+    sessionStorage.removeItem('sf_signup_codes');
+    window.location.href = 'index.html';
+  });
+
+  // ============ LOAD MEMBERS ============
+  async function loadMembers(reset){
+    if (state.loading) return;
+    if (reset){
+      state.members = [];
+      state.offset = 0;
+      state.hasMore = true;
+      state.totalLoaded = 0;
+      membersGrid.innerHTML = '<div class="full loading-state"><span class="dot"></span>loading members…</div>';
+      loadMoreWrap.style.display = 'none';
+    } else {
+      if (!state.hasMore) return;
+      loadMoreBtn.disabled = true;
+      loadMoreBtn.textContent = 'loading…';
+    }
+
+    state.loading = true;
+
+    try {
+      let query = supabase
+        .from('profiles')
+        .select('id, username, avatar_url, bio, created_at, is_admin, is_vip, username_effect, username_emoji');
+
+      if (state.searchQuery){
+        query = query.ilike('username', '%' + state.searchQuery + '%');
+      }
+      if (state.filter === 'vip'){
+        query = query.eq('is_vip', true);
+      } else if (state.filter === 'admin'){
+        query = query.eq('is_admin', true);
+      }
+
+      if (state.sort === 'newest'){
+        query = query.order('created_at', { ascending: false });
+      } else if (state.sort === 'oldest'){
+        query = query.order('created_at', { ascending: true });
+      } else if (state.sort === 'alphabetical'){
+        query = query.order('username', { ascending: true });
+      }
+
+      query = query.range(state.offset, state.offset + PAGE_SIZE - 1);
+
+      const { data, error } = await query;
+      if (error) throw error;
+
+      const batch = data || [];
+
+      if (batch.length < PAGE_SIZE){
+        state.hasMore = false;
+      }
+
+      // Fetch counts for this batch
+      if (batch.length > 0){
+        const ids = batch.map(function(p){ return p.id; });
+
+        const [prodsRes, followsRes] = await Promise.all([
+          supabase.from('products').select('seller_id').in('seller_id', ids),
+          supabase.from('follows').select('following_id').in('following_id', ids)
+        ]);
+
+        const prodCount = {};
+        (prodsRes.data || []).forEach(function(p){
+          prodCount[p.seller_id] = (prodCount[p.seller_id] || 0) + 1;
+        });
+
+        const folCount = {};
+        (followsRes.data || []).forEach(function(f){
+          folCount[f.following_id] = (folCount[f.following_id] || 0) + 1;
+        });
+
+        batch.forEach(function(p){
+          p._prodCount = prodCount[p.id] || 0;
+          p._folCount = folCount[p.id] || 0;
+        });
+      }
+
+      state.members = state.members.concat(batch);
+      state.offset += batch.length;
+      state.totalLoaded = state.members.length;
+    } catch (err){
+      console.error(err);
+      state.hasMore = false;
+      if (state.members.length === 0){
+        membersGrid.innerHTML =
+          '<div class="full empty-state"><strong>Failed to load</strong>' + escapeHtml(err.message || 'unknown error') + '</div>';
+      } else {
+        toast('Failed to load more: ' + (err.message || 'unknown'), 'err');
+      }
+    }
+
+    state.loading = false;
+    renderMembers();
+  }
+
+  function renderMembers(){
+    pageSub.textContent = state.totalLoaded + ' shown · Browse SilverFang community';
+
+    if (state.members.length === 0){
+      membersGrid.innerHTML =
+        '<div class="full empty-state">' +
+          '<strong>No members found</strong>' +
+          (state.searchQuery ? 'No match for "' + escapeHtml(state.searchQuery) + '".' : 'No members to display.') +
+        '</div>';
+      loadMoreWrap.style.display = 'none';
+      return;
+    }
+
+    membersGrid.innerHTML = state.members.map(function(m){
+      const av = avatarHTML(m.avatar_url, (m.username || '?').charAt(0));
+      const nameHTML = renderUsername(m.username, m.username_effect, m.username_emoji);
+
+      let badgesHTML = '';
+      if (m.is_admin) badgesHTML += '<span class="badge admin">Admin</span>';
+      if (m.is_vip) badgesHTML += '<span class="badge vip">VIP</span>';
+
+      const bioHTML = m.bio
+        ? '<div class="member-bio">' + escapeHtml(m.bio) + '</div>'
+        : '<div class="member-bio empty">no bio</div>';
+
+      return (
+        '<a href="user.html?id=' + escapeHtml(m.id) + '" class="member-card">' +
+          '<div class="member-avatar">' + av + '</div>' +
+          '<div class="member-name">' + nameHTML + '</div>' +
+          '<div class="member-badges">' + badgesHTML + '</div>' +
+          bioHTML +
+          '<div class="member-stats">' +
+            '<span class="stat"><strong>' + m._prodCount + '</strong> products</span>' +
+            '<span class="stat"><strong>' + m._folCount + '</strong> followers</span>' +
+          '</div>' +
+          '<div class="member-joined">joined ' + escapeHtml(fmtDate(m.created_at)) + '</div>' +
+        '</a>'
+      );
+    }).join('');
+
+    // Load more button
+    if (state.hasMore){
+      loadMoreWrap.style.display = 'block';
+      loadMoreBtn.disabled = false;
+      loadMoreBtn.textContent = 'Load More';
+    } else {
+      loadMoreWrap.style.display = 'none';
+    }
+  }
+
+  // ============ EVENTS ============
+  let searchTimer;
+  searchInput.addEventListener('input', function(){
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(function(){
+      state.searchQuery = searchInput.value.trim();
+      loadMembers(true);
+    }, 400);
+  });
+
+  document.querySelectorAll('.filter-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('on'); });
+      btn.classList.add('on');
+      state.filter = btn.getAttribute('data-filter');
+      loadMembers(true);
+    });
+  });
+
+  sortSelect.addEventListener('change', function(){
+    state.sort = sortSelect.value;
+    loadMembers(true);
+  });
+
+  loadMoreBtn.addEventListener('click', function(){
+    loadMembers(false);
+  });
+
+  // ============ BOOT ============
+  (async function boot(){
+    await initAuth();
+    await loadMembers(true);
+  })();
+
+})();
+</script>
+</body>
+</html>
