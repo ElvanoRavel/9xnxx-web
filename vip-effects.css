@@ -223,19 +223,20 @@
   flex-shrink: 0;
 }
 
-.uemoji svg {
+/* Glow rules — apply ke .uemoji (preview & tampilan user)
+   DAN .svg-wrap (grid picker di VIP Studio) */
+.uemoji svg,
+.svg-wrap svg {
   width: 100%;
   height: 100%;
   display: block;
   overflow: visible;
-  /* universal glow — 2 layer biar keliatan "nyala" */
   filter:
     drop-shadow(0 0 2px var(--glow))
     drop-shadow(0 0 6px var(--glow));
   animation: eGlowPulse 1.6s ease-in-out infinite;
 }
 
-/* glow pulse universal — setiap emoji pasti bernafas */
 @keyframes eGlowPulse {
   0%, 100% {
     filter:
