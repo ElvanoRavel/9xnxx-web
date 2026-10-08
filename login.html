@@ -356,6 +356,103 @@ input{font-family:inherit;color:inherit;font-size:inherit}
   const banReasonEl = document.getElementById('banReason');
   const banReasonText = document.getElementById('banReasonText');
 
+  const LOGIN_RATE_KEY = 'sf_login_attempts_v1';
+  const MAX_ATTEMPTS = 5;
+  const LOCKOUT_MS = 15 * 60 * 1000;
+  const ATTEMPT_WINDOW_MS = 10 * 60 * 1000;
+
+  function normalizeLoginKey(value) {
+    return String(value || '').trim().toLowerCase();
+  }
+
+  function readLoginAttempts() {
+    try {
+      const raw = localStorage.getItem(LOGIN_RATE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function writeLoginAttempts(data) {
+    try {
+      localStorage.setItem(LOGIN_RATE_KEY, JSON.stringify(data));
+    } catch (e) {
+      // ignore storage issues
+    }
+  }
+
+  function getLoginAttemptState(username) {
+    const key = normalizeLoginKey(username);
+    if (!key) return { attempts: 0, firstAt: 0, lockedUntil: 0 };
+
+    const all = readLoginAttempts();
+    const state = all[key] || { attempts: 0, firstAt: 0, lockedUntil: 0 };
+    const now = Date.now();
+
+    if (state.firstAt && state.firstAt < now - ATTEMPT_WINDOW_MS) {
+      state.attempts = 0;
+      state.firstAt = now;
+      state.lockedUntil = 0;
+      all[key] = state;
+      writeLoginAttempts(all);
+    }
+
+    return state;
+  }
+
+  function saveLoginAttemptState(username, state) {
+    const key = normalizeLoginKey(username);
+    if (!key) return;
+
+    const all = readLoginAttempts();
+    all[key] = state;
+    writeLoginAttempts(all);
+  }
+
+  function clearLoginAttemptState(username) {
+    const key = normalizeLoginKey(username);
+    if (!key) return;
+
+    const all = readLoginAttempts();
+    delete all[key];
+    writeLoginAttempts(all);
+  }
+
+  function getRemainingLockSeconds(username) {
+    const state = getLoginAttemptState(username);
+    if (!state.lockedUntil || state.lockedUntil <= Date.now()) return 0;
+    return Math.ceil((state.lockedUntil - Date.now()) / 1000);
+  }
+
+  function isLoginLocked(username) {
+    const state = getLoginAttemptState(username);
+    return !!state.lockedUntil && state.lockedUntil > Date.now();
+  }
+
+  function recordFailedLogin(username) {
+    const key = normalizeLoginKey(username);
+    if (!key) return { attempts: 0, locked: false, remaining: 0 };
+
+    const now = Date.now();
+    const state = getLoginAttemptState(username);
+
+    if (!state.firstAt) {
+      state.firstAt = now;
+    }
+
+    state.attempts = (state.attempts || 0) + 1;
+
+    if (state.attempts >= MAX_ATTEMPTS) {
+      state.lockedUntil = now + LOCKOUT_MS;
+      saveLoginAttemptState(username, state);
+      return { attempts: state.attempts, locked: true, remaining: Math.ceil(LOCKOUT_MS / 1000) };
+    }
+
+    saveLoginAttemptState(username, state);
+    return { attempts: state.attempts, locked: false, remaining: MAX_ATTEMPTS - state.attempts };
+  }
+
   function showMsg(text, type) {
     msgEl.textContent = text;
     msgEl.className = 'msg on ' + (type || 'err');
@@ -404,6 +501,12 @@ input{font-family:inherit;color:inherit;font-size:inherit}
       return;
     }
 
+    if (isLoginLocked(username)) {
+      const sec = getRemainingLockSeconds(username);
+      showMsg('Too many failed attempts. Try again in ' + sec + 's.', 'err');
+      return;
+    }
+
     submitBtn.disabled = true;
     submitBtn.textContent = 'logging in…';
     showLoading('authenticating…');
@@ -417,12 +520,32 @@ input{font-family:inherit;color:inherit;font-size:inherit}
       });
 
       if (authErr) {
-        throw new Error('Invalid username or password.');
+        const lockState = recordFailedLogin(username);
+        if (lockState.locked) {
+          hideLoading();
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Login';
+          showMsg('Too many failed attempts. This account is temporarily locked for 15 minutes.', 'err');
+          return;
+        }
+
+        const attemptsLeft = Math.max(0, MAX_ATTEMPTS - lockState.attempts);
+        throw new Error('Invalid username or password. ' + attemptsLeft + ' attempts remaining before lockout.');
       }
 
       if (!authData || !authData.user) {
+        const lockState = recordFailedLogin(username);
+        if (lockState.locked) {
+          hideLoading();
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Login';
+          showMsg('Too many failed attempts. This account is temporarily locked for 15 minutes.', 'err');
+          return;
+        }
         throw new Error('Login failed: no session returned.');
       }
+
+      clearLoginAttemptState(username);
 
       // === Cek apakah user di-ban ===
       showLoading('checking status…');
