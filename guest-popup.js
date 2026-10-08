@@ -1,1245 +1,236 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="theme-color" content="#000000" />
-<title>SilverFang</title>
-<link rel="icon" type="image/jpeg" href="silverfang.jpg" />
-<link rel="stylesheet" href="vip-effects.css" />
-
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%}
-body{
-  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-  background:#000;
-  color:#c9c9c9;
-  font-size:13px;
-  line-height:1.5;
-  -webkit-font-smoothing:antialiased;
-  min-height:100vh;
-}
-a{color:inherit;text-decoration:none}
-a:hover{color:#fff}
-button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;font-size:inherit}
-input{font-family:inherit;color:inherit;font-size:inherit}
-ul{list-style:none}
-img,svg{display:block;max-width:100%}
-::selection{background:#d92626;color:#fff}
-
-:root{
-  --border:#1a1a1a;
-  --border-2:#262626;
-  --border-red:#3a1414;
-  --border-red-2:#6b1f1f;
-  --text:#d4d4d4;
-  --text-2:#8a8a8a;
-  --text-3:#555;
-  --text-4:#333;
-  --red:#d92626;
-  --red-2:#a81c1c;
-  --green:#4a9e4a;
-  --amber:#c9a227;
-  --mono:'IBM Plex Mono',ui-monospace,'Courier New',monospace;
-}
-
-::-webkit-scrollbar{width:10px;height:10px}
-::-webkit-scrollbar-track{background:#000}
-::-webkit-scrollbar-thumb{background:#1a1a1a;border:2px solid #000}
-::-webkit-scrollbar-thumb:hover{background:#282828}
-*{scrollbar-width:thin;scrollbar-color:#1a1a1a #000}
-
-.mono{font-family:var(--mono)}
-.dim{color:var(--text-2)}
-.dim2{color:var(--text-3)}
-.red{color:var(--red)}
-.green{color:var(--green)}
-.amber{color:var(--amber)}
-
-/* ============ GUEST POPUP ============ */
-.sf-guest-bg{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.85);
-  backdrop-filter:blur(4px);
-  z-index:300;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  animation:sfFadeIn .18s ease-out;
-}
-.sf-guest-bg.on{display:flex}
-@keyframes sfFadeIn{
-  from{opacity:0}
-  to{opacity:1}
-}
-@keyframes sfSlideUp{
-  from{opacity:0;transform:translateY(14px) scale(.98)}
-  to{opacity:1;transform:translateY(0) scale(1)}
-}
-.sf-guest-modal{
-  width:100%;
-  max-width:440px;
-  background:#000;
-  border:1px solid var(--border-red-2);
-  animation:sfSlideUp .22s ease-out;
-  position:relative;
-}
-.sf-guest-head{
-  padding:12px 18px;
-  border-bottom:1px solid var(--border-red-2);
-  background:#050505;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-}
-.sf-guest-brand{
-  font-family:var(--mono);
-  font-size:13px;
-  letter-spacing:.06em;
-  color:#fff;
-  font-weight:500;
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-.sf-guest-brand::before{
-  content:'';
-  display:inline-block;
-  width:6px;
-  height:6px;
-  background:var(--red);
-  border-radius:50%;
-  box-shadow:0 0 8px rgba(217,38,38,.7);
-}
-.sf-guest-close{
-  color:var(--text-3);
-  font-family:var(--mono);
-  font-size:15px;
-  line-height:1;
-  padding:0 4px;
-  transition:color .1s;
-}
-.sf-guest-close:hover{color:var(--red)}
-.sf-guest-body{
-  padding:28px 24px 24px;
-  text-align:center;
-}
-.sf-guest-ico{
-  font-size:40px;
-  line-height:1;
-  margin-bottom:16px;
-  opacity:.9;
-}
-.sf-guest-title{
-  font-family:var(--mono);
-  font-size:15px;
-  font-weight:600;
-  color:#fff;
-  letter-spacing:.06em;
-  text-transform:uppercase;
-  margin-bottom:14px;
-}
-.sf-guest-text{
-  font-family:var(--mono);
-  font-size:11.5px;
-  color:var(--text);
-  line-height:1.75;
-  margin-bottom:10px;
-}
-.sf-guest-sub{
-  font-family:var(--mono);
-  font-size:10.5px;
-  color:var(--text-3);
-  line-height:1.7;
-  margin-bottom:22px;
-}
-.sf-guest-actions{
-  display:flex;
-  gap:10px;
-  justify-content:center;
-  flex-wrap:wrap;
-}
-.sf-guest-btn{
-  min-width:130px;
-  padding:11px 20px;
-  font-family:var(--mono);
-  font-size:11.5px;
-  letter-spacing:.08em;
-  text-transform:uppercase;
-  border:1px solid transparent;
-  transition:background .15s,border-color .15s,color .15s;
-  text-align:center;
-}
-.sf-guest-btn-primary{
-  background:var(--red);
-  border-color:var(--red);
-  color:#fff;
-}
-.sf-guest-btn-primary:hover{background:var(--red-2);border-color:var(--red-2)}
-.sf-guest-btn-ghost{
-  background:#0d0d0d;
-  border-color:var(--border-2);
-  color:var(--text);
-}
-.sf-guest-btn-ghost:hover{background:#161616;border-color:var(--border-red-2);color:#fff}
-.sf-guest-foot{
-  padding:10px 18px;
-  border-top:1px solid var(--border-red-2);
-  background:#050505;
-  font-family:var(--mono);
-  font-size:9.5px;
-  color:var(--text-4);
-  text-align:center;
-  letter-spacing:.06em;
-  line-height:1.7;
-}
-
-.hdr{
-  border-bottom:1px solid var(--border);
-  background:#000;
-  position:sticky;
-  top:0;
-  z-index:50;
-}
-.hdr-inner{
-  max-width:1180px;
-  margin:0 auto;
-  padding:0 20px;
-  display:flex;
-  align-items:center;
-  height:52px;
-  gap:24px;
-}
-.brand{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  font-family:var(--mono);
-  font-size:15px;
-  letter-spacing:.06em;
-  color:#fff;
-  flex-shrink:0;
-}
-.brand-logo{width:22px;height:22px;object-fit:contain;flex-shrink:0}
-.brand .name{font-weight:500}
-
-.hdr-nav{
-  display:flex;
-  gap:2px;
-  font-size:12.5px;
-}
-.hdr-nav a{
-  padding:6px 11px;
-  color:var(--text-2);
-  border-radius:2px;
-  transition:color .1s,background .1s;
-}
-.hdr-nav a:hover{color:var(--text);background:#0d0d0d}
-.hdr-nav a.on{color:#fff}
-.hdr-nav a.admin-link{
-  color:var(--red);
-  border:1px solid var(--border-red-2);
-}
-.hdr-nav a.admin-link:hover{
-  color:#fff;
-  background:#150505;
-}
-.hdr-nav a.vip-link{
-  color:var(--amber);
-  border:1px solid #3a2f0f;
-}
-.hdr-nav a.vip-link:hover{
-  color:#fff;
-  background:#0a0800;
-}
-
-.hdr-right{
-  margin-left:auto;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  font-family:var(--mono);
-  font-size:11px;
-  color:var(--text-3);
-}
-
-.hdr-guest{display:flex;align-items:center;gap:8px}
-.hdr-guest .btn-log{
-  padding:6px 12px;
-  border:1px solid var(--border-2);
-  color:var(--text);
-  font-size:11.5px;
-  transition:background .1s,border-color .1s,color .1s;
-}
-.hdr-guest .btn-log:hover{background:var(--red);border-color:var(--red);color:#fff}
-.hdr-guest .btn-signup{
-  padding:6px 12px;
-  background:var(--red);
-  border:1px solid var(--red);
-  color:#fff;
-  font-size:11.5px;
-  transition:background .1s,border-color .1s;
-}
-.hdr-guest .btn-signup:hover{background:var(--red-2);border-color:var(--red-2)}
-
-.hdr-user{display:none;align-items:center;gap:8px}
-.user-chip{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:4px 10px 4px 4px;
-  border:1px solid var(--border-red-2);
-  background:#050505;
-  color:#e0e0e0;
-  font-size:11.5px;
-  transition:border-color .15s;
-}
-.user-chip:hover{border-color:var(--red)}
-.user-chip .avatar{
-  width:24px;height:24px;
-  background:#1a1a1a;
-  display:flex;align-items:center;justify-content:center;
-  overflow:hidden;
-  flex-shrink:0;
-}
-.user-chip .avatar img{width:100%;height:100%;object-fit:cover}
-.user-chip .avatar .ph{font-size:10px;color:var(--text-3)}
-.user-chip .name{max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-flex;align-items:center;gap:4px}
-.btn-logout{
-  padding:6px 12px;
-  border:1px solid var(--border-2);
-  color:var(--text);
-  font-size:11.5px;
-  transition:background .1s,border-color .1s,color .1s;
-}
-.btn-logout:hover{background:var(--red);border-color:var(--red);color:#fff}
-
-.ann-banners{
-  display:none;
-  flex-direction:column;
-}
-.ann-banners.on{display:flex}
-
-.ann-banner{
-  padding:12px 20px;
-  border-bottom:1px solid var(--border-2);
-  font-family:var(--mono);
-  font-size:12px;
-  line-height:1.6;
-  position:relative;
-  display:flex;
-  align-items:flex-start;
-  gap:12px;
-}
-.ann-banner .ann-ico{
-  flex-shrink:0;
-  font-size:14px;
-  line-height:1.4;
-  margin-top:1px;
-}
-.ann-banner .ann-body{
-  flex:1;
-  min-width:0;
-}
-.ann-banner .ann-t{
-  font-weight:600;
-  color:#fff;
-  margin-bottom:3px;
-  letter-spacing:.02em;
-  word-break:break-word;
-}
-.ann-banner .ann-c{
-  color:var(--text);
-  white-space:pre-wrap;
-  word-break:break-word;
-  font-size:11.5px;
-  opacity:.92;
-}
-.ann-banner .ann-close{
-  flex-shrink:0;
-  padding:0 6px;
-  color:var(--text-3);
-  font-size:14px;
-  line-height:1;
-  transition:color .1s;
-}
-.ann-banner .ann-close:hover{color:#fff}
-
-.ann-banner.level-info{background:#050814;border-left:3px solid #4a7cd9}
-.ann-banner.level-info .ann-ico{color:#4a7cd9}
-.ann-banner.level-success{background:#020a02;border-left:3px solid var(--green)}
-.ann-banner.level-success .ann-ico{color:var(--green)}
-.ann-banner.level-warning{background:#0a0800;border-left:3px solid var(--amber)}
-.ann-banner.level-warning .ann-ico{color:var(--amber)}
-.ann-banner.level-danger{background:#0a0202;border-left:3px solid var(--red)}
-.ann-banner.level-danger .ann-ico{color:var(--red)}
-
-.hero{
-  border-bottom:1px solid var(--border-red);
-  background:#000;
-}
-.hero-inner{
-  max-width:980px;
-  margin:0 auto;
-  padding:40px 24px 34px;
-  text-align:center;
-}
-.hero-title{
-  font-family:var(--mono);
-  font-size:22px;
-  font-weight:600;
-  color:#fff;
-  letter-spacing:.02em;
-  line-height:1.5;
-  text-transform:uppercase;
-  margin:0 auto;
-  word-break:normal;
-  overflow-wrap:normal;
-  hyphens:none;
-}
-.hero-title .accent{color:var(--red)}
-.hero-title .globe{color:var(--red)}
-.hero-title .nowrap{white-space:nowrap;display:inline-block}
-
-.hero-sub{
-  margin:20px auto 0;
-  font-family:var(--mono);
-  font-size:11.5px;
-  color:var(--amber);
-  line-height:1.9;
-  letter-spacing:.02em;
-  max-width:820px;
-}
-.hero-sub .lead{
-  display:block;
-  color:var(--text-2);
-  font-size:11px;
-  letter-spacing:.1em;
-  text-transform:uppercase;
-  margin-bottom:14px;
-}
-.hero-sub .lead .hl{color:#fff;font-weight:600}
-
-.hero-list{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:8px 10px;
-  margin-top:6px;
-}
-.hero-list .tag{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  font-family:var(--mono);
-  font-size:11px;
-  padding:4px 10px;
-  border:1px solid #3a2f0f;
-  background:#0a0800;
-  color:var(--amber);
-  white-space:nowrap;
-  line-height:1.4;
-}
-.hero-list .tag .ic{color:var(--amber);font-size:10px}
-.hero-list .tag.alt{border-color:#1f3a1f;background:#020a02;color:var(--amber)}
-.hero-list .tag.alt .ic{color:var(--green)}
-.hero-list .tag.end{
-  border-color:var(--border-red-2);
-  background:#0a0202;
-  color:#e0e0e0;
-}
-
-.toolbar{
-  border-bottom:1px solid var(--border);
-  background:#000;
-}
-.toolbar-inner{
-  max-width:1180px;
-  margin:0 auto;
-  padding:0 20px;
-  display:flex;
-  align-items:center;
-  height:44px;
-  gap:20px;
-  font-family:var(--mono);
-  font-size:11px;
-}
-.toolbar .cats{
-  display:flex;
-  gap:0;
-  overflow-x:auto;
-  scrollbar-width:none;
-}
-.toolbar .cats::-webkit-scrollbar{display:none}
-.toolbar .cats a{
-  padding:4px 0;
-  color:var(--text-2);
-  white-space:nowrap;
-}
-.toolbar .cats a:hover{color:#fff}
-.toolbar .cats a.on{color:var(--red)}
-.toolbar .search{
-  margin-left:auto;
-  display:flex;
-}
-.toolbar .search input{
-  width:260px;
-  height:28px;
-  padding:0 10px;
-  background:#000;
-  border:1px solid var(--border-red-2);
-  border-right:none;
-  color:var(--text);
-  font-family:var(--mono);
-  font-size:11.5px;
-  outline:none;
-  transition:border-color .15s,box-shadow .15s;
-}
-.toolbar .search input::placeholder{color:var(--text-4)}
-.toolbar .search input:focus{
-  border-color:var(--red);
-  box-shadow:0 0 0 1px rgba(217,38,38,.15);
-}
-.toolbar .search button{
-  height:28px;
-  padding:0 12px;
-  background:#150505;
-  border:1px solid var(--border-red-2);
-  color:#fff;
-  font-family:var(--mono);
-  font-size:10.5px;
-  letter-spacing:.04em;
-  transition:background .1s,color .1s,border-color .1s;
-}
-.toolbar .search button:hover{
-  background:var(--red);
-  border-color:var(--red);
-  color:#fff;
-}
-
-.main{
-  max-width:1180px;
-  margin:0 auto;
-  padding:20px;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:14px;
-}
-
-.item{
-  border:1px solid var(--border-red);
-  background:#000;
-  display:flex;
-  flex-direction:column;
-  transition:border-color .15s,box-shadow .15s;
-  position:relative;
-}
-.item:hover{
-  border-color:var(--border-red-2);
-  box-shadow:0 0 10px rgba(217,38,38,.06);
-}
-
-.item-img{
-  aspect-ratio:1 / 1;
-  background:#050505;
-  border-bottom:1px solid var(--border);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  position:relative;
-  overflow:hidden;
-}
-.item-img img{width:100%;height:100%;object-fit:cover;position:relative;z-index:1}
-.item-img .ph{
-  font-family:var(--mono);
-  font-size:9.5px;
-  color:#1f1f1f;
-  letter-spacing:.3em;
-  text-transform:uppercase;
-  user-select:none;
-  position:relative;
-  z-index:1;
-}
-.item-img::before{
-  content:'';
-  position:absolute;
-  inset:0;
-  background:linear-gradient(135deg,#060606 25%,#0b0b0b 25%,#0b0b0b 50%,#060606 50%,#060606 75%,#0b0b0b 75%);
-  background-size:12px 12px;
-  opacity:.4;
-  pointer-events:none;
-  z-index:0;
-}
-
-.item-body{
-  padding:10px 12px 12px;
-  display:flex;
-  flex-direction:column;
-  flex:1;
-}
-
-.item-name{
-  font-size:13px;
-  font-weight:500;
-  color:#e0e0e0;
-  margin-bottom:3px;
-  line-height:1.35;
-}
-.item-name:hover{color:#fff}
-
-.item-vendor{
-  font-family:var(--mono);
-  font-size:10px;
-  color:var(--text-3);
-  margin-bottom:10px;
-  display:flex;
-  align-items:center;
-  gap:3px;
-  flex-wrap:wrap;
-  line-height:1.4;
-}
-.item-vendor .uemoji{font-size:11px}
-
-.item-foot{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:8px;
-  margin-top:auto;
-  padding-top:10px;
-  border-top:1px solid var(--border);
-}
-.item-price{
-  font-family:var(--mono);
-  font-size:12px;
-  color:#e0e0e0;
-  font-weight:500;
-  line-height:1.4;
-}
-.item-price small{
-  font-size:10px;
-  color:var(--text-3);
-  font-weight:400;
-}
-.item-price .row{display:block}
-.item-rep{
-  font-family:var(--mono);
-  font-size:10.5px;
-  color:var(--amber);
-  white-space:nowrap;
-}
-
-.foot{
-  border-top:1px solid var(--border);
-  margin-top:40px;
-}
-.foot-inner{
-  max-width:1180px;
-  margin:0 auto;
-  padding:16px 20px;
-  display:flex;
-  justify-content:space-between;
-  gap:16px;
-  flex-wrap:wrap;
-  font-family:var(--mono);
-  font-size:10.5px;
-  color:var(--text-3);
-}
-.foot-inner a{color:var(--text-3)}
-.foot-inner a:hover{color:var(--text)}
-.foot-inner .sep{margin:0 8px;color:var(--text-4)}
-
-.toast{
-  position:fixed;
-  left:50%;
-  bottom:20px;
-  transform:translate(-50%,80px);
-  background:#0d0d0d;
-  border:1px solid var(--border-2);
-  padding:10px 16px;
-  font-family:var(--mono);
-  font-size:11.5px;
-  color:var(--text);
-  z-index:200;
-  transition:transform .25s ease;
-  max-width:90vw;
-}
-.toast.on{transform:translate(-50%,0)}
-.toast .dot{
-  display:inline-block;
-  width:5px;height:5px;
-  background:var(--red);
-  border-radius:50%;
-  margin-right:8px;
-  vertical-align:middle;
-}
-
-.loading-state{
-  grid-column:1 / -1;
-  text-align:center;
-  padding:60px 20px;
-  font-family:var(--mono);
-  font-size:11.5px;
-  color:var(--text-3);
-  border:1px dashed var(--border-2);
-  background:#030303;
-}
-.loading-state .dot{
-  display:inline-block;
-  width:5px;height:5px;
-  background:var(--red);
-  border-radius:50%;
-  margin-right:6px;
-  vertical-align:middle;
-  animation:blink 1s infinite;
-}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-
-.empty-state{
-  grid-column:1 / -1;
-  text-align:center;
-  padding:60px 20px;
-  font-family:var(--mono);
-  font-size:11.5px;
-  color:var(--text-3);
-  border:1px dashed var(--border-2);
-  background:#030303;
-  line-height:1.7;
-}
-.empty-state strong{color:var(--text-2);display:block;margin-bottom:6px}
-
-@media (max-width:1024px){
-  .grid{grid-template-columns:repeat(3,1fr)}
-}
-@media (max-width:820px){
-  .hdr-nav{display:none}
-  .toolbar .search input{width:180px}
-  .grid{grid-template-columns:repeat(3,1fr);gap:10px}
-  .item-body{padding:8px 10px 10px}
-  .item-name{font-size:12px;margin-bottom:2px}
-  .item-vendor{font-size:9.5px;margin-bottom:8px}
-  .item-price{font-size:11.5px}
-  .item-price small{font-size:9px}
-  .item-rep{font-size:9.5px}
-  .hero-inner{padding:32px 20px 28px}
-  .hero-title{font-size:17px}
-  .hero-sub{font-size:10.5px}
-  .hero-list .tag{font-size:10px;padding:3px 8px}
-  .ann-banner{padding:10px 16px;gap:10px}
-  .ann-banner .ann-t{font-size:12px}
-  .ann-banner .ann-c{font-size:11px}
-}
-@media (max-width:560px){
-  .hdr-inner{padding:0 14px;gap:10px}
-  .hdr-right{gap:6px}
-  .hdr-guest{gap:6px}
-  .hdr-guest .btn-log{padding:5px 9px;font-size:10.5px}
-  .hdr-guest .btn-signup{padding:5px 9px;font-size:10.5px}
-  .user-chip{padding:5px 8px;font-size:10.5px;max-width:120px}
-  .user-chip .name{max-width:80px}
-  .btn-logout{padding:5px 9px;font-size:10.5px}
-  .toolbar-inner{padding:0 14px;gap:10px;height:44px}
-  .toolbar .search input{width:120px;height:26px;font-size:11px;padding:0 8px}
-  .toolbar .search button{height:26px;padding:0 9px;font-size:10px}
-  .main{padding:12px}
-  .grid{grid-template-columns:repeat(2,1fr);gap:8px}
-  .item-body{padding:7px 9px 9px}
-  .item-name{font-size:11.5px;margin-bottom:2px}
-  .item-vendor{font-size:9px;margin-bottom:6px}
-  .item-price{font-size:11px}
-  .item-price small{font-size:8.5px}
-  .item-rep{font-size:9px}
-  .hero-inner{padding:26px 14px 22px}
-  .hero-title{font-size:14px;line-height:1.55}
-  .hero-sub{font-size:10px}
-  .hero-list{gap:6px 8px}
-  .hero-list .tag{font-size:9.5px;padding:3px 7px}
-  .ann-banner{padding:9px 12px;gap:8px}
-  .ann-banner .ann-ico{font-size:12px}
-  .ann-banner .ann-t{font-size:11px}
-  .ann-banner .ann-c{font-size:10.5px}
-  .sf-guest-body{padding:22px 18px 20px}
-  .sf-guest-ico{font-size:32px;margin-bottom:12px}
-  .sf-guest-title{font-size:13px;margin-bottom:12px}
-  .sf-guest-text{font-size:11px}
-  .sf-guest-sub{font-size:10px}
-  .sf-guest-btn{min-width:0;flex:1;padding:10px 14px}
-}
-@media (max-width:380px){
-  .hero-title{font-size:13px}
-  .toolbar .search input{width:100px}
-  .hdr-guest .btn-log{padding:5px 8px;font-size:10px}
-  .hdr-guest .btn-signup{padding:5px 8px;font-size:10px}
-  .user-chip{padding:5px 7px;font-size:10px;max-width:90px}
-  .btn-logout{padding:5px 8px;font-size:10px}
-}
-</style>
-</head>
-<body>
-
-<header class="hdr">
-  <div class="hdr-inner">
-    <a href="index.html" class="brand">
-      <img src="silverfang.jpg" alt="SilverFang" class="brand-logo" />
-      <span class="name">SilverFang</span>
-    </a>
-
-    <nav class="hdr-nav">
-      <a href="index.html" class="on">Market</a>
-      <a href="dashboard.html">Dashboard</a>
-      <a href="messages.html">Messages</a>
-      <a href="vip.html" class="vip-link" id="vipLink" style="display:none">VIP</a>
-      <a href="admin.html" class="admin-link" id="adminLink" style="display:none">Admin</a>
-    </nav>
-
-    <div class="hdr-right">
-      <div class="hdr-guest" id="hdrGuest">
-        <a href="login.html" class="btn-log">Login</a>
-        <a href="signup.html" class="btn-signup">Sign Up</a>
-      </div>
-
-      <div class="hdr-user" id="hdrUser">
-        <a href="dashboard.html" class="user-chip">
-          <span class="avatar" id="chipAvatar"><span class="ph">?</span></span>
-          <span class="name" id="chipName">…</span>
-        </a>
-        <button type="button" class="btn-logout" id="logoutBtn">Logout</button>
-      </div>
-    </div>
-  </div>
-</header>
-
-<div class="ann-banners" id="annBanners"></div>
-
-<section class="hero">
-  <div class="hero-inner">
-    <h1 class="hero-title">
-      Connects You With The Top <span class="accent">Hackers</span>, <span class="accent">Crackers</span> And <span class="accent">Carders</span> Around The <span class="nowrap">W<span class="globe">🌎</span>RLD</span>
-    </h1>
-
-    <div class="hero-sub">
-      <span class="lead">Gain Access To 1000s of Darknet &amp; Deepweb Resources with <span class="hl">US</span></span>
-
-      <div class="hero-list">
-        <span class="tag"><span class="ic">⭐</span>Hacked Database Leaks</span>
-        <span class="tag"><span class="ic">⭐</span>Combo Lists</span>
-        <span class="tag"><span class="ic">⭐</span>OpenBullet &amp; SilverBullet Configs</span>
-        <span class="tag"><span class="ic">⭐</span>CC Checkers</span>
-        <span class="tag"><span class="ic">⭐</span>Spamming Tools</span>
-        <span class="tag"><span class="ic">⭐</span>Carding Tools</span>
-        <span class="tag"><span class="ic">⭐</span>Carding Tutorials</span>
-
-        <span class="tag"><span class="ic">⭐</span>Hacked Credit Cards with CVV (CC + CVV)</span>
-        <span class="tag"><span class="ic">⭐</span>Paypal &amp; Bank Logs</span>
-        <span class="tag"><span class="ic">⭐</span>Verified Sellers Marketplace</span>
-        <span class="tag alt"><span class="ic">✔️</span>KYC Bypass Methods</span>
-
-        <span class="tag"><span class="ic">⭐</span>Scam Pages</span>
-        <span class="tag"><span class="ic">⭐</span>ID Scans &amp; Selfies</span>
-        <span class="tag"><span class="ic">⭐</span>Info Stealer Logs</span>
-        <span class="tag"><span class="ic">⭐</span>RATs &amp; Worm Builders</span>
-        <span class="tag"><span class="ic">⭐</span>Ransomware &amp; Malware Builders + Source Codes</span>
-
-        <span class="tag"><span class="ic">⭐</span>Hacking / Cracking Tools &amp; Apps</span>
-        <span class="tag"><span class="ic">⭐</span>Hacking Tutorials &amp; Methods</span>
-        <span class="tag"><span class="ic">⭐</span>XSS &amp; SQL Injection Dorks</span>
-        <span class="tag"><span class="ic">⭐</span>SSH Logins</span>
-        <span class="tag"><span class="ic">⭐</span>RDP Logins</span>
-
-        <span class="tag"><span class="ic">⭐</span>Shells Logins</span>
-        <span class="tag"><span class="ic">⭐</span>SMTP &amp; Webmail Logins</span>
-        <span class="tag"><span class="ic">⭐</span>CPanel &amp; WHM Logins</span>
-        <span class="tag"><span class="ic">⭐</span>Leaked Udemy &amp; Programming Courses</span>
-
-        <span class="tag"><span class="ic">⭐</span>Free Premium Netflix Accounts &amp; Cookies</span>
-        <span class="tag"><span class="ic">⭐</span>Premium Gaming Accounts</span>
-        <span class="tag"><span class="ic">⭐</span>VPN Accounts</span>
-
-        <span class="tag"><span class="ic">⭐</span>Cracked Programs &amp; Activation Keys</span>
-        <span class="tag"><span class="ic">⭐</span>Graphics Design Packs &amp; Assets</span>
-
-        <span class="tag"><span class="ic">⭐</span>Nulled PHP Scripts &amp; Themes</span>
-        <span class="tag end"><span class="ic">⭐</span>And Much Much More</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="toolbar">
-  <div class="toolbar-inner">
-    <div class="cats">
-      <a href="#" class="on">All</a>
-    </div>
-
-    <form class="search" id="searchForm">
-      <input type="text" id="searchInput" placeholder="search products…" />
-      <button type="submit">SEARCH</button>
-    </form>
-  </div>
-</div>
-
-<main class="main">
-  <div class="grid" id="productGrid">
-    <div class="loading-state"><span class="dot"></span>loading market…</div>
-  </div>
-</main>
-
-<footer class="foot">
-  <div class="foot-inner">
-    <div>
-      © 2025 SilverFang
-      <span class="sep">·</span>
-      <a href="#">Privacy</a>
-      <span class="sep">·</span>
-      <a href="#">Terms</a>
-      <span class="sep">·</span>
-      <a href="#">Escrow Policy</a>
-    </div>
-  </div>
-</footer>
-
-<div class="toast" id="toast">
-  <span class="dot"></span>
-  <span id="toastMsg">—</span>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="vip-helper.js"></script>
-<script src="guest-popup.js"></script>
-<script>
 (function(){
   'use strict';
 
-  const SUPABASE_URL = 'https://iygiioemtpfozxikhgmx.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_xHr9z0NCsm8gBivTQ2nH8Q_Y1uzdlis';
+  function ensureStyles(){
+    if (document.getElementById('sfGuestPopupStyles')) return;
 
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  const escapeHtml = SF_VIP.escapeHtml;
-  const renderUsername = SF_VIP.renderUsername;
+    const style = document.createElement('style');
+    style.id = 'sfGuestPopupStyles';
+    style.textContent = `
+      .sf-guest-bg {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.82);
+        backdrop-filter: blur(4px);
+        z-index: 300;
+        padding: 20px;
+      }
+      .sf-guest-bg.on {
+        display: flex;
+      }
+      .sf-guest-modal {
+        width: min(440px, 100%);
+        background: #000;
+        border: 1px solid #6b1f1f;
+        position: relative;
+        box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+        animation: sfGuestSlide .22s ease-out;
+      }
+      .sf-guest-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 18px;
+        border-bottom: 1px solid #6b1f1f;
+        background: #050505;
+      }
+      .sf-guest-brand {
+        font-family: 'IBM Plex Mono', ui-monospace, monospace;
+        letter-spacing: 0.06em;
+        font-size: 13px;
+        font-weight: 600;
+        color: #fff;
+      }
+      .sf-guest-brand::before {
+        content: '';
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #d92626;
+        margin-right: 8px;
+        vertical-align: middle;
+        box-shadow: 0 0 8px rgba(217,38,38,.7);
+      }
+      .sf-guest-close {
+        border: none;
+        background: transparent;
+        color: #555;
+        cursor: pointer;
+        font-size: 18px;
+        line-height: 1;
+      }
+      .sf-guest-close:hover { color: #fff; }
+      .sf-guest-body {
+        padding: 28px 24px 24px;
+        text-align: center;
+      }
+      .sf-guest-ico {
+        font-size: 40px;
+        margin-bottom: 16px;
+      }
+      .sf-guest-title {
+        font-family: 'IBM Plex Mono', ui-monospace, monospace;
+        font-size: 15px;
+        color: #fff;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 12px;
+      }
+      .sf-guest-text {
+        font-family: 'IBM Plex Mono', ui-monospace, monospace;
+        font-size: 11.5px;
+        color: #d4d4d4;
+        line-height: 1.7;
+        margin-bottom: 10px;
+      }
+      .sf-guest-sub {
+        font-family: 'IBM Plex Mono', ui-monospace, monospace;
+        font-size: 10.5px;
+        color: #6b6b6b;
+        line-height: 1.7;
+        margin-bottom: 22px;
+      }
+      .sf-guest-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .sf-guest-btn {
+        min-width: 130px;
+        padding: 11px 20px;
+        font-family: 'IBM Plex Mono', ui-monospace, monospace;
+        font-size: 11.5px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        border: 1px solid transparent;
+        cursor: pointer;
+        transition: background .15s ease, border-color .15s ease, color .15s ease;
+      }
+      .sf-guest-btn-primary {
+        background: #d92626;
+        border-color: #d92626;
+        color: #fff;
+      }
+      .sf-guest-btn-primary:hover { background: #a81c1c; border-color: #a81c1c; }
+      .sf-guest-btn-ghost {
+        background: #0d0d0d;
+        border-color: #262626;
+        color: #d4d4d4;
+      }
+      .sf-guest-btn-ghost:hover { background: #161616; border-color: #6b1f1f; color: #fff; }
+      .sf-guest-foot {
+        padding: 10px 18px;
+        border-top: 1px solid #6b1f1f;
+        background: #050505;
+        font-family: 'IBM Plex Mono', ui-monospace, monospace;
+        font-size: 9.5px;
+        color: #333;
+        text-align: center;
+        letter-spacing: 0.06em;
+      }
+      @keyframes sfGuestSlide {
+        from { opacity: 0; transform: translateY(14px) scale(.98); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+      }
+      @media (max-width: 560px) {
+        .sf-guest-body { padding: 22px 18px 20px; }
+        .sf-guest-ico { font-size: 32px; margin-bottom: 12px; }
+        .sf-guest-title { font-size: 13px; margin-bottom: 12px; }
+        .sf-guest-text { font-size: 11px; }
+        .sf-guest-sub { font-size: 10px; }
+        .sf-guest-btn { min-width: 0; flex: 1; padding: 10px 14px; }
+      }
+    `;
+    document.head.appendChild(style);
+  }
 
-  const state = {
-    session: null,
-    me: null,
-    allProducts: [],
-    sellerMap: {},
-    ratingMap: {},
-    searchQuery: '',
-    dismissedAnns: {}
+  function buildPopup(){
+    let popup = document.getElementById('sfGuestPopup');
+    if (popup) return popup;
+
+    popup = document.createElement('div');
+    popup.id = 'sfGuestPopup';
+    popup.className = 'sf-guest-bg';
+    popup.innerHTML = `
+      <div class="sf-guest-modal" role="dialog" aria-modal="true" aria-labelledby="sfGuestTitle">
+        <div class="sf-guest-head">
+          <div class="sf-guest-brand">SilverFang</div>
+          <button type="button" class="sf-guest-close" data-close="true" aria-label="Close">×</button>
+        </div>
+        <div class="sf-guest-body">
+          <div class="sf-guest-ico" data-role="icon">🔒</div>
+          <div class="sf-guest-title" id="sfGuestTitle" data-role="title">Login required</div>
+          <div class="sf-guest-text" data-role="text">Please sign in to continue.</div>
+          <div class="sf-guest-sub" data-role="sub">Members only access.</div>
+          <div class="sf-guest-actions">
+            <button type="button" class="sf-guest-btn sf-guest-btn-primary" data-action="primary">Login</button>
+            <button type="button" class="sf-guest-btn sf-guest-btn-ghost" data-action="secondary">Sign Up</button>
+          </div>
+        </div>
+        <div class="sf-guest-foot">Members-only access</div>
+      </div>
+    `;
+
+    popup.addEventListener('click', function(event){
+      if (event.target === popup) closePopup();
+    });
+    popup.querySelector('[data-close="true"]').addEventListener('click', closePopup);
+    popup.querySelector('[data-action="primary"]').addEventListener('click', function(){
+      window.location.href = 'login.html';
+    });
+    popup.querySelector('[data-action="secondary"]').addEventListener('click', function(){
+      window.location.href = 'signup.html';
+    });
+
+    document.body.appendChild(popup);
+    return popup;
+  }
+
+  function openPopup(options){
+    ensureStyles();
+    const popup = buildPopup();
+    const icon = popup.querySelector('[data-role="icon"]');
+    const title = popup.querySelector('[data-role="title"]');
+    const text = popup.querySelector('[data-role="text"]');
+    const sub = popup.querySelector('[data-role="sub"]');
+    const primary = popup.querySelector('[data-action="primary"]');
+    const secondary = popup.querySelector('[data-action="secondary"]');
+
+    if (icon) icon.textContent = options && options.icon ? options.icon : '🔒';
+    if (title) title.textContent = options && options.title ? options.title : 'Login required';
+    if (text) text.textContent = options && options.text ? options.text : 'Please sign in to continue.';
+    if (sub) sub.textContent = options && options.sub ? options.sub : 'Members only access.';
+    if (primary) primary.textContent = options && options.primaryLabel ? options.primaryLabel : 'Login';
+    if (secondary) secondary.textContent = options && options.secondaryLabel ? options.secondaryLabel : 'Sign Up';
+
+    popup.classList.add('on');
+    document.body.style.overflow = 'hidden';
+    return popup;
+  }
+
+  function closePopup(){
+    const popup = document.getElementById('sfGuestPopup');
+    if (!popup) return;
+    popup.classList.remove('on');
+    document.body.style.overflow = '';
+  }
+
+  window.SF_GUEST = {
+    open: openPopup,
+    close: closePopup,
+    buildPopup: buildPopup
   };
 
-  const $ = function(id){ return document.getElementById(id); };
-  const productGrid = $('productGrid');
-  const hdrGuest = $('hdrGuest');
-  const hdrUser = $('hdrUser');
-  const adminLink = $('adminLink');
-  const vipLink = $('vipLink');
-  const chipAvatar = $('chipAvatar');
-  const chipName = $('chipName');
-  const logoutBtn = $('logoutBtn');
-  const searchForm = $('searchForm');
-  const searchInput = $('searchInput');
-  const annBanners = $('annBanners');
-  const toastEl = $('toast');
-  const toastMsg = $('toastMsg');
-  let toastTimer;
-
-  function toast(msg){
-    toastMsg.textContent = msg;
-    toastEl.classList.add('on');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(function(){
-      toastEl.classList.remove('on');
-    }, 3000);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', ensureStyles, { once: true });
+  } else {
+    ensureStyles();
   }
-
-  function priceHTML(p){
-    const parts = [];
-    if (p.price_monthly != null){
-      parts.push('<span class="row">$' + Number(p.price_monthly).toFixed(0) + '<small>/mo</small></span>');
-    }
-    if (p.price_lifetime != null){
-      parts.push('<span class="row">$' + Number(p.price_lifetime).toFixed(0) + '<small> lifetime</small></span>');
-    }
-    return parts.join('');
-  }
-
-  // ============ ANNOUNCEMENTS ============
-  function loadDismissed(){
-    try {
-      const raw = localStorage.getItem('sf_dismissed_anns');
-      state.dismissedAnns = raw ? JSON.parse(raw) : {};
-    } catch(e){ state.dismissedAnns = {}; }
-  }
-
-  function saveDismissed(){
-    try { localStorage.setItem('sf_dismissed_anns', JSON.stringify(state.dismissedAnns)); } catch(e){}
-  }
-
-  function annIcon(level){
-    if (level === 'success') return '✓';
-    if (level === 'warning') return '⚠';
-    if (level === 'danger') return '✕';
-    return 'ℹ';
-  }
-
-  async function loadAnnouncements(){
-    const { data, error } = await supabase
-      .from('announcements')
-      .select('id, title, content, level, active, created_at')
-      .eq('active', true)
-      .order('created_at', { ascending: false })
-      .limit(10);
-
-    if (error){
-      console.warn('announcements load failed:', error.message);
-      return;
-    }
-
-    renderAnnouncements(data || []);
-  }
-
-  function renderAnnouncements(anns){
-    const visible = anns.filter(function(a){ return !state.dismissedAnns[a.id]; });
-
-    if (visible.length === 0){
-      annBanners.classList.remove('on');
-      annBanners.innerHTML = '';
-      return;
-    }
-
-    annBanners.innerHTML = visible.map(function(a){
-      return (
-        '<div class="ann-banner level-' + a.level + '" data-annid="' + a.id + '">' +
-          '<span class="ann-ico">' + annIcon(a.level) + '</span>' +
-          '<div class="ann-body">' +
-            '<div class="ann-t">' + escapeHtml(a.title) + '</div>' +
-            '<div class="ann-c">' + escapeHtml(a.content) + '</div>' +
-          '</div>' +
-          '<button type="button" class="ann-close" data-closeann="' + a.id + '" aria-label="dismiss">✕</button>' +
-        '</div>'
-      );
-    }).join('');
-
-    annBanners.classList.add('on');
-
-    annBanners.querySelectorAll('[data-closeann]').forEach(function(btn){
-      btn.addEventListener('click', function(){
-        const id = btn.getAttribute('data-closeann');
-        state.dismissedAnns[id] = true;
-        saveDismissed();
-        const el = annBanners.querySelector('[data-annid="' + id + '"]');
-        if (el) el.remove();
-        if (annBanners.children.length === 0){
-          annBanners.classList.remove('on');
-        }
-      });
-    });
-  }
-
-  // ============ AUTH ============
-  async function initAuth(){
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      state.session = session;
-      if (session){
-        const { data: me } = await supabase
-          .from('profiles')
-          .select('id, username, avatar_url, is_admin, is_vip, username_effect, username_emoji')
-          .eq('id', session.user.id)
-          .maybeSingle();
-        state.me = me || null;
-      }
-    } catch (e){}
-    renderHeader();
-  }
-
-  function renderHeader(){
-    if (state.session && state.me){
-      hdrGuest.style.display = 'none';
-      hdrUser.style.display = 'flex';
-
-      chipName.innerHTML = renderUsername(state.me.username, state.me.username_effect, state.me.username_emoji);
-      chipAvatar.innerHTML = state.me.avatar_url
-        ? '<img src="' + escapeHtml(state.me.avatar_url) + '" alt="" />'
-        : '<span class="ph">' + escapeHtml((state.me.username || '?').charAt(0).toUpperCase()) + '</span>';
-
-      adminLink.style.display = state.me.is_admin ? 'inline-block' : 'none';
-      vipLink.style.display = (state.me.is_vip || state.me.is_admin) ? 'inline-block' : 'none';
-    } else {
-      hdrGuest.style.display = 'flex';
-      hdrUser.style.display = 'none';
-      adminLink.style.display = 'none';
-      vipLink.style.display = 'none';
-    }
-  }
-
-  // ============ MARKET ============
-  async function loadMarket(){
-    productGrid.innerHTML = '<div class="loading-state"><span class="dot"></span>loading market…</div>';
-
-    const { data, error } = await supabase
-      .from('products')
-      .select('id, seller_id, name, image_url, price_monthly, price_lifetime, created_at')
-      .order('created_at', { ascending: false })
-      .limit(60);
-
-    if (error){
-      productGrid.innerHTML = '<div class="empty-state"><strong>Failed to load</strong>' + escapeHtml(error.message) + '</div>';
-      return;
-    }
-
-    state.allProducts = data || [];
-
-    if (state.allProducts.length === 0){
-      productGrid.innerHTML =
-        '<div class="empty-state">' +
-          '<strong>No products listed yet</strong>' +
-          'Be the first to list a product on the market.' +
-        '</div>';
-      return;
-    }
-
-    const sellerIds = Array.from(new Set(state.allProducts.map(function(p){ return p.seller_id; })));
-    const productIds = state.allProducts.map(function(p){ return p.id; });
-
-    const [{ data: sellers }, { data: ratings }] = await Promise.all([
-      supabase.from('profiles').select('id, username, avatar_url, username_effect, username_emoji').in('id', sellerIds),
-      supabase.from('ratings').select('product_id, stars').in('product_id', productIds)
-    ]);
-
-    state.sellerMap = {};
-    (sellers || []).forEach(function(s){ state.sellerMap[s.id] = s; });
-
-    const agg = {};
-    (ratings || []).forEach(function(r){
-      if (!agg[r.product_id]) agg[r.product_id] = { sum: 0, count: 0 };
-      agg[r.product_id].sum += r.stars;
-      agg[r.product_id].count++;
-    });
-    state.ratingMap = agg;
-
-    renderMarket();
-  }
-
-  function renderMarket(){
-    const q = state.searchQuery.toLowerCase();
-    const filtered = q
-      ? state.allProducts.filter(function(p){
-          return (p.name || '').toLowerCase().indexOf(q) !== -1;
-        })
-      : state.allProducts;
-
-    if (filtered.length === 0){
-      productGrid.innerHTML =
-        '<div class="empty-state">' +
-          '<strong>No results</strong>' +
-          'No products match "' + escapeHtml(state.searchQuery) + '".' +
-        '</div>';
-      return;
-    }
-
-    productGrid.innerHTML = filtered.map(function(p){
-      const seller = state.sellerMap[p.seller_id] || { username: 'unknown', username_effect: 'none', username_emoji: 'none' };
-      const agg = state.ratingMap[p.id];
-      const avg = agg ? (agg.sum / agg.count).toFixed(1) : null;
-      const cnt = agg ? agg.count : 0;
-      const ratingHTML = avg
-        ? '<span class="item-rep">★ ' + avg + ' (' + cnt + ')</span>'
-        : '<span class="item-rep" style="color:var(--text-3)">—</span>';
-
-      const img = p.image_url
-        ? '<img src="' + escapeHtml(p.image_url) + '" alt="" />'
-        : '<span class="ph">NO IMG</span>';
-
-      return (
-        '<a href="product.html?id=' + p.id + '" class="item">' +
-          '<div class="item-img">' + img + '</div>' +
-          '<div class="item-body">' +
-            '<div class="item-name">' + escapeHtml(p.name) + '</div>' +
-            '<div class="item-vendor">by ' + renderUsername(seller.username, seller.username_effect, seller.username_emoji) + '</div>' +
-            '<div class="item-foot">' +
-              '<span class="item-price">' + priceHTML(p) + '</span>' +
-              ratingHTML +
-            '</div>' +
-          '</div>' +
-        '</a>'
-      );
-    }).join('');
-  }
-
-  logoutBtn.addEventListener('click', async function(){
-    logoutBtn.disabled = true;
-    try { await supabase.auth.signOut(); } catch(e){}
-    sessionStorage.removeItem('sf_signup_codes');
-    window.location.href = 'index.html';
-  });
-
-  // ============ SEARCH (GUEST POPUP) ============
-  searchForm.addEventListener('submit', function(e){
-    e.preventDefault();
-    const q = searchInput.value.trim();
-
-    if (!state.session){
-      SF_GUEST.open({
-        icon: '🔍',
-        title: 'Login to Search',
-        text: 'Search across the market is available to registered members only.',
-        sub: 'Login to your existing account, or sign up — no email required.'
-      });
-      return;
-    }
-
-    if (!q){
-      state.searchQuery = '';
-      renderMarket();
-      return;
-    }
-
-    state.searchQuery = q;
-    renderMarket();
-  });
-
-  searchInput.addEventListener('input', function(){
-    if (searchInput.value.trim() === '' && state.searchQuery !== ''){
-      state.searchQuery = '';
-      renderMarket();
-    }
-  });
-
-  // Guest yang nge-klik search box langsung → trigger popup
-  searchInput.addEventListener('focus', function(){
-    if (!state.session){
-      searchInput.blur();
-      SF_GUEST.open({
-        icon: '🔍',
-        title: 'Login to Search',
-        text: 'Search across the market is available to registered members only.',
-        sub: 'Login to your existing account, or sign up — no email required.'
-      });
-    }
-  });
-
-  (async function boot(){
-    loadDismissed();
-    await initAuth();
-    await Promise.all([
-      loadAnnouncements(),
-      loadMarket()
-    ]);
-  })();
-
 })();
-</script>
-</body>
-</html>
